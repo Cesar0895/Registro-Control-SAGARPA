@@ -45,7 +45,135 @@
 
   <main role="main" class="container">
 
+    <div class="card">
+      <div class="card-header">
+        <h4>Registro de auxiliares.</h4>
+      </div>
 
+      <div class="card-body">
+
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datosGenerales">
+          Generales
+        </button>
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datosDispositivo">
+            Datos del dispositivo
+        </button>
+
+       
+
+        <!-- Modal Datos Generales -->
+        <div class="modal fade" id="datosGenerales" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Datos Generales</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <form>
+                      <div class="form-group">
+                        <label>Grupo</label>
+                        <input type="text" class="form-control" id="grupo" placeholder="Introduce el nombre del grupo">
+                      </div>
+        
+                      <div class="form-group">
+                        <label for="selectZona">Zona</label>
+                        <select class="form-control" id="selectZona">
+                          <option>Delegación Estatal</option>
+                          <option>Subdelegación Administrativa</option>
+                          <option>Subdelegación Agropecuaria</option>
+                          <option>Subdelegación de Planeación</option>
+                          <option>Subdelegación de Pesca</option>
+                          <option>DDR 095 Santiago Ixcuintla</option>
+                          <option>DDR 096 Compostela</option>
+                          <option>DDR 097 Ahuacatlán</option>
+                          <option>DDR 098 Acaponeta</option>
+                          <option>DDR 099 Tepic</option>
+                        </select>
+                      </div>
+        
+                      <div class="form-group">
+                        <label>Presupuesto</label>
+                        <input type="number" class="form-control" id="presupuesto" placeholder="Introduce el presupuesto">
+                      </div>
+        
+                      <div class="form-group">
+                        <label>Dispositivo</label>
+                        <input type="text" class="form-control" id="auxiliar" placeholder="Introduce el nombre del dispositivo">
+                      </div>
+        
+                      <div class="form-group">
+                        <label>Inventario</label>
+                        <input type="number" class="form-control" id="inventario" placeholder="Introduce el no. de inventario">
+                      </div>
+        
+                    </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Datos del dispositivo-->
+        <div class="modal fade" id="datosDispositivo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Datos del dispositivo</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                  <form>
+                      <div class="form-group">
+                        <label>Marca</label>
+                        <input type="text" class="form-control" id="marca" placeholder="Introduce la marca">
+                      </div>
+        
+                      <div class="form-group">
+                        <label>Modelo</label>
+                        <input type="text" class="form-control" id="Modelo" placeholder="Introduce el modelo">
+                      </div>
+        
+                      <div class="form-group">
+                        <label>Serie </label>
+                        <input type="text" class="form-control" id="text" placeholder="Introduce el numero de serie">
+                      </div>
+        
+                      <div class="form-group">
+                        <label>Tipo</label>
+                        <input type="text" class="form-control" id="Memoria" placeholder="Introduce el tipo de auxiliar">
+                      </div>
+        
+                      <div class="form-group">
+                        <label>Adquisición</label>
+                        <input type="text" class="form-control" id="presupuesto" placeholder="Introduce la adquisición">
+                      </div>
+                    </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+       
+        <button type="button" class="btn btn-success">Guardar</button>
+
+      </div>
+    </div>
+
+<!--
     <div class="accordion" id="accordionExample">
       <div class="card">
         <div class="card-header" id="headingOne">
@@ -160,6 +288,7 @@
         </div>
       </div>
     </div>
+  -->
   </main>
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->

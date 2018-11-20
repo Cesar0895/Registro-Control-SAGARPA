@@ -48,7 +48,7 @@
       <div class="card-header">
         <h4>Registro de quipos de computo.</h4>
       </div>
-      
+
       <div class="card-body">
 
         <!-- Button trigger modal -->
@@ -57,8 +57,24 @@
         </button>
 
         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datosCPU">
-            Datos CPU
-          </button>
+          Datos CPU
+        </button>
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datosMonitor">
+          Datos Monitor
+        </button>
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datosTeclado">
+          Datos Teclado
+        </button>
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datosMouse">
+          Datos Mouse
+        </button>
+
+        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datosResponsable">
+          Responsable
+        </button>
 
         <!-- Modal Datos Generales -->
         <div class="modal fade" id="datosGenerales" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -78,8 +94,19 @@
                   </div>
 
                   <div class="form-group">
-                    <label>Zona</label>
-                    <input type="text" class="form-control" id="zona" placeholder="Introduce el nombre de la zona">
+                    <label for="selectZona">Zona</label>
+                    <select class="form-control" id="selectZona">
+                      <option>Delegación Estatal</option>
+                      <option>Subdelegación Administrativa</option>
+                      <option>Subdelegación Agropecuaria</option>
+                      <option>Subdelegación de Planeación</option>
+                      <option>Subdelegación de Pesca</option>
+                      <option>DDR 095 Santiago Ixcuintla</option>
+                      <option>DDR 096 Compostela</option>
+                      <option>DDR 097 Ahuacatlán</option>
+                      <option>DDR 098 Acaponeta</option>
+                      <option>DDR 099 Tepic</option>
+                    </select>
                   </div>
 
                   <div class="form-group">
@@ -103,65 +130,258 @@
 
         <!-- Modal Datos CPU-->
         <div class="modal fade" id="datosCPU" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Datos CPU</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <form>
-                      <form>
-         
-                          <div class="form-group">
-                            <label>No_Serie</label>
-                            <input type="number" class="form-control" id="serie" placeholder="Introduce el no. de serie">
-                          </div>
-                
-                          <div class="form-group">
-                            <label>No. de inventario</label>
-                            <input type="number" class="form-control" id="inventario" placeholder="Introduce el no. de inventario">
-                          </div>
-                
-                          <div class="form-group">
-                            <label>Marca</label>
-                            <input type="text" class="form-control" id="marca" placeholder="Introduce la marca">
-                          </div>
-                
-                          <div class="form-group">
-                            <label>Modelo</label>
-                            <input type="text" class="form-control" id="Modelo" placeholder="Introduce el modelo">
-                          </div>
-                
-                          <div class="form-group">
-                            <label>Procesador </label>
-                            <input type="text" class="form-control" id="text" placeholder="Introduce el tipo de procesador">
-                          </div>
-                
-                          <div class="form-group">
-                            <label>Memoria</label>
-                            <input type="text" class="form-control" id="Memoria" placeholder="Introduce el tipo de Memoria">
-                          </div>
-                
-                          <div class="form-group">
-                            <label>Disco duro</label>
-                            <input type="text" class="form-control" id="presupuesto" placeholder="Introduce la cantidad de alacenamiento del disco duro">
-                          </div>
-                        </form>
-                
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                  <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Datos CPU</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+
+                <form>
+
+                  <div class="form-group">
+                    <label>No_Serie</label>
+                    <input type="number" class="form-control" id="serie" placeholder="Introduce el no. de serie">
+                  </div>
+
+                  <div class="form-group">
+                    <label>No. de inventario</label>
+                    <input type="number" class="form-control" id="inventario" placeholder="Introduce el no. de inventario">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Marca</label>
+                    <input type="text" class="form-control" id="marca" placeholder="Introduce la marca">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Modelo</label>
+                    <input type="text" class="form-control" id="Modelo" placeholder="Introduce el modelo">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Procesador </label>
+                    <input type="text" class="form-control" id="text" placeholder="Introduce el tipo de procesador">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Memoria</label>
+                    <input type="text" class="form-control" id="Memoria" placeholder="Introduce el tipo de Memoria">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Disco duro</label>
+                    <input type="text" class="form-control" id="presupuesto" placeholder="Introduce la cantidad de alacenamiento del disco duro">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Velocidad</label>
+                    <input type="text" class="form-control" id="velocidad" placeholder="Introduce velocidad del CPU">
+                  </div>
+                  <div class="form-group">
+                    <label>Tipo de adquisición</label>
+                    <input type="text" class="form-control" id="TipoAdquisicion" placeholder="Introduce el tipo de adquisición">
+                  </div>
+                </form>
+
+
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
               </div>
             </div>
           </div>
+        </div>
 
-                <button type="button" class="btn btn-success">Guardar</button>
+        <!-- Modal Datos Monitor-->
+        <div class="modal fade" id="datosMonitor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Datos Monitor</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-group">
+                    <label>No. de inventario</label>
+                    <input type="number" class="form-control" id="inventario" placeholder="Introduce el no. de inventario">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Marca</label>
+                    <input type="text" class="form-control" id="marca" placeholder="Introduce la marca">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Modelo</label>
+                    <input type="text" class="form-control" id="Modelo" placeholder="Introduce el modelo">
+                  </div>
+
+                  <div class="form-group">
+                    <label>No_Serie</label>
+                    <input type="number" class="form-control" id="serie" placeholder="Introduce el no. de serie">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Observaciones </label>
+                    <input type="text" class="form-control" id="text" placeholder="Introduce las observaciones">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Tipo de adquisición</label>
+                    <input type="text" class="form-control" id="TipoAdquisicion" placeholder="Introduce el tipo de adquisición">
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Datos Teclado-->
+        <div class="modal fade" id="datosTeclado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Datos Teclado</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-group">
+                    <label>No. de inventario</label>
+                    <input type="number" class="form-control" id="inventario" placeholder="Introduce el no. de inventario">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Marca</label>
+                    <input type="text" class="form-control" id="marca" placeholder="Introduce la marca">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Modelo</label>
+                    <input type="text" class="form-control" id="Modelo" placeholder="Introduce el modelo">
+                  </div>
+
+                  <div class="form-group">
+                    <label>No_Serie</label>
+                    <input type="number" class="form-control" id="serie" placeholder="Introduce el no. de serie">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Observaciones </label>
+                    <input type="text" class="form-control" id="text" placeholder="Introduce las observaciones">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Tipo de adquisición</label>
+                    <input type="text" class="form-control" id="TipoAdquisicion" placeholder="Introduce el tipo de adquisición">
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Datos Mouse-->
+        <div class="modal fade" id="datosMouse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Datos Mouse</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-group">
+                    <label>No. de inventario</label>
+                    <input type="number" class="form-control" id="inventario" placeholder="Introduce el no. de inventario">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Marca</label>
+                    <input type="text" class="form-control" id="marca" placeholder="Introduce la marca">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Modelo</label>
+                    <input type="text" class="form-control" id="Modelo" placeholder="Introduce el modelo">
+                  </div>
+
+                  <div class="form-group">
+                    <label>No_Serie</label>
+                    <input type="number" class="form-control" id="serie" placeholder="Introduce el no. de serie">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Observaciones </label>
+                    <input type="text" class="form-control" id="text" placeholder="Introduce las observaciones">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Tipo de adquisición</label>
+                    <input type="text" class="form-control" id="TipoAdquisicion" placeholder="Introduce el tipo de adquisición">
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Datos Responsable-->
+        <div class="modal fade" id="datosResponsable" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Datos del responsable</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+              <div class="modal-body">
+                <form>
+                  <div class="form-group">
+                    <label>RFC</label>
+                    <input type="text" class="form-control" id="inventario" placeholder="Introduce el RFC">
+                  </div>
+
+                  <div class="form-group">
+                    <label>Nombre del responsable</label>
+                    <input type="text" class="form-control" id="marca" placeholder="nombre del responsable" disabled>
+                  </div>
+                </form>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <button type="button" class="btn btn-success">Guardar</button>
 
       </div>
     </div>
