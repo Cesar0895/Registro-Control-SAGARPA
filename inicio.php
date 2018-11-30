@@ -10,22 +10,29 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
         crossorigin="anonymous">
 
-
+    <link rel="stylesheet" href="./css/estilo.css">
     <title>Control de dispositivos</title>
 
 </head>
 
 <body>
+    <div class="allNavbar">
 
-    <nav class="navbar navbar-light" style="background-color: #000000;">
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
+        <a href="inicio.php" class="logo">
+            <img src="./img/logoSagarpa.png" width="180" height="80" class="d-inline-block align-top" alt="">
+        </a>
 
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+                aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+ <div class="collapse navbar-collapse" id="navbarCollapse">
         <ul class="nav nav-tabs">
-            <li class="nav-item">
-                <img src="./img/logoSagarpa.png" width="180" height="80" class="d-inline-block align-top" alt="">
-            </li>
 
             <li class="nav-item">
-                <a class="nav-link" href="inicio.html">Inicio</a>
+                <a class="nav-link" href="inicio.php">Inicio</a>
             </li>
             <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
@@ -41,10 +48,13 @@
                 <a class="nav-link" href="personal.html">Personal</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link disabled" href="#">Disabled</a>
+                <a class="nav-link " href="complementos.php">Registros complementos</a>
             </li>
         </ul>
+</div>
     </nav>
+
+    </div>
 
     <main role="main" class="container">
         <br>
