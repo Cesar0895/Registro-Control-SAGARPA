@@ -1,8 +1,7 @@
 <?php
 	require 'conexion.php';
-	
-	        $RFC = $_GET['RFC'];        
-            $nombre = isset($_GET['Nombre']) ? $_GET['Nombre'] : null ;
+			$RFC = $_GET['RFC'];
+			$nombre = isset($_GET['Nombre']) ? $_GET['Nombre'] : null ;
             $apePaterno = isset($_GET['ApePaterno']) ? $_GET['ApePaterno'] : null ;
             $apeMaterno = isset($_GET['ApeMaterno']) ? $_GET['ApeMaterno'] : null ;
             $adscripcion = isset($_GET['Adscripcion']) ? $_GET['Adscripcion'] : null ;
@@ -19,20 +18,29 @@
             $estatus = isset($_GET['estatus']) ? $_GET['estatus'] : null ;
 
 	
-            $sql = "SELECT * FROM persona WHERE RFC = '$RFC'";
-            $resultado = $mysqli->query($sql);
-            $row = $resultado->fetch_array(MYSQLI_ASSOC);
+            
         
 
             if ($nombre!=null) {
-                $sql2= "update persona set  Nombre='".$nombre."', ApePaterno='".$apePaterno."',ApeMaterno='".$apeMaterno."', Adscripcion='".$adscripcion."', Aera='$area',Subarea='$subarea', Puesto='$puesto', Denominacion='$denominacion', Telefono='$telefono', Extension='$extencion', Domicilio='$domicilio', Correo='$correo', GFC='$GFC', Acceso_correo='$accesoCorreo', Estatus='$estatus'
-                Where RFC='$RFC'";
+                $sql2= "update persona set  Nombre='".$nombre."', ApePaterno='".$apePaterno."',ApeMaterno='".$apeMaterno."', Adscripcion='".$adscripcion."', Area='$area',Subarea='$subarea', Puesto='$puesto', Denominacion='$denominacion', Telefono='$telefono', Extension='$extencion', Domicilio='$domicilio', Correo='$correo', GFC='$GFC', Acceso_correo='$accesoCorreo', Estatus='$estatus'
+                Where RFC='".$RFC."'";
                 $mysqli->query($sql2);
     
-                if ($nombre=1) {
+                if ($RFC=1) {
                     header("location:personal.php");
                 }
-            }
+			}
+?>
+<?php
+	require 'conexion.php';
+
+			
+	
+	        $RFC = $_GET['RFC'];        
+            
+			$sql = "SELECT * FROM persona WHERE RFC = '$RFC'";
+            $resultado = $mysqli->query($sql);
+            $row = $resultado->fetch_array(MYSQLI_ASSOC);
 ?>
 <!doctype html>
 <html lang="en">
@@ -103,10 +111,10 @@
 		</div>
 		<form>
 			<div class="form-group">
-				<input type="text" class="form-control" id="RFC" name="RFC" placeholder="RFC" value="<?php echo $row['RFC']; ?>"
+				<input type="hidden" class="form-control" id="RFC" name="RFC" placeholder="RFC" value="<?php echo $row['RFC']; ?>"
 				 required>
 			</div>
-			</div>
+
 
 			<div class="form-group">
 				<label for="nombre" class="col-sm-2 controllabel">Nombre</label>

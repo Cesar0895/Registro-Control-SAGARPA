@@ -1,0 +1,12 @@
+body {
+    margin: 0;
+    padding: 0;
+    background-color: burlywood;
+    background-size: cover;
+    font-family: sans-serif;
+    height: 100vh;
+  }
+
+  .container{
+      background-color: white;
+  }

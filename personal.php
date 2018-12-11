@@ -1,13 +1,19 @@
 <?php
 	require 'conexion.php';
+
+	$RFC = $_GET['RFC'];
+	
+	$sql2 = "DELETE FROM persona WHERE RFC = '$RFC'";
+	$resultado = $mysqli->query($sql2);
 	
 	$where = "";
 	
 	if(!empty($_POST))
 	{
 		$valor = $_POST['campo'];
+	
 		if(!empty($valor)){
-			$where = "WHERE RFC LIKE '%$valor'";
+			$where = "WHERE RFC LIKE '%$valor' or Nombre like '%$valor' or Area like '%$valor'";
 		}
 	}
 	$sql = "SELECT * FROM persona $where";
@@ -30,7 +36,7 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
 	 crossorigin="anonymous">
 
-
+	<link rel="stylesheet" href="./css/general.css">
 	<title>Control de dispositivos</title>
 
 </head>
@@ -78,7 +84,7 @@
 	</div>
 
 	<main role="main" class="container">
-        <br><br><br><br><br>
+        <br><br><br>
 		<div class="row">
 			<h2 style="text-align:center">PERSONAL</h2>
         </div>
@@ -180,7 +186,7 @@
 							</a>
 						</td>
 						<td>
-							<a href="#" data-href="EliminarPersona.php?RFC=<?php echo $row['RFC']; ?>" data-toggle="modal"
+							<a href="personal.php" data-href="personal.phps=<?php echo $row['RFC']; ?>" data-toggle="modal"
 							 data-target="#confirm-delete">
 								<span class="far fa-trash-alt"></span>
 							</a>
