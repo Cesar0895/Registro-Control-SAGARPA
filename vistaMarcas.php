@@ -1,35 +1,11 @@
-	<?php
+<?php
 
 		require 'conexion.php';
 
-	$RFC = $_POST['RFC'];
-	$nombre = $_POST['Nombre'];
-	$apePaterno = $_POST['ApePaterno'];
-	$apeMaterno = $_POST['ApeMaterno'];
-	$adscripcion = $_POST['Adscripcion'];
-	$area = $_POST['Area'];
-	$subarea = $_POST['Subarea'];
-	$puesto = $_POST['Puesto'];
-	$denominacion = $_POST['Denominacion'];
-	$telefono = $_POST['telefono'];
-	$extencion = $_POST['extencion'];
-	$domicilio = $_POST['domicilio'];
-	$correo = $_POST['correo'];
-	$GFC = $_POST['GFC'];
-	$accesoCorreo = $_POST['accesoCorreo'];
-	$estatus = $_POST['estatus'];
-
-	$sql= "INSERT INTO persona (RFC, Nombre, ApePaterno, ApeMaterno, 
-		Adscripcion, Area, Subarea, Puesto, Denominacion, Telefono, Extension, 
-		Domicilio, Correo, GFC, Acceso_correo, Estatus) 
-		VALUES ('$RFC','$nombre','$apePaterno','$apeMaterno','$adscripcion','$area','$subarea',
-				'$puesto','$denominacion','$telefono','$extencion','$domicilio','$correo','$GFC',
-				'$accesoCorreo','$estatus')";
-	$resultado = $mysqli->query($sql);
-
+	
 	$where = "";
 
-	$sqlmostrar = "SELECT * FROM persona $where";
+	$sqlmostrar = "SELECT * FROM marca $where";
 	$resultadoTabla = $mysqli->query($sqlmostrar);
 
 ?>
@@ -84,11 +60,11 @@
 
     <main role="main" class="container">
         <div class="row">
-				<h2 style="text-align:center">PERSONAL</h2>
+				<h2 style="text-align:center">MARCAS</h2>
 			</div>
 			
 			<div class="row">
-				<a href="RegistroPersonal.php" class="btn btn-primary">Nuevo Registro</a>
+				<a href="complementos.php" class="btn btn-primary">Nuevo Registro</a>
 				
 				<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
 					<b>Nombre: </b><input type="text" id="campo" name="campo" />
@@ -102,22 +78,9 @@
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th>RFC</th>
-							<th>Nombre</th>
-							<th>Apellido Paterno</th>
-							<th>Apellido Materno</th>
-                            <th>Adscripción</th>
-                            <th>Area</th>
-                            <th>Subarea</th>
-                            <th>Puesto</th>
-                            <th>Denominación</th>
-                            <th>Telefono</th>
-                            <th>Extención</th>
-                            <th>Domicilio</th>
-                            <th>Correo</th>
-                            <th>GFC</th>
-                            <th>Acceso del correo</th>
-                            <th>Status</th>
+							<th>ID</th>
+							<th>Marca</th>
+							
                             <th></th>
                             <th></th>
 						</tr>
@@ -126,23 +89,8 @@
 					<tbody>
 						<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
 							<tr>
-								<td><?php echo $row['RFC']; ?></td>
-								<td><?php echo $row['Nombre']; ?></td>
-								<td><?php echo $row['ApePaterno']; ?></td>
-                                <td><?php echo $row['ApeMaterno']; ?></td>
-                                <td><?php echo $row['Adscripcion']; ?></td>
-								<td><?php echo $row['Area']; ?></td>
-								<td><?php echo $row['Subarea']; ?></td>
-                                <td><?php echo $row['Puesto']; ?></td>
-                                <td><?php echo $row['Denominacion']; ?></td>
-								<td><?php echo $row['Telefono']; ?></td>
-								<td><?php echo $row['Extension']; ?></td>
-                                <td><?php echo $row['Domicilio']; ?></td>
-                                <td><?php echo $row['Correo']; ?></td>
-								<td><?php echo $row['GFC']; ?></td>
-								<td><?php echo $row['Acceso_correo']; ?></td>
-								<td><?php echo $row['Estatus']; ?></td>
-
+								<td><?php echo $row['id_Marca']; ?></td>
+								<td><?php echo $row['Marca']; ?></td>
 							</tr>
 						<?php } ?>
 					</tbody>

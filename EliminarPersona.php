@@ -1,3 +1,13 @@
+<?php
+	
+	require 'conexion.php';
+
+	$RFC = $_GET['RFC'];
+	
+	$sql = "DELETE FROM persona WHERE RFC = '$RFC'";
+	$resultado = $mysqli->query($sql);
+	
+?>
 <!doctype html>
 <html lang="en">
 
@@ -56,46 +66,19 @@
 
 	</div>
 
-	<main role="main" class="container principal">
-        <br>
-        <br><br><br><br>
-		<h1 class="text-center">Bienvenido @[Usuario]</h1>
-		<br>
-		<div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
-			<div class="carousel-inner">
-				<div class="carousel-item active">
-					<img class="d-block w-100" src="./img/slide1.png" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide2.png" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide3.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide4.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide5.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide6.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide7.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide8.jpg" class="img-fluid" alt="Responsive image">
-				</div>
+	<main role="main" class="container">
+        <br><br><br><br><br>
+		<div class="row">
+			<div class="row" style="text-align:center">
+				<?php if($resultado) { ?>
+				<h3>REGISTRO ELIMINADO</h3>
+				<?php } else { ?>
+				<h3>ERROR AL ELIMINAR</h3>
+				<?php } ?>
+
+				<a href="index.php" class="btn btn-primary">Regresar</a>
+
 			</div>
-			<a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="sr-only">Previous</span>
-			</a>
-			<a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="sr-only">Next</span>
-			</a>
 		</div>
 	</main>
 	<!-- Optional JavaScript -->

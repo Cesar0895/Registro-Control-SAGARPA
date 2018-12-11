@@ -1,7 +1,7 @@
 <?php
-        include 'conexion.php';
-        
-            $RFC = isset($_GET['RFC']) ? $_GET['RFC'] : null ;
+	require 'conexion.php';
+	
+	        $RFC = $_GET['RFC'];        
             $nombre = isset($_GET['Nombre']) ? $_GET['Nombre'] : null ;
             $apePaterno = isset($_GET['ApePaterno']) ? $_GET['ApePaterno'] : null ;
             $apeMaterno = isset($_GET['ApeMaterno']) ? $_GET['ApeMaterno'] : null ;
@@ -17,23 +17,23 @@
             $GFC = isset($_GET['GFC']) ? $_GET['GFC'] : null ;
             $accesoCorreo = isset($_GET['accesoCorreo']) ? $_GET['accesoCorreo'] : null ;
             $estatus = isset($_GET['estatus']) ? $_GET['estatus'] : null ;
+
+	
+            $sql = "SELECT * FROM persona WHERE RFC = '$RFC'";
+            $resultado = $mysqli->query($sql);
+            $row = $resultado->fetch_array(MYSQLI_ASSOC);
         
 
-            if ($RFC!=null) {
-                $sql= "INSERT INTO persona (RFC, Nombre, ApePaterno, ApeMaterno, 
-                Adscripcion, Area, Subarea, Puesto, Denominacion, Telefono, Extension, 
-                Domicilio, Correo, GFC, Acceso_correo, Estatus) 
-                VALUES ('".$RFC."','".$nombre."','".$apePaterno."','".$apeMaterno."','".$adscripcion."','$area','$subarea',
-                    '$puesto','$denominacion','$telefono','$extencion','$domicilio','$correo','$GFC',
-                    '$accesoCorreo','$estatus')";
-                $resultado = $mysqli->query($sql);
+            if ($nombre!=null) {
+                $sql2= "update persona set  Nombre='".$nombre."', ApePaterno='".$apePaterno."',ApeMaterno='".$apeMaterno."', Adscripcion='".$adscripcion."', Aera='$area',Subarea='$subarea', Puesto='$puesto', Denominacion='$denominacion', Telefono='$telefono', Extension='$extencion', Domicilio='$domicilio', Correo='$correo', GFC='$GFC', Acceso_correo='$accesoCorreo', Estatus='$estatus'
+                Where RFC='$RFC'";
+                $mysqli->query($sql2);
     
-                if ($RFC=1) {
+                if ($nombre=1) {
                     header("location:personal.php");
                 }
             }
 ?>
-
 <!doctype html>
 <html lang="en">
 
@@ -55,153 +55,162 @@
 
 	<div class="allNavbar">
 
-<nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
-    <a href="inicio.php" class="logo">
-        <img src="./img/logoSagarpa.png" width="180" height="80" class="d-inline-block align-top" alt="">
-    </a>
+		<nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
+			<a href="inicio.php" class="logo">
+				<img src="./img/logoSagarpa.png" width="180" height="80" class="d-inline-block align-top" alt="">
+			</a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
-     aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+			 aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
 
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="nav nav-tabs">
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<ul class="nav nav-tabs">
 
-            <li class="nav-item">
-                <a class="nav-link" href="inicio.php">Inicio</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="registroEquipoComputo.html ">Equipo de computo</a>
-                    <a class="dropdown-item" href="registroAuxiliares.html">Auxiliares</a>
-                    <a class="dropdown-item" href="#">Telefonia</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Separated link</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="personal.php">Personal</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link " href="complementos.php">Registros complementos</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+					<li class="nav-item">
+						<a class="nav-link" href="inicio.php">Inicio</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="registroEquipoComputo.html ">Equipo de computo</a>
+							<a class="dropdown-item" href="registroAuxiliares.html">Auxiliares</a>
+							<a class="dropdown-item" href="#">Telefonia</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#">Separated link</a>
+						</div>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="personal.php">Personal</a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link " href="complementos.php">Registros complementos</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
 
-</div>
+	</div>
 
 	<main role="main" class="container">
 		<br>
 		<br>
+		<br>
+		<br>
 		<div class="row">
-			<h3 style="text-align:center">NUEVO REGISTRO</h3>
+			<h3 style="text-align:center">ACTUALIZAR REGISTRO</h3>
 		</div>
 		<form>
 			<div class="form-group">
-				<label for="rfc" class="col-sm-2 controllabel">RFC</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="RFC" name="RFC" placeholder="RFC" required>
-				</div>
+				<input type="text" class="form-control" id="RFC" name="RFC" placeholder="RFC" value="<?php echo $row['RFC']; ?>"
+				 required>
+			</div>
 			</div>
 
 			<div class="form-group">
 				<label for="nombre" class="col-sm-2 controllabel">Nombre</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="nombre" name="Nombre" placeholder="Nombre" required>
+					<input type="text" class="form-control" id="nombre" name="Nombre" placeholder="Nombre" value="<?php echo $row['Nombre']; ?>"
+					 required>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="apePaterno" class="col-sm-2 controllabel">Apellido Paterno</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="apePaterno" name="ApePaterno" placeholder="Apellido Paterno" required>
+					<input type="text" class="form-control" id="apePaterno" name="ApePaterno" placeholder="Apellido Paterno" value="<?php echo $row['ApePaterno']; ?>"
+					 required>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="apeMaterno" class="col-sm-2 controllabel">Apellido Materno</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="apeMaterno" name="ApeMaterno" placeholder="Apellido Materno" required>
+					<input type="text" class="form-control" id="apeMaterno" name="ApeMaterno" placeholder="Apellido Materno" value="<?php echo $row['ApeMaterno']; ?>"
+					 required>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="adscripcion" class="col-sm-2 controllabel">Adscripción</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="adscripcion" name="Adscripcion" placeholder="Adscripción" required>
+					<input type="text" class="form-control" id="adscripcion" name="Adscripcion" placeholder="Adscripción" value="<?php echo $row['Adscripcion']; ?>"
+					 required>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="area" class="col-sm-2 controllabel">Area</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="area" name="Area" placeholder="Area" required>
+					<input type="text" class="form-control" id="area" name="Area" placeholder="Area" value="<?php echo $row['Area']; ?>"
+					 required>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="subarea" class="col-sm-2 controllabel">Subarea</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="subarea" name="Subarea" placeholder="Subarea" required>
+					<input type="text" class="form-control" id="subarea" name="Subarea" placeholder="Subarea" value="<?php echo $row['Subarea']; ?>"
+					 required>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="puestp" class="col-sm-2 controllabel">Puesto</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="puesto" name="Puesto" placeholder="Puesto" required>
+					<input type="text" class="form-control" id="puesto" name="Puesto" placeholder="Puesto" value="<?php echo $row['Puesto']; ?>"
+					 required>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="denominacion" class="col-sm-2 controllabel">Denominación</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="denominacion" name="Denominacion" placeholder="Denominación" required>
+					<input type="text" class="form-control" id="denominacion" name="Denominacion" placeholder="Denominación" value="<?php echo $row['Denominacion']; ?>"
+					 required>
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="telefono" class="col-sm-2 controllabel">Telefono</label>
 				<div class="col-sm-10">
-					<input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Telefono">
+					<input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Telefono" value="<?php echo $row['Telefono']; ?>">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="extencion" class="col-sm-2 controllabel">Extención</label>
 				<div class="col-sm-10">
-					<input type="tel" class="form-control" id="esxtencion" name="extencion" placeholder="Extencion">
+					<input type="tel" class="form-control" id="esxtencion" name="extencion" placeholder="Extencion" value="<?php echo $row['Extension']; ?>">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="Domicilo" class="col-sm-2 controllabel">Domicilio</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="domicilio" name="domicilio" placeholder="Domicilio">
+					<input type="text" class="form-control" id="domicilio" name="domicilio" placeholder="Domicilio" value="<?php echo $row['Domicilio']; ?>">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="correo" class="col-sm-2 controllabel">Correo</label>
 				<div class="col-sm-10">
-					<input type="email" class="form-control" id="correo" name="correo" placeholder="Correo">
+					<input type="email" class="form-control" id="correo" name="correo" placeholder="Correo" value="<?php echo $row['Correo']; ?>">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="GFC" class="col-sm-2 controllabel">GFC</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="GFC" name="GFC" placeholder="GFC">
+					<input type="text" class="form-control" id="GFC" name="GFC" placeholder="GFC" value="<?php echo $row['GFC']; ?>">
 				</div>
 			</div>
 
 			<div class="form-group">
 				<label for="accesoCorreo" class="col-sm-2 controllabel">Acceso del correo</label>
 				<div class="col-sm-10">
-					<input type="text" class="form-control" id="accesoCorreo" name="accesoCorreo" placeholder="Acceso del correo">
+					<input type="text" class="form-control" id="accesoCorreo" name="accesoCorreo" placeholder="Acceso del correo" value="<?php echo $row['Acceso_correo']; ?>">
 				</div>
 			</div>
 
@@ -209,9 +218,9 @@
 				<label for="estatus" class="col-sm-2 controllabel">Status</label>
 				<div class="col-sm-10">
 					<select class="form-control" id="estatus" name="estatus">
-						<option value="ACTIVO">ACTIVO</option>
-						<option value="BAJA">BAJA</option>
-						<option value="OTRO">OTRO</option>
+						<option value="ACTIVO" <?php if( $row[ 'Estatus']=='ACTIVO' ) echo 'Selected'; ?>>ACTIVO</option>
+						<option value="BAJA" <?php if( $row[ 'Estatus']=='BAJA' ) echo 'Selected'; ?>>BAJA</option>
+						<option value="OTRO" <?php if( $row[ 'Estatus']=='OTRO' ) echo 'Selected'; ?>>OTRO</option>
 					</select>
 				</div>
 			</div>
@@ -220,12 +229,11 @@
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
 					<a href="index.php" class="btn btndefault">Regresar</a>
-					<button type="submit" class="btn btnprimary">Guardar</button>
+					<button type="submit" class="btn btnprimary">Actualizar</button>
 				</div>
 			</div>
 
-		</form>
-
+        </form>
 
 
 	</main>
