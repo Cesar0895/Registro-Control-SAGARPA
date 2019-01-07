@@ -55,43 +55,50 @@
 
 	<div class="allNavbar">
 
-<nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
-    <a href="inicio.php" class="logo">
-        <img src="./img/logoSagarpa.png" width="180" height="80" class="d-inline-block align-top" alt="">
-    </a>
+		<nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
+			<a href="inicio.php" class="logo">
+				<img src="./img/logoSagarpa.png" width="180" height="80" class="d-inline-block align-top" alt="">
+			</a>
 
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
-     aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
+			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+			 aria-expanded="false" aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
 
-    <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="nav nav-tabs">
+			<div class="collapse navbar-collapse" id="navbarCollapse">
+				<ul class="nav nav-tabs">
 
-            <li class="nav-item">
-                <a class="nav-link" href="inicio.php">Inicio</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="registroEquipoComputo.html ">Equipo de computo</a>
-                    <a class="dropdown-item" href="registroAuxiliares.html">Auxiliares</a>
-                    <a class="dropdown-item" href="#">Telefonia</a>
-                    <div class="dropdown-divider"></div>
-                    <a class="dropdown-item" href="#">Separated link</a>
-                </div>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" href="personal.php">Personal</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link " href="complementos.php">Registros complementos</a>
-            </li>
-        </ul>
-    </div>
-</nav>
+					<li class="nav-item">
+						<a class="nav-link" href="inicio.php">Inicio</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="registroEquipoComputo.html ">Equipo de computo</a>
+							<a class="dropdown-item" href="registroAuxiliares.html">Auxiliares</a>
+							<a class="dropdown-item" href="#">Telefonia</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#">Separated link</a>
+						</div>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="personal.php">Personal</a>
+					</li>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro Complementos</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="marcas.php ">Marcas</a>
+							<a class="dropdown-item" href="modelos.php">Modelos</a>
+							<a class="dropdown-item" href="#">Disco duro</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#">Separated link</a>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</nav>
 
-</div>
+	</div>
 
 	<main role="main" class="container">
 		<br>

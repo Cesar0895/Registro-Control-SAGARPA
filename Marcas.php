@@ -49,8 +49,15 @@
 					<li class="nav-item">
 						<a class="nav-link" href="personal.php">Personal</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link " href="complementos.php">Registros complementos</a>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro Complementos</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="marcas.php ">Marcas</a>
+							<a class="dropdown-item" href="modelos.php">Modelos</a>
+							<a class="dropdown-item" href="#">Disco duro</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#">Separated link</a>
+						</div>
 					</li>
 				</ul>
 			</div>
@@ -67,7 +74,7 @@
 		<div class="card">
 			<form>
 				<div class="form-group">
-					<label>Marca</label>
+				<h5 class="card-title">Marca</h5>
 					<input type="text" class="form-control" id="marca" name="Marca" placeholder="Marca" require>
 				</div>
 				<div class="form-group">
@@ -77,6 +84,8 @@
 					</div>
 				</div>
 			</form>
+			<a href="vistaMarcas.php" class="btn btn-success">Ver lista de marcas registradas</a>
+
 		</div>
 
 		<?php

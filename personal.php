@@ -74,25 +74,33 @@
 					<li class="nav-item">
 						<a class="nav-link" href="personal.php">Personal</a>
 					</li>
-					<li class="nav-item">
-						<a class="nav-link " href="complementos.php">Registros complementos</a>
+					<li class="nav-item dropdown">
+						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro Complementos</a>
+						<div class="dropdown-menu">
+							<a class="dropdown-item" href="marcas.php ">Marcas</a>
+							<a class="dropdown-item" href="modelos.php">Modelos</a>
+							<a class="dropdown-item" href="#">Disco duro</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="#">Separated link</a>
+						</div>
 					</li>
 				</ul>
 			</div>
 		</nav>
 
 	</div>
-
 	<main role="main" class="container">
-        <br><br><br>
+		<br>
+		<br>
+		<br>
 		<div class="row">
 			<h2 style="text-align:center">PERSONAL</h2>
-        </div>
-        
-        <a href="RegistroPersonal.php" class="btn btn-primary float-right">Nuevo Registro</a>
+		</div>
+
+		<a href="RegistroPersonal.php" class="btn btn-primary float-right">Nuevo Registro</a>
 
 		<div class="row">
-			
+
 
 			<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
 				<b>Nombre: </b>
@@ -105,7 +113,7 @@
 		<br>
 
 		<div class="row table-responsive">
-			<table class="table table-striped">
+			<table class="table table-hover table-secondary">
 				<thead>
 					<tr>
 						<th>RFC</th>
@@ -186,8 +194,8 @@
 							</a>
 						</td>
 						<td>
-							<a href="personal.php" data-href="personal.phps=<?php echo $row['RFC']; ?>" data-toggle="modal"
-							 data-target="#confirm-delete">
+							<a href="personal.php" data-href="personal.php?RFC=<?php echo $row['RFC']; ?>"
+							 data-toggle="modal" data-target="#confirm-delete">
 								<span class="far fa-trash-alt"></span>
 							</a>
 						</td>
@@ -197,7 +205,7 @@
 				</tbody>
 			</table>
 		</div>
-		</div>
+		
 
 
 
