@@ -16,6 +16,8 @@
 </head>
 
 <body>
+
+
 	<div class="allNavbar">
 
 		<nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
@@ -52,16 +54,9 @@
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="marcas.php ">Marcas</a>
 							<a class="dropdown-item" href="modelos.php">Modelos</a>
-							
+							<a class="dropdown-item" href="#">Disco duro</a>
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="Dispositivos.php">Dispositivos</a>
-							<a class="dropdown-item" href="Soft.php">Software</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="DiscoDuro.php">Disco duro</a>
-							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
-							<a class="dropdown-item" href="Procesador.php">Procesador</a>
-							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
-							<a class="dropdown-item" href="Zonas.php">Zonas</a>
+							<a class="dropdown-item" href="#">Separated link</a>
 						</div>
 					</li>
 				</ul>
@@ -69,53 +64,55 @@
 		</nav>
 
 	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
 
+	<div class="container">
+		<div class="card">
+			<form>
+				<div class="form-group">
+				<h5 class="card-title">Dispositivos</h5>
+					<input type="text" class="form-control" id="dispositivo" name="Dispositivo" placeholder="Nombre de dispositivo" require>
+					<input type="text" class="form-control" id="tipo" name="Tipo" placeholder="Tipo" require>
 
-	<main role="main" class="container principal">
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<h1 class="text-center">Bienvenido @[Usuario]</h1>
-		<br>
-		<div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
-			<div class="carousel-inner">
-				<div class="carousel-item active">
-					<img class="d-block w-100" src="./img/slide1.png" class="img-fluid" alt="Responsive image">
 				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide2.png" class="img-fluid" alt="Responsive image">
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<a href="inicio.php" class="btn btn-default">Regresar</a>
+						<button type="submit" class="btn btn-primary">Guardar</button>
+					</div>
 				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide3.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide4.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide5.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide6.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide7.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide8.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-			</div>
-			<a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="sr-only">Previous</span>
-			</a>
-			<a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="sr-only">Next</span>
-			</a>
+			</form>
+			<a href="vistaDispositivos.php" class="btn btn-success">Ver lista de dispositivos registrados</a>
+
 		</div>
-	</main>
+
+		<?php
+        error_reporting(E_ALL & ~E_NOTICE);
+        error_reporting(E_ERROR | E_PARSE);
+        require 'conexion.php';
+
+		$disp = $_GET['Dispositivo'];
+		$tipo = $_GET['Tipo'];
+        if ($disp!=null && $tipo!=null) {
+            $sqldisp= "INSERT INTO dispositivos (Nomb_Dispositivo, Tipo) VALUES ('$disp','$tipo')";
+            $mysqli->query($sqldisp);
+
+            if ($disp=1 && $tipo=1) {
+                header("location:vistaDispositivos.php");
+            }
+        }
+        
+
+        ?>
+
+
+
+
+	</div>
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

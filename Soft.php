@@ -1,3 +1,26 @@
+<?php
+        error_reporting(E_ALL & ~E_NOTICE);
+        error_reporting(E_ERROR | E_PARSE);
+        require 'conexion.php';
+
+		$nombre = $_GET['Nombre'];
+		$version = $_GET['Version'];
+		$licencia = $_GET['Licencia'];
+		$key = $_GET['llave'];
+		$plataforma = $_GET['Plataforma'];
+		$fabricante = $_GET['Fabricante'];
+		$adqui = $_GET['Adquisicion'];
+
+        if ($nombre!=null) {
+            $sqlsoft= "INSERT INTO software (Nombre, Version, Licencia, Key_soft, Plataforma, Fabricante, Adquisicion) VALUES ('$nombre','$version','$licencia', '$key', '$plataforma', '$fabricante', '$adqui')";
+            $mysqli->query($sqlsoft);
+
+            if ($nombre=1) {
+                header("location:vistaSoft.php");
+            }
+        }
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -16,6 +39,8 @@
 </head>
 
 <body>
+
+
 	<div class="allNavbar">
 
 		<nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
@@ -52,16 +77,9 @@
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="marcas.php ">Marcas</a>
 							<a class="dropdown-item" href="modelos.php">Modelos</a>
-							
+							<a class="dropdown-item" href="#">Disco duro</a>
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="Dispositivos.php">Dispositivos</a>
-							<a class="dropdown-item" href="Soft.php">Software</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="DiscoDuro.php">Disco duro</a>
-							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
-							<a class="dropdown-item" href="Procesador.php">Procesador</a>
-							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
-							<a class="dropdown-item" href="Zonas.php">Zonas</a>
+							<a class="dropdown-item" href="#">Separated link</a>
 						</div>
 					</li>
 				</ul>
@@ -69,53 +87,74 @@
 		</nav>
 
 	</div>
+	<br>
+	<br>
+	<br>
+	<br>
+	<br>
 
+	<div class="container">
+		<div class="card">
+			<form>
+				<h4 class="card-title">Software</h4>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label ml-4" >Nombre:</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="nombre" name="Nombre" placeholder="Nombre de software" require>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label ml-4">Version:</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="version" name="Version" placeholder="Version" require>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label ml-4">Licencia</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="licencia" name="Licencia" placeholder="Licencia" require>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label ml-4">Key</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="key" name="llave" placeholder="Key" require>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label ml-4">Plataforma</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="plataforma" name="Plataforma" placeholder="Plataforma (Ejemplo: Windows 8...)" require>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label ml-4">Fabricante</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="fabricante" name="Fabricante" placeholder="Nombre del fabricante" require>
+					</div>
+				</div>
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label ml-4">Adquisición</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="adquisicion" name="Adquisicion" placeholder="datos de adquisición" require>
+					</div>
+				</div>
 
-	<main role="main" class="container principal">
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<h1 class="text-center">Bienvenido @[Usuario]</h1>
-		<br>
-		<div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
-			<div class="carousel-inner">
-				<div class="carousel-item active">
-					<img class="d-block w-100" src="./img/slide1.png" class="img-fluid" alt="Responsive image">
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<a href="inicio.php" class="btn btn-default">Regresar</a>
+						<button type="submit" class="btn btn-primary">Guardar</button>
+					</div>
 				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide2.png" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide3.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide4.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide5.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide6.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide7.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide8.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-			</div>
-			<a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="sr-only">Previous</span>
-			</a>
-			<a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="sr-only">Next</span>
-			</a>
+
+			</form>
+			<a href="vistaSoft.php" class="btn btn-success">Ver lista de software registrados</a>
+
 		</div>
-	</main>
+
+		
+
+	</div>
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"

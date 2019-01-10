@@ -1,3 +1,27 @@
+<?php
+
+		require 'conexion.php';
+	$id_zona = $_GET['id_Zona'];
+
+	$sql2 = "DELETE FROM zona WHERE id_Zona = '$id_zona'";
+	$resultado = $mysqli->query($sql2);
+	
+	$where = "";
+
+	if(!empty($_POST))
+	{
+		$valor = $_POST['campo'];
+	
+		if(!empty($valor)){
+			$where = "WHERE Nombre LIKE '%$valor'";
+		}
+	}
+
+	$sqlmostrar = "SELECT * FROM zona $where";
+	$resultadoTabla = $mysqli->query($sqlmostrar);
+
+?>
+
 <!doctype html>
 <html lang="en">
 
@@ -10,12 +34,15 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
 
-	<link rel="stylesheet" href="./css/estilo.css">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+	 crossorigin="anonymous">
+
 	<title>Control de dispositivos</title>
 
 </head>
 
 <body>
+
 	<div class="allNavbar">
 
 		<nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
@@ -52,16 +79,9 @@
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="marcas.php ">Marcas</a>
 							<a class="dropdown-item" href="modelos.php">Modelos</a>
-							
+							<a class="dropdown-item" href="DiscoDuro">Disco duro</a>
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="Dispositivos.php">Dispositivos</a>
-							<a class="dropdown-item" href="Soft.php">Software</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="DiscoDuro.php">Disco duro</a>
-							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
-							<a class="dropdown-item" href="Procesador.php">Procesador</a>
-							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
-							<a class="dropdown-item" href="Zonas.php">Zonas</a>
+							<a class="dropdown-item" href="#">Separated link</a>
 						</div>
 					</li>
 				</ul>
@@ -69,52 +89,54 @@
 		</nav>
 
 	</div>
-
-
-	<main role="main" class="container principal">
-		<br>
-		<br>
-		<br>
-		<br>
-		<br>
-		<h1 class="text-center">Bienvenido @[Usuario]</h1>
-		<br>
-		<div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
-			<div class="carousel-inner">
-				<div class="carousel-item active">
-					<img class="d-block w-100" src="./img/slide1.png" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide2.png" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide3.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide4.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide5.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide6.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide7.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide8.jpg" class="img-fluid" alt="Responsive image">
-				</div>
-			</div>
-			<a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
-				<span class="carousel-control-prev-icon" aria-hidden="true"></span>
-				<span class="sr-only">Previous</span>
-			</a>
-			<a class="carousel-control-next" href="#carouselExampleFade" role="button" data-slide="next">
-				<span class="carousel-control-next-icon" aria-hidden="true"></span>
-				<span class="sr-only">Next</span>
-			</a>
+	<br>
+	<br>
+	<br>
+	<main role="main" class="container">
+		<div class="row">
+			<h2 style="text-align:center">Almacenamiento</h2>
 		</div>
+
+		<a href="Zona.php" class="btn btn-primary float-right">Nuevo Registro</a>
+
+
+		<br>
+
+		<div class="row table-responsive">
+			<table class="table table-hover table-secondary">
+				<thead>
+					<tr>
+
+						<th>zona</th>
+
+						<th></th>
+
+					</tr>
+				</thead>
+
+				<tbody>
+					<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
+					<tr>
+
+						<td>
+							<?php echo $row['Nombre']; ?>
+						</td>
+						<td>
+							<a href="vistaZonas.php" data-href="vistaZonas.php?id_Zona=<?php echo $row['id_Zona']; ?>"
+							 data-toggle="modal" data-target="#confirm-delete">
+								<span class="far fa-trash-alt"></span>
+							</a>
+						</td>
+					</tr>
+					<?php } ?>
+				</tbody>
+			</table>
+		</div>
+
+
+
+
+
 	</main>
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
@@ -124,6 +146,37 @@
 	 crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	 crossorigin="anonymous"></script>
+
+	<!-- Modal -->
+	<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Eliminar Zona</h4>
+				</div>
+
+				<div class="modal-body">
+					¿Desea eliminar este registro?
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<a class="btn btn-danger btn-ok">Delete</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$('#confirm-delete').on('show.bs.modal', function(e) {
+			$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+
+			$('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
+		});
+	</script>
+
 </body>
 
 </html>
