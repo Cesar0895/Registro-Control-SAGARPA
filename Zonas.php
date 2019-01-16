@@ -20,9 +20,9 @@
 
 	<div class="allNavbar">
 
-		<nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a href="inicio.php" class="logo">
-				<img src="./img/logoSagarpa.png" width="180" height="80" class="d-inline-block align-top" alt="">
+				<img src="./img/logoSader.jpg" width="180" height="80" class="d-inline-block align-top" alt="">
 			</a>
 
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
@@ -31,11 +31,12 @@
 			</button>
 
 			<div class="collapse navbar-collapse" id="navbarCollapse">
-				<ul class="nav nav-tabs">
+				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
 					<li class="nav-item">
 						<a class="nav-link" href="inicio.php">Inicio</a>
 					</li>
+
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
 						<div class="dropdown-menu">
@@ -52,12 +53,29 @@
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro Complementos</a>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="marcas.php ">Marcas</a>
-							<a class="dropdown-item" href="modelos.php">Modelos</a>
-							<a class="dropdown-item" href="DiscoDuro.php">Disco duro</a>
+							<a class="dropdown-item" href="Marcas.php ">Marcas</a>
+							<a class="dropdown-item" href="Modelos.php">Modelos</a>
+
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Separated link</a>
+							<a class="dropdown-item" href="Dispositivos.php">Dispositivos</a>
+							<a class="dropdown-item" href="Soft.php">Software</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="DiscoDuro.php">Disco duro</a>
+							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
+							<a class="dropdown-item" href="Procesador.php">Procesador</a>
+							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
+							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 						</div>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="#">
+							<span class="fas fa-user nav-link"></span> Sign Up</a>
+					</li>
+					<li>
+						<a href="#">
+							<span class="fas fa-sign-in-alt nav-link"></span> Salir</a>
 					</li>
 				</ul>
 			</div>
@@ -65,16 +83,12 @@
 
 	</div>
 	<br>
-	<br>
-	<br>
-	<br>
-	<br>
 
 	<div class="container">
 		<div class="card">
 			<form>
 				<div class="form-group">
-				<h5 class="card-title">Zonas</h5>
+					<h5 class="card-title">Zonas</h5>
 					<input type="text" class="form-control" id="zona" name="Nombre" placeholder="Escribe una zona" require>
 				</div>
 				<div class="form-group">

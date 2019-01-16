@@ -55,9 +55,9 @@
 
 	<div class="allNavbar">
 
-		<nav class="navbar navbar-expand-lg navbar-light fixed-top bg-light">
+		<nav class="navbar navbar-expand-lg navbar-light bg-light">
 			<a href="inicio.php" class="logo">
-				<img src="./img/logoSagarpa.png" width="180" height="80" class="d-inline-block align-top" alt="">
+				<img src="./img/logoSader.jpg" width="180" height="80" class="d-inline-block align-top" alt="">
 			</a>
 
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
@@ -66,11 +66,12 @@
 			</button>
 
 			<div class="collapse navbar-collapse" id="navbarCollapse">
-				<ul class="nav nav-tabs">
+				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
 					<li class="nav-item">
 						<a class="nav-link" href="inicio.php">Inicio</a>
 					</li>
+
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
 						<div class="dropdown-menu">
@@ -87,12 +88,29 @@
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro Complementos</a>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="marcas.php ">Marcas</a>
-							<a class="dropdown-item" href="modelos.php">Modelos</a>
-							<a class="dropdown-item" href="#">Disco duro</a>
+							<a class="dropdown-item" href="Marcas.php ">Marcas</a>
+							<a class="dropdown-item" href="Modelos.php">Modelos</a>
+
 							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Separated link</a>
+							<a class="dropdown-item" href="Dispositivos.php">Dispositivos</a>
+							<a class="dropdown-item" href="Soft.php">Software</a>
+							<div class="dropdown-divider"></div>
+							<a class="dropdown-item" href="DiscoDuro.php">Disco duro</a>
+							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
+							<a class="dropdown-item" href="Procesador.php">Procesador</a>
+							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
+							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 						</div>
+					</li>
+				</ul>
+				<ul class="nav navbar-nav">
+					<li>
+						<a href="#">
+							<span class="fas fa-user nav-link"></span> Sign Up</a>
+					</li>
+					<li>
+						<a href="#">
+							<span class="fas fa-sign-in-alt nav-link"></span> Salir</a>
 					</li>
 				</ul>
 			</div>
@@ -101,9 +119,7 @@
 	</div>
 
 	<main role="main" class="container">
-		<br>
-		<br>
-		<br>
+	
 		<br>
 		<div class="row">
 			<h3 style="text-align:center">ACTUALIZAR REGISTRO</h3>
@@ -118,46 +134,53 @@
 			<div class="form-group row">
 				<label class="col-sm-2 col-form-label ml-4">Nombre:</label>
 				<div class="col-sm-4">
-					<input type="text" class="form-control" id="nombre" name="Nombre" placeholder="Nombre de software" value="<?php echo $row['Nombre']; ?>" require>
+					<input type="text" class="form-control" id="nombre" name="Nombre" placeholder="Nombre de software" value="<?php echo $row['Nombre']; ?>"
+					 require>
 				</div>
 			</div>
 
 			<div class="form-group row">
-					<label class="col-sm-2 col-form-label ml-4">Version:</label>
-					<div class="col-sm-4">
-						<input type="text" class="form-control" id="version" name="Version" placeholder="Version" value="<?php echo $row['Version']; ?>" require>
-					</div>
+				<label class="col-sm-2 col-form-label ml-4">Version:</label>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="version" name="Version" placeholder="Version" value="<?php echo $row['Version']; ?>"
+					 require>
 				</div>
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label ml-4">Licencia</label>
-					<div class="col-sm-4">
-						<input type="text" class="form-control" id="licencia" name="Licencia" placeholder="Licencia" value="<?php echo $row['Licencia']; ?>" require>
-					</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label ml-4">Licencia</label>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="licencia" name="Licencia" placeholder="Licencia" value="<?php echo $row['Licencia']; ?>"
+					 require>
 				</div>
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label ml-4">Key</label>
-					<div class="col-sm-4">
-						<input type="text" class="form-control" id="key" name="llave" placeholder="Key" value="<?php echo $row['Key_soft']; ?>" require>
-					</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label ml-4">Key</label>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="key" name="llave" placeholder="Key" value="<?php echo $row['Key_soft']; ?>"
+					 require>
 				</div>
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label ml-4">Plataforma</label>
-					<div class="col-sm-4">
-						<input type="text" class="form-control" id="plataforma" name="Plataforma" placeholder="Plataforma (Ejemplo: Windows 8...)" value="<?php echo $row['Plataforma']; ?>" require>
-					</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label ml-4">Plataforma</label>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="plataforma" name="Plataforma" placeholder="Plataforma (Ejemplo: Windows 8...)"
+					 value="<?php echo $row['Plataforma']; ?>" require>
 				</div>
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label ml-4">Fabricante</label>
-					<div class="col-sm-4">
-						<input type="text" class="form-control" id="fabricante" name="Fabricante" placeholder="Nombre del fabricante" value="<?php echo $row['Fabricante']; ?>" require>
-					</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label ml-4">Fabricante</label>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="fabricante" name="Fabricante" placeholder="Nombre del fabricante" value="<?php echo $row['Fabricante']; ?>"
+					 require>
 				</div>
-				<div class="form-group row">
-					<label class="col-sm-2 col-form-label ml-4">Adquisición</label>
-					<div class="col-sm-4">
-						<input type="text" class="form-control" id="adquisicion" name="Adquisicion" placeholder="datos de adquisición" value="<?php echo $row['Adquisicion']; ?>" require>
-					</div>
+			</div>
+			<div class="form-group row">
+				<label class="col-sm-2 col-form-label ml-4">Adquisición</label>
+				<div class="col-sm-4">
+					<input type="text" class="form-control" id="adquisicion" name="Adquisicion" placeholder="datos de adquisición" value="<?php echo $row['Adquisicion']; ?>"
+					 require>
 				</div>
+			</div>
 
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">
