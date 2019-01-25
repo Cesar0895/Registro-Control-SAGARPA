@@ -40,9 +40,9 @@
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="registroEquipoComputo.html ">Equipo de computo</a>
-							<a class="dropdown-item" href="registroAuxiliares.html">Auxiliares</a>
-							<a class="dropdown-item" href="#">Telefonia</a>
+							<a class="dropdown-item" href="registroEquipoComputo.php">Equipo de computo</a>
+							<a class="dropdown-item" href="registroAuxiliares.php">Auxiliares</a>
+							<a class="dropdown-item" href="Telefonia.php">Telefonia</a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="#">Separated link</a>
 						</div>

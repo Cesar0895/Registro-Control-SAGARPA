@@ -2,25 +2,40 @@
 error_reporting(E_ALL & ~E_NOTICE);
 error_reporting(E_ERROR | E_PARSE);
 require 'conexion.php';
+$extencion = $_GET['Extencion'];
+$display = $_GET['Display'];
 $RFC = $_GET['RFC'];
-$nombre = isset($_GET['Nombre']) ? $_GET['Nombre'] : null ;
-$apePaterno = isset($_GET['ApePaterno']) ? $_GET['ApePaterno'] : null ;
-$apeMaterno = isset($_GET['ApeMaterno']) ? $_GET['ApeMaterno'] : null ;
-$adscripcion = isset($_GET['Adscripcion']) ? $_GET['Adscripcion'] : null ;
-$area = isset($_GET['Area']) ? $_GET['Area'] : null ;
-$subarea = isset($_GET['Subarea']) ? $_GET['Subarea'] : null ;
-$puesto = isset($_GET['Puesto']) ? $_GET['Puesto'] : null ;
-$denominacion = isset($_GET['Denominacion']) ? $_GET['Denominacion'] : null ;
-$telefono = isset($_GET['telefono']) ? $_GET['telefono'] : null ;
-$extencion = isset($_GET['extension']) ? $_GET['extension'] : null ;
-$domicilio = isset($_GET['domicilio']) ? $_GET['domicilio'] : null ;
-$correo = isset($_GET['correo']) ? $_GET['correo'] : null ;
-$GFC = isset($_GET['GFC']) ? $_GET['GFC'] : null ;
-$accesoCorreo = isset($_GET['accesoCorreo']) ? $_GET['accesoCorreo'] : null ;
-$estatus = isset($_GET['estatus']) ? $_GET['estatus'] : null ;
+$inmueble = $_GET['Inmueble'];
+$sitio = $_GET['Sitio'];
+$serie = $_GET['Serie'];
+$marca = $_GET['Marca'];
+$modelo = $_GET['Modelo'];
+$mac = $_GET['Mac'];
+$nodoRed = $_GET['NodoRed'];
+$gpoCaptura = $_GET['GpoCaptura'];
+$nivel_cor = $_GET['Nivel_Cor'];
+$nivel_Aut = $_GET['Nivel_Aut'];
+$codigo_Aut = $_GET['Codigo_Aut'];
+$funcion = $_GET['Funcion'];
+$DID = $_GET['DID'];
+$correoVoz = $_GET['CorreoVoz'];
+$puerto = $_GET['Puerto'];
+$dir_ip = $_GET['Dir_IP'];
+$mask = $_GET['Mask'];
+$gateway = $_GET['Gateway'];
+$vlan = $_GET['VLAN'];
+$notas = $_GET['Notas'];
+$adquisicion = $_GET['Adquisicion'];
+$eliminador = $_GET['Eliminador'];
+$f_resguardo = $_GET['F_Resguardo'];
+$fecha_resguardo = $_GET['Fecha_Resguardo'];
+$observaciones = $_GET['Obsevaciones'];
+$estatus = $_GET['Estatus'];
+
+
 
 if ($nombre!=null) {
-    $sql2= "update persona set  Nombre='".$nombre."', ApePaterno='".$apePaterno."',ApeMaterno='".$apeMaterno."', Adscripcion='".$adscripcion."', Area='$area',Subarea='$subarea', Puesto='$puesto', Denominacion='$denominacion', Telefono='$telefono', Extension='$extencion', Domicilio='$domicilio', Correo='$correo', GFC='$GFC', Acceso_correo='$accesoCorreo', Estatus='$estatus'
+    $sql2= "update telefonia set  Display='".$nombre."', RFC='".$apePaterno."',Inmueble='".$apeMaterno."', Sitio='".$adscripcion."', Serie='$area',Marca='$subarea', Modelo='$puesto', Denominacion='$denominacion', Telefono='$telefono', Extension='$extencion', Domicilio='$domicilio', Correo='$correo', GFC='$GFC', Acceso_correo='$accesoCorreo', Estatus='$estatus'
     Where RFC='".$RFC."'";
     $mysqli->query($sql2);
     

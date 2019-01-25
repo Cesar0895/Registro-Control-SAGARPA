@@ -1,7 +1,8 @@
 <?php
-        
-        require 'conexion.php';
-
+        error_reporting(E_ALL & ~E_NOTICE);
+		error_reporting(E_ERROR | E_PARSE);
+		require 'conexion.php';
+		
 		$serie = $_GET['Serie'];
 		$id_Marca = $_GET['id_Marca'];
 		$id_Modelo = $_GET['id_Modelo'];
@@ -9,12 +10,49 @@
 		$descripcion = $_GET['Descripcion'];
 		$adqui = $_GET['Adquisicion'];
 
+		$serieTec = $_GET['SerieTec'];
+		$id_MarcaTec = $_GET['id_MarcaTec'];
+		$id_ModeloTec = $_GET['id_ModeloTec'];
+		$inventarioTec = $_GET['InventarioTec'];
+		$descripcionTec = $_GET['DescripcionTec'];
+		$adquiTec = $_GET['AdquisicionTec'];
+
+		$serieMou = $_GET['SerieMou'];
+		$id_MarcaMou = $_GET['id_MarcaMou'];
+		$id_ModeloMou = $_GET['id_ModeloMou'];
+		$inventarioMou = $_GET['InventarioMou'];
+		$descripcionMou = $_GET['DescripcionMou'];
+		$adquiMou= $_GET['AdquisicionMou'];
+
 
         if ($serie!=null) {
             $sqlmonitor= "INSERT INTO monitor (Serie, id_Marca, id_Modelo, Inventario, Descripcion, Adquisicion) VALUES ('$serie','$id_Marca','$id_Modelo', '$inventario', '$descripcion', '$adqui')";
             $mysqli->query($sqlmonitor);
 
             if ($serie=1) {
+                echo'<script type="text/javascript">
+						alert("Registro guardado");
+						window.location.href="registroEquipoComputo.php";
+						</script>';
+            }
+		}
+		if ($serieTec!=null) {
+            $sqlteclado= "INSERT INTO teclado (Serie, Id_Marca, IdModelo, Inventario, Descripcion, Adquisicion) VALUES ('$serieTec','$id_MarcaTec','$id_ModeloTec', '$inventarioTec', '$descripcionTec', '$adquiTec')";
+            $mysqli->query($sqlteclado);
+
+            if ($serieTec=1) {
+                echo'<script type="text/javascript">
+						alert("Registro guardado");
+						window.location.href="registroEquipoComputo.php";
+						</script>';
+            }
+		}
+		
+		if ($serieMou!=null) {
+            $sqlmouse= "INSERT INTO mouse (Serie, id_Marca, id_Modelo, Inventario, Descripcion, Adquisicion) VALUES ('$serieMou','$id_MarcaMou','$id_ModeloMou', '$inventarioMou', '$descripcionMou', '$adquiMou')";
+            $mysqli->query($sqlmouse);
+
+            if ($serieMou=1) {
                 echo'<script type="text/javascript">
 						alert("Registro guardado");
 						window.location.href="registroEquipoComputo.php";
@@ -33,7 +71,7 @@ if ($result->num_rows > 0) //si la variable tiene al menos 1 fila entonces segui
     $combobit="";
     while ($row = $result->fetch_array(MYSQLI_ASSOC)) 
     {
-        $combobit .=" <option value='".$row['id_Modelo']."'>".$row['Modelo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+        $combobit .="<option value='".$row['id_Modelo']."'>".$row['Modelo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
     }
 }
 else
@@ -48,13 +86,27 @@ if ($resultmarca->num_rows > 0) //si la variable tiene al menos 1 fila entonces 
     $combobitmarca="";
     while ($row = $resultmarca->fetch_array(MYSQLI_ASSOC)) 
     {
-        $combobitmarca .=" <option value='".$row['id_Marca']."'>".$row['Marca']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+        $combobitmarca .="<option value='".$row['id_Marca']."'>".$row['Marca']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
     }
 }
 else
 {
     echo "No hubo resultados";
 }
+
+$where = "";
+
+	if(!empty($_POST))
+	{
+		$valor = $_POST['campo'];
+	
+		if(!empty($valor)){
+			$where = "WHERE RFC LIKE '$valor%'";
+		}
+	}
+
+	$sqlpersona = "SELECT Nombre FROM persona $where";
+	$resultadonombre = $mysqli->query($sqlpersona);
 ?>
 <!doctype html>
 <html lang="en">
@@ -66,6 +118,9 @@ else
 
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous">
+
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
 	 crossorigin="anonymous">
 
 	<title>Registro de equipo de computo </title>
@@ -97,8 +152,8 @@ else
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="registroEquipoComputo.html ">Equipo de computo</a>
-							<a class="dropdown-item" href="registroAuxiliares.html">Auxiliares</a>
+							<a class="dropdown-item" href="registroEquipoComputo.php ">Equipo de computo</a>
+							<a class="dropdown-item" href="registroAuxiliares.php">Auxiliares</a>
 							<a class="dropdown-item" href="#">Telefonia</a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="#">Separated link</a>
@@ -143,396 +198,434 @@ else
 
 
 	<main role="main" class="container">
+		<script type="text/javascript">
+			function mostrar() {
+				document.getElementById('oculto').style.display = 'block';
+			}
+		</script>
+
+
+		<div class="row">
+			<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+				<label>Nombre del responsable</label>
+				<input type="text" class="form-control" id="campo" name="campo" autofocus />
+				<button type="submit" id="enviar" name="enviar" class="btn btn-info" value="Mostrar" onClick="mostrar()"> Verificar </button>
+
+
+
+				<div class="form-group" id="oculto" style='display:none;'>
+					<?php while($row = $resultadonombre->fetch_array(MYSQLI_ASSOC)) { ?>
+					<input type="text" class="form-control" id="nombre" name="Nombre" placeholder="nombre del responsable" value="<?php echo $row['Nombre']; ?>"
+					 disabled>
+					<?php } ?>
+				</div>
+
+			</form>
+		</div>
 		<div class="card">
 			<div class="card-header">
 				<h4>Registro de quipos de computo.</h4>
 			</div>
 
 			<div class="card-body">
-
-				<!-- Button trigger modal -->
-				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datosGenerales">
-					Generales
-				</button>
-
-				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datosCPU">
-					Datos CPU
-				</button>
-
-				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datosMonitor">
-					Datos Monitor
-				</button>
-
-				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datosTeclado">
-					Datos Teclado
-				</button>
-
-				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datosMouse">
-					Datos Mouse
-				</button>
-
-				<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#datosResponsable">
-					Responsable
-				</button>
-
-				<!-- Modal Datos Generales -->
-				<div class="modal fade" id="datosGenerales" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">Datos Generales</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<form>
-									<div class="form-group">
-										<label>GPO</label>
-										<input type="text" class="form-control" id="grupo" placeholder="Introduce el nombre del grupo">
-									</div>
-
-									<div class="form-group">
-										<label for="selectZona">Zona</label>
-										<select class="form-control" id="selectZona">
-											<option>Delegación Estatal</option>
-											<option>Subdelegación Administrativa</option>
-											<option>Subdelegación Agropecuaria</option>
-											<option>Subdelegación de Planeación</option>
-											<option>Subdelegación de Pesca</option>
-											<option>DDR 095 Santiago Ixcuintla</option>
-											<option>DDR 096 Compostela</option>
-											<option>DDR 097 Ahuacatlán</option>
-											<option>DDR 098 Acaponeta</option>
-											<option>DDR 099 Tepic</option>
-										</select>
-									</div>
-
-									<div class="form-group">
-										<label>Folio resguardo</label>
-										<input type="text" class="form-control" id="folioRes" placeholder="Introduce el folio de resguardo">
-									</div>
-
-									<div class="form-group">
-										<label>Presupuesto</label>
-										<input type="number" class="form-control" id="presupuesto" placeholder="Introduce el presupuesto">
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary">Save changes</button>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<!-- Modal Datos CPU-->
-				<div class="modal fade" id="datosCPU" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">Datos CPU</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-
-								<form>
-
-									<div class="form-group">
-										<label>No_Serie</label>
-										<input type="number" class="form-control" id="serie" placeholder="Introduce el no. de serie">
-									</div>
-
-									<div class="form-group">
-										<label>No. de inventario</label>
-										<input type="number" class="form-control" id="inventario" placeholder="Introduce el no. de inventario">
-									</div>
-
-									<div class="form-group">
-										<label>Marca</label>
-										<input type="text" class="form-control" id="marca" placeholder="Introduce la marca">
-									</div>
-
-									<div class="form-group">
-										<label>Modelo</label>
-										<input type="text" class="form-control" id="Modelo" placeholder="Introduce el modelo">
-									</div>
-
-									<div class="form-group">
-										<label>Procesador </label>
-										<input type="text" class="form-control" id="text" placeholder="Introduce el tipo de procesador">
-									</div>
-
-									<div class="form-group">
-										<label>Memoria</label>
-										<input type="text" class="form-control" id="Memoria" placeholder="Introduce el tipo de Memoria">
-									</div>
-
-									<div class="form-group">
-										<label>Disco duro</label>
-										<input type="text" class="form-control" id="presupuesto" placeholder="Introduce la cantidad de alacenamiento del disco duro">
-									</div>
-
-									<div class="form-group">
-										<label>Velocidad</label>
-										<input type="text" class="form-control" id="velocidad" placeholder="Introduce velocidad del CPU">
-									</div>
-									<div class="form-group">
-										<label>Tipo de adquisición</label>
-										<input type="text" class="form-control" id="TipoAdquisicion" placeholder="Introduce el tipo de adquisición">
-									</div>
-								</form>
+				<div btn-group-vertical>
+					<!-- Button trigger modal -->
+					<a type="button" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal" data-target="#datosGenerales">
+						Generales
+					</a>
 
 
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary">Save changes</button>
-							</div>
-						</div>
-					</div>
-				</div>
+					<a type="button" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal" data-target="#datosCPU">
+						Datos CPU
+					</a>
 
-				<!-- Modal Datos Monitor-->
-				<div class="modal fade" id="datosMonitor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">Datos Monitor</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<form>
-									<div class="form-group">
-										<label>No. de inventario</label>
-										<input type="number" class="form-control" id="inventario" name="Inventario" placeholder="Introduce el no. de inventario"
-										 require>
-									</div>
+					<a type="button" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal" data-target="#datosMonitor">
+						Datos Monitor
+					</a>
 
-									<div class="form-group">
-										<label>Marca</label>
-										<select class="form-control" id="marca" name="id_Marca">
-											<?php echo $combobitmarca; ?>
-										</select>
-									</div>
+					<a type="button" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal" data-target="#datosTeclado">
+						Datos Teclado
+					</a>
 
-									<div class="form-group">
-										<label>Modelo</label>
+					<a type="button" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal" data-target="#datosMouse">
+						Datos Mouse
+					</a>
 
-										<select class="form-control" id="modelo" name="id_Modelo">
-											<?php echo $combobit; ?>
-										</select>
+					<a type="button" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal" data-target="#datosResponsable">
+						Responsable
+					</a>
 
-									</div>
+					<!-- Modal Datos Generales -->
+					<div class="modal fade" id="datosGenerales" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Datos Generales</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<form>
+										<div class="form-group">
+											<label>GPO</label>
+											<input type="text" class="form-control" id="grupo" placeholder="Introduce el nombre del grupo">
+										</div>
 
-									<div class="form-group">
-										<label>No_Serie</label>
-										<input type="number" class="form-control" id="serie" name="Serie" placeholder="Introduce el no. de serie">
-									</div>
+										<div class="form-group">
+											<label for="selectZona">Zona</label>
+											<select class="form-control" id="selectZona">
+												<option>Delegación Estatal</option>
+												<option>Subdelegación Administrativa</option>
+												<option>Subdelegación Agropecuaria</option>
+												<option>Subdelegación de Planeación</option>
+												<option>Subdelegación de Pesca</option>
+												<option>DDR 095 Santiago Ixcuintla</option>
+												<option>DDR 096 Compostela</option>
+												<option>DDR 097 Ahuacatlán</option>
+												<option>DDR 098 Acaponeta</option>
+												<option>DDR 099 Tepic</option>
+											</select>
+										</div>
 
-									<div class="form-group">
-										<label>Descripcion </label>
-										<input type="text" class="form-control" id="descripcion" name="Descripcion" placeholder="Introduce la descripcion" require>
-									</div>
+										<div class="form-group">
+											<label>Folio resguardo</label>
+											<input type="text" class="form-control" id="folioRes" placeholder="Introduce el folio de resguardo">
+										</div>
 
-									<div class="form-group">
-										<label>Tipo de adquisición</label>
-										<input type="text" class="form-control" id="adquisicion" name="Adquisicion" placeholder="Introduce el tipo de adquisición">
-									</div>
+										<div class="form-group">
+											<label>Presupuesto</label>
+											<input type="number" class="form-control" id="presupuesto" placeholder="Introduce el presupuesto">
+										</div>
+									</form>
+								</div>
+								<div class="modal-footer">
 									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-									<button type="submit" class="btn btn-primary">Guardar</button>
-								</form>
-							</div>
-							<div class="modal-footer">
-								
-									
-							</div>
-							<a href="vistaMonitor.php" class="btn btn-success">Ver lista de Monitores registrados</a>
-						</div>
-					</div>
-				</div>
-
-				<!-- Modal Datos Teclado-->
-				<div class="modal fade" id="datosTeclado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">Datos Teclado</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<form>
-									<div class="form-group">
-										<label>No. de inventario</label>
-										<input type="number" class="form-control" id="inventario" placeholder="Introduce el no. de inventario">
-									</div>
-
-									<div class="form-group">
-										<label>Marca</label>
-										<input type="text" class="form-control" id="marca" placeholder="Introduce la marca">
-									</div>
-
-									<div class="form-group">
-										<label>Modelo</label>
-										<input type="text" class="form-control" id="Modelo" placeholder="Introduce el modelo">
-									</div>
-
-									<div class="form-group">
-										<label>No_Serie</label>
-										<input type="number" class="form-control" id="serie" placeholder="Introduce el no. de serie">
-									</div>
-
-									<div class="form-group">
-										<label>Observaciones </label>
-										<input type="text" class="form-control" id="text" placeholder="Introduce las observaciones">
-									</div>
-
-									<div class="form-group">
-										<label>Tipo de adquisición</label>
-										<input type="text" class="form-control" id="TipoAdquisicion" placeholder="Introduce el tipo de adquisición">
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary">Save changes</button>
+									<button type="button" class="btn btn-primary">Save changes</button>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
-				<!-- Modal Datos Mouse-->
-				<div class="modal fade" id="datosMouse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">Datos Mouse</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<form>
-									<div class="form-group">
-										<label>No. de inventario</label>
-										<input type="number" class="form-control" id="inventario" placeholder="Introduce el no. de inventario">
-									</div>
+					<!-- Modal Datos CPU-->
+					<div class="modal fade" id="datosCPU" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Datos CPU</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
 
-									<div class="form-group">
-										<label>Marca</label>
-										<input type="text" class="form-control" id="marca" placeholder="Introduce la marca">
-									</div>
+									<form>
 
-									<div class="form-group">
-										<label>Modelo</label>
-										<select name="Modelo">
-											<?php echo $combobit; ?>
-										</select>
-									</div>
+										<div class="form-group">
+											<label>No_Serie</label>
+											<input type="number" class="form-control" id="serie" placeholder="Introduce el no. de serie">
+										</div>
 
-									<div class="form-group">
-										<label>No_Serie</label>
-										<input type="number" class="form-control" id="serie" placeholder="Introduce el no. de serie">
-									</div>
+										<div class="form-group">
+											<label>No. de inventario</label>
+											<input type="number" class="form-control" id="inventario" placeholder="Introduce el no. de inventario">
+										</div>
 
-									<div class="form-group">
-										<label>Observaciones </label>
-										<input type="text" class="form-control" id="text" placeholder="Introduce las observaciones">
-									</div>
+										<div class="form-group">
+											<label>Marca</label>
+											<input type="text" class="form-control" id="marca" placeholder="Introduce la marca">
+										</div>
 
-									<div class="form-group">
-										<label>Tipo de adquisición</label>
-										<input type="text" class="form-control" id="TipoAdquisicion" placeholder="Introduce el tipo de adquisición">
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary">Save changes</button>
-							</div>
-						</div>
-					</div>
-				</div>
+										<div class="form-group">
+											<label>Modelo</label>
+											<input type="text" class="form-control" id="Modelo" placeholder="Introduce el modelo">
+										</div>
 
-				<!-- Modal Datos Responsable-->
-				<div class="modal fade" id="datosResponsable" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-					<div class="modal-dialog" role="document">
-						<div class="modal-content">
-							<div class="modal-header">
-								<h5 class="modal-title" id="exampleModalLabel">Datos del responsable</h5>
-								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-									<span aria-hidden="true">&times;</span>
-								</button>
-							</div>
-							<div class="modal-body">
-								<form>
-									<div class="form-group">
-										<label>RFC</label>
-										<input type="text" class="form-control" id="inventario" placeholder="Introduce el RFC">
-									</div>
+										<div class="form-group">
+											<label>Procesador </label>
+											<input type="text" class="form-control" id="text" placeholder="Introduce el tipo de procesador">
+										</div>
 
-									<div class="form-group">
-										<label>Nombre del responsable</label>
-										<input type="text" class="form-control" id="marca" placeholder="nombre del responsable" disabled>
-									</div>
-								</form>
-							</div>
-							<div class="modal-footer">
-								<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-								<button type="button" class="btn btn-primary">Save changes</button>
+										<div class="form-group">
+											<label>Memoria</label>
+											<input type="text" class="form-control" id="Memoria" placeholder="Introduce el tipo de Memoria">
+										</div>
+
+										<div class="form-group">
+											<label>Disco duro</label>
+											<input type="text" class="form-control" id="presupuesto" placeholder="Introduce la cantidad de alacenamiento del disco duro">
+										</div>
+
+										<div class="form-group">
+											<label>Velocidad</label>
+											<input type="text" class="form-control" id="velocidad" placeholder="Introduce velocidad del CPU">
+										</div>
+										<div class="form-group">
+											<label>Tipo de adquisición</label>
+											<select class="form-control" id="adquisicion" name="Adquisicion">
+												<option value="Compra">Compra</option>
+												<option value="Transferencia">Transferencia</option>
+												<option value="Comodato">Comodato</option>
+												<option value="Arrendamiento">Arrendamiento</option>
+												<option value="Prestamo">Prestamo</option>
+												<option value="Otro">Otro</option>
+											</select>
+
+										</div>
+									</form>
+
+
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+									<button type="button" class="btn btn-primary">Save changes</button>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
 
+					<!-- Modal Datos Monitor-->
+					<div class="modal fade" id="datosMonitor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Datos Monitor</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<form>
+										<div class="form-group">
+											<label>No. de inventario</label>
+											<input type="number" class="form-control" id="inventario" name="Inventario" placeholder="Introduce el no. de inventario"
+											 require>
+										</div>
+
+										<div class="form-group">
+											<label>Marca</label>
+											<select class="form-control" id="marca" name="id_Marca">
+												<?php echo $combobitmarca; ?>
+											</select>
+										</div>
+
+										<div class="form-group">
+											<label>Modelo</label>
+
+											<select class="form-control" id="modelo" name="id_Modelo">
+												<?php echo $combobit; ?>
+											</select>
+
+										</div>
+
+										<div class="form-group">
+											<label>No_Serie</label>
+											<input type="number" class="form-control" id="serie" name="Serie" placeholder="Introduce el no. de serie">
+										</div>
+
+										<div class="form-group">
+											<label>Descripcion </label>
+											<input type="text" class="form-control" id="descripcion" name="Descripcion" placeholder="Introduce la descripcion" require>
+										</div>
+
+										<div class="form-group">
+											<label>Tipo de adquisición</label>
+											<select class="form-control" id="adquisicion" name="Adquisicion">
+												<option value="Compra">Compra</option>
+												<option value="Transferencia">Transferencia</option>
+												<option value="Comodato">Comodato</option>
+												<option value="Arrendamiento">Arrendamiento</option>
+												<option value="Prestamo">Prestamo</option>
+												<option value="Otro">Otro</option>
+											</select>
+
+										</div>
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Guardar</button>
+									</form>
+								</div>
+
+								<a href="vistaMonitor.php" class="btn btn-success">Ver lista de Monitores registrados</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- Modal Datos Teclado-->
+					<div class="modal fade" id="datosTeclado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Datos Teclado</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<form>
+										<div class="form-group">
+											<label>No. de inventario</label>
+											<input type="number" class="form-control" id="inventario" name="InventarioTec" placeholder="Introduce el no. de inventario"
+											 require>
+										</div>
+
+										<div class="form-group">
+											<label>Marca</label>
+											<select class="form-control" id="marca" name="id_MarcaTec">
+												<?php echo $combobitmarca; ?>
+											</select>
+										</div>
+
+										<div class="form-group">
+											<label>Modelo</label>
+
+											<select class="form-control" id="modelo" name="id_ModeloTec">
+												<?php echo $combobit; ?>
+											</select>
+
+										</div>
+
+										<div class="form-group">
+											<label>No_Serie</label>
+											<input type="number" class="form-control" id="serie" name="SerieTec" placeholder="Introduce el no. de serie">
+										</div>
+
+										<div class="form-group">
+											<label>Descripcion </label>
+											<input type="text" class="form-control" id="descripcion" name="DescripcionTec" placeholder="Introduce la descripcion" require>
+										</div>
+
+										<div class="form-group">
+											<label>Tipo de adquisición</label>
+											<select class="form-control" id="adquisicion" name="Adquisicion">
+												<option value="Compra">Compra</option>
+												<option value="Transferencia">Transferencia</option>
+												<option value="Comodato">Comodato</option>
+												<option value="Arrendamiento">Arrendamiento</option>
+												<option value="Prestamo">Prestamo</option>
+												<option value="Otro">Otro</option>
+											</select>
+
+										</div>
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Guardar</button>
+									</form>
+								</div>
+
+								<a href="vistaMonitor.php" class="btn btn-success">Ver lista de Teclados registrados</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- Modal Datos Mouse-->
+					<div class="modal fade" id="datosMouse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Datos Mouse</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<form>
+										<div class="form-group">
+											<label>No. de inventario</label>
+											<input type="number" class="form-control" id="inventario" name="InventarioMou" placeholder="Introduce el no. de inventario"
+											 require>
+										</div>
+
+										<div class="form-group">
+											<label>Marca</label>
+											<select class="form-control" id="marca" name="id_MarcaMou">
+												<?php echo $combobitmarca; ?>
+											</select>
+										</div>
+
+										<div class="form-group">
+											<label>Modelo</label>
+
+											<select class="form-control" id="modelo" name="id_ModeloMou">
+												<?php echo $combobit; ?>
+											</select>
+
+										</div>
+
+										<div class="form-group">
+											<label>No_Serie</label>
+											<input type="number" class="form-control" id="serie" name="SerieMou" placeholder="Introduce el no. de serie">
+										</div>
+
+										<div class="form-group">
+											<label>Descripcion </label>
+											<input type="text" class="form-control" id="descripcion" name="DescripcionMou" placeholder="Introduce la descripcion" require>
+										</div>
+
+										<div class="form-group">
+											<label>Tipo de adquisición</label>
+											<select class="form-control" id="adquisicion" name="Adquisicion">
+												<option value="Compra">Compra</option>
+												<option value="Transferencia">Transferencia</option>
+												<option value="Comodato">Comodato</option>
+												<option value="Arrendamiento">Arrendamiento</option>
+												<option value="Prestamo">Prestamo</option>
+												<option value="Otro">Otro</option>
+											</select>
+
+										</div>
+										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+										<button type="submit" class="btn btn-primary">Guardar</button>
+									</form>
+								</div>
+
+								<a href="vistaMonitor.php" class="btn btn-success">Ver lista de Mouse registrados</a>
+							</div>
+						</div>
+					</div>
+
+					<!-- Modal Datos Responsable-->
+					<div class="modal fade" id="datosResponsable" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+						<div class="modal-dialog" role="document">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title" id="exampleModalLabel">Datos del responsable</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<form>
+										<div class="form-group">
+											<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+												<label>Nombre del responsable</label>
+												<input type="text" class="form-control" id="campo" name="campo" />
+												<button type="submit" id="enviar" name="enviar" class="btn btn-info"> Verificar </button>
+											</form>
+										</div>
+										<div class="form-group">
+											<?php while($row = $resultadonombre->fetch_array(MYSQLI_ASSOC)) { ?>
+											<input type="text" class="form-control" id="nombre" name="Nombre" placeholder="nombre del responsable" value="<?php echo $row['Nombre']; ?>"
+											 disabled>
+											<?php } ?>
+										</div>
+
+									</form>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+									<button type="button" class="btn btn-primary">Save changes</button>
+								</div>
+							</div>
+						</div>
+
+
+					</div>
+
+
+
+
+				</div>
 			</div>
 		</div>
-		<form>
-									<div class="form-group">
-										<label>No. de inventario</label>
-										<input type="number" class="form-control" id="inventario" name="Inventario" placeholder="Introduce el no. de inventario"
-										 require>
-									</div>
-
-									<div class="form-group">
-										<label>Marca</label>
-										<select class="form-control" id="marca" name="id_Marca">
-											<?php echo $combobitmarca; ?>
-										</select>
-									</div>
-
-									<div class="form-group">
-										<label>Modelo</label>
-
-										<select class="form-control" id="modelo" name="id_Modelo">
-											<?php echo $combobit; ?>
-										</select>
-
-									</div>
-
-									<div class="form-group">
-										<label>No_Serie</label>
-										<input type="number" class="form-control" id="serie" name="Serie" placeholder="Introduce el no. de serie">
-									</div>
-
-									<div class="form-group">
-										<label>Descripcion </label>
-										<input type="text" class="form-control" id="descripcion" name="Descripcion" placeholder="Introduce la descripcion" require>
-									</div>
-
-									<div class="form-group">
-										<label>Tipo de adquisición</label>
-										<input type="text" class="form-control" id="adquisicion" name="Adquisicion" placeholder="Introduce el tipo de adquisición">
-									</div>
-									<button type="submit" class="btn btn-primary">Guardar</button>
-								</form>
 
 
 	</main>

@@ -3,9 +3,9 @@
 	error_reporting(E_ERROR | E_PARSE);
 	require 'conexion.php';
 
-	$RFC = $_GET['RFC'];
+	$extencion = $_GET['Extencion'];
 	
-	$sql2 = "DELETE FROM persona WHERE RFC = '$RFC'";
+	$sql2 = "DELETE FROM telefonia WHERE Extencion = '$extencion'";
 	$resultado = $mysqli->query($sql2);
 	
 	$where = "";
@@ -15,10 +15,10 @@
 		$valor = $_POST['campo'];
 	
 		if(!empty($valor)){
-			$where = "WHERE RFC LIKE '$valor%' or Nombre like '$valor%' or ApePaterno like '$valor%' or ApeMaterno like '$valor%' or Area like '$valor%'";
+			$where = "WHERE Extencion LIKE '$valor%' or RFC like '$valor%' or Display like '$valor%' or Serie like '$valor%' or Sitio like '$valor%'";
 		}
 	}
-	$sql = "SELECT * FROM persona $where";
+	$sql = "SELECT * FROM telefonia $where";
 	$resultadoTabla = $mysqli->query($sql);
 	
 ?>
@@ -110,119 +110,179 @@
 
 	</div>
 	<main role="main" class="container">
-		
-		<br>
-		<div class="row ml-3">
-			<h2 style="text-align:center">PERSONAL</h2>
-		</div>
-
-		<a href="RegistroPersonal.php" class="btn btn-primary float-right mr-3">Nuevo Registro</a>
-
-		<div class="row ml-3">
-
-
-			<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-				<b>Nombre: </b>
-				<input type="text" id="campo" name="campo" />
-				<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
-			</form>
-		</div>
-
 
 		<br>
+		<div class="card">
+			<div class="card-header bg-info">
+				<div class="row ml-3">
+					<h2 style="text-align:center">Telefonia</h2>
+				</div>
+			</div>
+			<div class="card-body">
 
-		<div class="row table-responsive mx-auto">
-			<table class="table table-hover table-secondary">
-				<thead>
-					<tr>
-						<th>RFC</th>
-						<th>Nombre</th>
-						<th>Apellido Paterno</th>
-						<th>Apellido Materno</th>
-						<th>Adscripción</th>
-						<th>Area</th>
-						<th>Subarea</th>
-						<th>Puesto</th>
-						<th>Denominación</th>
-						<th>Telefono</th>
-						<th>Extención</th>
-						<th>Domicilio</th>
-						<th>Correo</th>
-						<th>GFC</th>
-						<th>Acceso del correo</th>
-						<th>Status</th>
-						<th></th>
-						<th></th>
-					</tr>
-				</thead>
+				<a href="RegistroTelefonia.php" class="btn btn-primary float-right mr-3">Nuevo Registro</a>
 
-				<tbody>
-					<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-					<tr>
-						<td>
-							<?php echo $row['RFC']; ?>
-						</td>
-						<td>
-							<?php echo $row['Nombre']; ?>
-						</td>
-						<td>
-							<?php echo $row['ApePaterno']; ?>
-						</td>
-						<td>
-							<?php echo $row['ApeMaterno']; ?>
-						</td>
-						<td>
-							<?php echo $row['Adscripcion']; ?>
-						</td>
-						<td>
-							<?php echo $row['Area']; ?>
-						</td>
-						<td>
-							<?php echo $row['Subarea']; ?>
-						</td>
-						<td>
-							<?php echo $row['Puesto']; ?>
-						</td>
-						<td>
-							<?php echo $row['Denominacion']; ?>
-						</td>
-						<td>
-							<?php echo $row['Telefono']; ?>
-						</td>
-						<td>
-							<?php echo $row['Extension']; ?>
-						</td>
-						<td>
-							<?php echo $row['Domicilio']; ?>
-						</td>
-						<td>
-							<?php echo $row['Correo']; ?>
-						</td>
-						<td>
-							<?php echo $row['GFC']; ?>
-						</td>
-						<td>
-							<?php echo $row['Acceso_correo']; ?>
-						</td>
-						<td>
-							<?php echo $row['Estatus']; ?>
-						</td>
-						<td>
-							<a href="ModificaPersona.php?RFC=<?php echo $row['RFC']; ?>">
-								<span class="far fa-edit"></span>
-							</a>
-						</td>
-						<td>
-							<a href="personal.php" data-href="personal.php?RFC=<?php echo $row['RFC']; ?>"
-							 data-toggle="modal" data-target="#confirm-delete">
-								<span class="far fa-trash-alt"></span>
-							</a>
-						</td>
+				<div class="row ml-3">
 
-					</tr>
-					<?php } ?>
-				</tbody>
-			</table>
+
+					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+						<b>Buscador: </b>
+						<input type="text" id="campo" name="campo" />
+						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
+					</form>
+				</div>
+
+
+				<br>
+
+				<div class="row table-responsive mx-auto">
+					<table class="table table-hover table-secondary">
+						<thead>
+							<tr>
+								<th>Extención</th>
+								<th>Display</th>
+								<th>RFC del responsable</th>
+								<th>Inmueble</th>
+								<th>Sitio</th>
+								<th>Serie</th>
+								<th>Marca</th>
+								<th>Modelo</th>
+								<th>Mac</th>
+								<th>Nodo de Red</th>
+								<th>Grupo de captura</th>
+								<th>Nivel Cor</th>
+								<th>Nivel Aut</th>
+								<th>Codigo Aut</th>
+								<th>Funcion</th>
+								<th>DID</th>
+								<th>Correo de voz</th>
+								<th>Puerto</th>
+								<th>Diriccion IP</th>
+								<th>Mask</th>
+								<th>Gateway</th>
+								<th>VLAN</th>
+								<th>Notas</th>
+								<th>Adquisicion</th>
+								<th>Eliminador</th>
+								<th>F_Resguardo</th>
+								<th>Fecha Resguardo</th>
+								<th>Observaciones</th>
+								<th>Estatus</th>
+						
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
+							<tr>
+								<td>
+									<?php echo $row['Extencion']; ?>
+								</td>
+								<td>
+									<?php echo $row['Display']; ?>
+								</td>
+								<td>
+									<?php echo $row['RFC']; ?>
+								</td>
+								<td>
+									<?php echo $row['Inmueble']; ?>
+								</td>
+								<td>
+									<?php echo $row['Sitio']; ?>
+								</td>
+								<td>
+									<?php echo $row['Serie']; ?>
+								</td>
+								<td>
+									<?php echo $row['Marca']; ?>
+								</td>
+								<td>
+									<?php echo $row['Modelo']; ?>
+								</td>
+								<td>
+									<?php echo $row['Mac']; ?>
+								</td>
+								<td>
+									<?php echo $row['NodoRed']; ?>
+								</td>
+								<td>
+									<?php echo $row['GpoCaptura']; ?>
+								</td>
+								<td>
+									<?php echo $row['Nivel_Cor']; ?>
+								</td>
+								<td>
+									<?php echo $row['Nivel_Aut']; ?>
+								</td>
+								<td>
+									<?php echo $row['Codigo_Aut']; ?>
+								</td>
+								<td>
+									<?php echo $row['Funcion']; ?>
+								</td>
+								<td>
+									<?php echo $row['DID']; ?>
+								</td>
+								<td>
+									<?php echo $row['CorreoVoz']; ?>
+								</td>
+								<td>
+									<?php echo $row['Puerto']; ?>
+								</td>
+								<td>
+									<?php echo $row['Dir_IP']; ?>
+								</td>
+								<td>
+									<?php echo $row['Mask']; ?>
+								</td>
+								<td>
+									<?php echo $row['Gateway']; ?>
+								</td>
+								<td>
+									<?php echo $row['VLAN']; ?>
+								</td>
+								<td>
+									<?php echo $row['Notas']; ?>
+								</td>
+								<td>
+									<?php echo $row['Adquisicion']; ?>
+								</td>
+								<td>
+									<?php echo $row['Eliminador']; ?>
+								</td>
+								<td>
+									<?php echo $row['F_Resguardo']; ?>
+								</td>
+								<td>
+									<?php echo $row['Fecha_Resguardo']; ?>
+								</td>
+								<td>
+									<?php echo $row['Observaciones']; ?>
+								</td>
+								<td>
+									<?php echo $row['Estatus']; ?>
+								</td>
+								
+
+								<td>
+									<a href="ModificaTelefonia.php?Extencion=<?php echo $row['Extencion']; ?>">
+										<span class="far fa-edit"></span>
+									</a>
+								</td>
+								<td>
+									<a href="Telefonia.php" data-href="Telefonia.php?Extencion=<?php echo $row['Extencion']; ?>"
+									 data-toggle="modal" data-target="#confirm-delete">
+										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 
 

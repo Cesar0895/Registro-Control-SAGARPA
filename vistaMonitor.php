@@ -4,8 +4,8 @@
 	require 'conexion.php';
 
 	
-	$id_soft = $_GET['id_Software'];
-	$sql2 = "DELETE FROM software WHERE id_Software = '$id_soft'";
+	$id_monitor = $_GET['id_Monitor'];
+	$sql2 = "DELETE FROM monitor WHERE id_Monitor = '$id_monitor'";
 	$resultado = $mysqli->query($sql2);
 		
 	$where = "";
@@ -15,11 +15,13 @@
 		$valor = $_POST['campo'];
 		
 		if(!empty($valor)){
-			$where = "WHERE Nombre LIKE '%$valor'";
+			$where = "WHERE Marca LIKE '%$valor' or Modelo LIKE '%$valor' or Inventario LIKE '%$valor'";
 		}
 	}
 
-	$sqlmostrar = "SELECT * FROM software $where";
+	$sqlmostrar = "SELECT monitor.id_Monitor, monitor.Serie, marca.Marca, modelo.Modelo, monitor.Inventario, monitor.Descripcion, monitor.Adquisicion FROM monitor 
+	inner join modelo on monitor.id_Modelo=modelo.id_Modelo
+	inner join marca on monitor.id_Marca=marca.id_Marca $where";
 	$resultadoTabla = $mysqli->query($sqlmostrar);
 
 ?>
@@ -68,8 +70,8 @@
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
 						<div class="dropdown-menu">
-							<a class="dropdown-item" href="registroEquipoComputo.html ">Equipo de computo</a>
-							<a class="dropdown-item" href="registroAuxiliares.html">Auxiliares</a>
+							<a class="dropdown-item" href="registroEquipoComputo.php">Equipo de computo</a>
+							<a class="dropdown-item" href="registroAuxiliares.php">Auxiliares</a>
 							<a class="dropdown-item" href="#">Telefonia</a>
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="#">Separated link</a>
@@ -113,10 +115,10 @@
 	<br>
 	<main role="main" class="container">
 		<div class="row">
-			<h2 style="text-align:center">Software</h2>
+			<h2 style="text-align:center">Monitores</h2>
 		</div>
 
-		<a href="Soft.php" class="btn btn-primary float-right">Nuevo Registro</a>
+		<a href="registroEquipoComputo.php" class="btn btn-primary float-right">Nuevo Registro</a>
 
 		<div class="row">
 
@@ -136,13 +138,12 @@
 				<thead>
 					<tr>
 
-						<th>Nombre</th>
-						<th>Version</th>
-						<th>Licencia</th>
-						<th>Key</th>
-						<th>Plataforma</th>
-						<th>Fabricante</th>
-						<th>Adquisición</th>
+						<th>Serie</th>
+						<th>Marca</th>
+						<th>Modelo</th>
+						<th>No. de inventario</th>
+						<th>Descripcion</th>
+						<th>Adquisicion</th>
 						<th></th>
 						<th></th>
 
@@ -154,28 +155,26 @@
 					<tr>
 
 						<td>
-							<?php echo $row['Nombre']; ?>
+							<?php echo $row['Serie']; ?>
 						</td>
 						<td>
-							<?php echo $row['Version']; ?>
+							<?php echo $row['Marca']; ?>
 						</td>
 						<td>
-							<?php echo $row['Licencia']; ?>
+							<?php echo $row['Modelo']; ?>
 						</td>
 						<td>
-							<?php echo $row['Key_soft']; ?>
+							<?php echo $row['Inventario']; ?>
 						</td>
 						<td>
-							<?php echo $row['Plataforma']; ?>
-						</td>
-						<td>
-							<?php echo $row['Fabricante']; ?>
+							<?php echo $row['Descripcion']; ?>
 						</td>
 						<td>
 							<?php echo $row['Adquisicion']; ?>
 						</td>
+					
 						<td>
-							<a href="ModificaSoft.php?id_Software=<?php echo $row['id_Software']; ?>">
+							<a href"#">
 								<span class="far fa-edit"></span>
 							</a>
 						</td>
