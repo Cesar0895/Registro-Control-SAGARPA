@@ -19,7 +19,11 @@
                 $mysqli->query($sql2);
     
 				if ($id_soft=1) {
-                    header("location:vistaSoft.php");
+					echo'<script type="text/javascript">
+			alert("Registro actualizado!");
+			window.location.href="vistaSoft.php"	;
+			</script>';
+                
                 }
 			}
 ?>

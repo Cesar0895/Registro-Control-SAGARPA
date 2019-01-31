@@ -113,7 +113,11 @@
             $mysqli->query($sqlmodelo);
 
             if ($modelo=1) {
-                header("location:vistaModelos.php");
+				echo'<script type="text/javascript">
+			alert("Registro Guardado");
+			window.location.href="vistaModelos.php"	;
+			</script>';
+            
             }
         }
         

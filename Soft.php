@@ -16,7 +16,11 @@
             $mysqli->query($sqlsoft);
 
             if ($nombre=1) {
-                header("location:vistaSoft.php");
+				echo'<script type="text/javascript">
+			alert("Registro guardado!");
+			window.location.href="vistaSoft.php"	;
+			</script>';
+               
             }
         }
 ?>

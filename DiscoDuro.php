@@ -114,7 +114,7 @@
 
             if ($disco=1) {
 				echo'<script type="text/javascript">
-						alert("Tarea Guardada");
+						alert("Registro guardado!");
 						window.location.href="vistaDiscoDuro.php"	;
 						</script>';
                 

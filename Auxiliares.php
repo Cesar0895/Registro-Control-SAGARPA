@@ -3,9 +3,9 @@
 	error_reporting(E_ERROR | E_PARSE);
 	require 'conexion.php';
 
-	$extencion = $_GET['Extencion'];
+	$folio = $_GET['Folio'];
 	
-	$sql2 = "DELETE FROM telefonia WHERE Extencion = '$extencion'";
+	$sql2 = "DELETE FROM auxiliares WHERE Folio = '$folio'";
 	$resultado = $mysqli->query($sql2);
 	
 	$where = "";
@@ -15,10 +15,10 @@
 		$valor = $_POST['campo'];
 	
 		if(!empty($valor)){
-			$where = "WHERE Extencion LIKE '$valor%' or RFC like '$valor%' or Display like '$valor%' or Serie like '$valor%' or Sitio like '$valor%'";
+			$where = "WHERE Folio LIKE '$valor%'";
 		}
 	}
-	$sql = "SELECT telefonia.Extencion, telefonia.Display, telefonia.RFC, telefonia.Inmueble, telefonia.Sitio, telefonia.Serie, marca.Marca, modelo.Modelo, telefonia.Mac,telefonia.NodoRed,telefonia.GpoCaptura,telefonia.Nivel_Cor,telefonia.Nivel_Aut,telefonia.Codigo_Aut, telefonia.Funcion, telefonia.DID, telefonia.CorreoVoz, telefonia.Puerto, telefonia.Dir_IP, telefonia.Mask, telefonia.Gateway, telefonia.VLAN, telefonia.Notas, telefonia.Adquisicion, telefonia.Eliminador, telefonia.F_Resguardo, telefonia.Fecha_Resguardo, telefonia.Observaciones, telefonia.Estatus FROM telefonia inner join modelo on telefonia.id_Modelo=modelo.id_Modelo inner join marca on telefonia.id_Marca=marca.id_Marca $where";
+	$sql = "SELECT auxiliares.Folio, zona.Nombre, auxiliares.Presupuesto, dispositivos.Nomb_Dispositivo, auxiliares.Inventario, marca.Marca, modelo.Modelo, auxiliares.serie, auxiliares.Tipo_Dispositivo, auxiliares.Adquisicion, auxiliares.Fecha_adquisicion, auxiliares.Fin_Garantia, auxiliares.DT, auxiliares.Observaciones, auxiliares.Direccion_ip, auxiliares.Mac_Eth, auxiliares.Mac_wifi, auxiliares.estatus, auxiliares.RFC, auxiliares.Valor FROM auxiliares inner join modelo on auxiliares.id_Modelo=modelo.id_Modelo inner join marca on auxiliares.id_Marca=marca.id_Marca inner join dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo inner join zona on auxiliares.Id_zona=zona.id_Zona $where";
 	$resultadoTabla = $mysqli->query($sql);
 	
 ?>
@@ -139,35 +139,26 @@
 					<table class="table table-hover table-secondary">
 						<thead>
 							<tr>
-								<th>Extención</th>
-								<th>Display</th>
-								<th>RFC del responsable</th>
-								<th>Inmueble</th>
-								<th>Sitio</th>
-								<th>Serie</th>
+								<th>Folio</th>
+								<th>Zona</th>
+								<th>Presupuesto</th>
+								<th>Nombre del dispositivo</th>
+								<th>No. de inventario</th>
 								<th>Marca</th>
 								<th>Modelo</th>
-								<th>Mac</th>
-								<th>Nodo de Red</th>
-								<th>Grupo de captura</th>
-								<th>Nivel Cor</th>
-								<th>Nivel Aut</th>
-								<th>Codigo Aut</th>
-								<th>Funcion</th>
-								<th>DID</th>
-								<th>Correo de voz</th>
-								<th>Puerto</th>
-								<th>Diriccion IP</th>
-								<th>Mask</th>
-								<th>Gateway</th>
-								<th>VLAN</th>
-								<th>Notas</th>
+								<th>Serie</th>
+								<th>Tipo de dispositivo (??)</th>
 								<th>Adquisicion</th>
-								<th>Eliminador</th>
-								<th>F_Resguardo</th>
-								<th>Fecha Resguardo</th>
+								<th>Fecha de adquisicion</th>
+								<th>Fin de garantia</th>
+								<th>DT.....</th>
 								<th>Observaciones</th>
+								<th>Direccion IP</th>
+								<th>Mac Ethernet</th>
+								<th>Mac Wifi</th>
 								<th>Estatus</th>
+								<th>RFC</th>
+								<th>Valor</th>
 
 								<th></th>
 								<th></th>
@@ -178,22 +169,19 @@
 							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
 							<tr>
 								<td>
-									<?php echo $row['Extencion']; ?>
+									<?php echo $row['Folio']; ?>
 								</td>
 								<td>
-									<?php echo $row['Display']; ?>
+									<?php echo $row['Nombre']; ?>
 								</td>
 								<td>
-									<?php echo $row['RFC']; ?>
+									$<?php echo $row['Presupuesto']; ?>.00
 								</td>
 								<td>
-									<?php echo $row['Inmueble']; ?>
+									<?php echo $row['Nomb_Dispositivo']; ?>
 								</td>
 								<td>
-									<?php echo $row['Sitio']; ?>
-								</td>
-								<td>
-									<?php echo $row['Serie']; ?>
+									<?php echo $row['Inventario']; ?>
 								</td>
 								<td>
 									<?php echo $row['Marca']; ?>
@@ -202,77 +190,53 @@
 									<?php echo $row['Modelo']; ?>
 								</td>
 								<td>
-									<?php echo $row['Mac']; ?>
+									<?php echo $row['serie']; ?>
 								</td>
 								<td>
-									<?php echo $row['NodoRed']; ?>
-								</td>
-								<td>
-									<?php echo $row['GpoCaptura']; ?>
-								</td>
-								<td>
-									<?php echo $row['Nivel_Cor']; ?>
-								</td>
-								<td>
-									<?php echo $row['Nivel_Aut']; ?>
-								</td>
-								<td>
-									<?php echo $row['Codigo_Aut']; ?>
-								</td>
-								<td>
-									<?php echo $row['Funcion']; ?>
-								</td>
-								<td>
-									<?php echo $row['DID']; ?>
-								</td>
-								<td>
-									<?php echo $row['CorreoVoz']; ?>
-								</td>
-								<td>
-									<?php echo $row['Puerto']; ?>
-								</td>
-								<td>
-									<?php echo $row['Dir_IP']; ?>
-								</td>
-								<td>
-									<?php echo $row['Mask']; ?>
-								</td>
-								<td>
-									<?php echo $row['Gateway']; ?>
-								</td>
-								<td>
-									<?php echo $row['VLAN']; ?>
-								</td>
-								<td>
-									<?php echo $row['Notas']; ?>
+									<?php echo $row['Tipo_Dispositivo']; ?>
 								</td>
 								<td>
 									<?php echo $row['Adquisicion']; ?>
 								</td>
 								<td>
-									<?php echo $row['Eliminador']; ?>
+									<?php echo $row['Fecha_adquisicion']; ?>
 								</td>
 								<td>
-									<?php echo $row['F_Resguardo']; ?>
+									<?php echo $row['Fin_Garantia']; ?>
 								</td>
 								<td>
-									<?php echo $row['Fecha_Resguardo']; ?>
+									<?php echo $row['DT']; ?>
 								</td>
 								<td>
 									<?php echo $row['Observaciones']; ?>
 								</td>
 								<td>
-									<?php echo $row['Estatus']; ?>
+									<?php echo $row['Direccion_ip']; ?>
 								</td>
-
+								<td>
+									<?php echo $row['Mac_Eth']; ?>
+								</td>
+								<td>
+									<?php echo $row['Mac_wifi']; ?>
+								</td>
+								<td>
+									<?php echo $row['estatus']; ?>
+								</td>
+								<td>
+									<?php echo $row['RFC']; ?>
+								</td>
+								<td>
+									$<?php echo $row['Valor']; ?>.00
+								</td>
+								
 
 								<td>
-									<a href="ModificaTelefonia.php?Extencion=<?php echo $row['Extencion']; ?>">
+									<a href="ModificaAuxiliares.php?Folio=<?php echo $row['Folio']; ?>">
 										<span class="far fa-edit"></span>
 									</a>
 								</td>
 								<td>
-									<a href="Telefonia.php" data-href="Telefonia.php?Extencion=<?php echo $row['Extencion']; ?>"
+									<a href="Auxiliares.php" data-href="Auxiliares.php?Folio=<?php echo $row['Folio']; ?>"
 									 data-toggle="modal" data-target="#confirm-delete">
 										<span class="far fa-trash-alt"></span>
 									</a>

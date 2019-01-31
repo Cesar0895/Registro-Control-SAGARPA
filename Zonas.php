@@ -113,7 +113,11 @@
             $mysqli->query($sqlzona);
 
             if ($zona=1) {
-                header("location:vistaZonas.php");
+				echo'<script type="text/javascript">
+			alert("Registro guardado!");
+			window.location.href="vistaZonas.php"	;
+			</script>';
+               // header("location:vistaZonas.php");
             }
         }
 

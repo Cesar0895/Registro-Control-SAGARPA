@@ -113,7 +113,11 @@
             $mysqli->query($sqlprocesador);
 
             if ($procesador=1) {
-                header("location:vistaProcesador.php");
+				echo'<script type="text/javascript">
+			alert("Registro guardado!");
+			window.location.href="vistaProcesador.php"	;
+			</script>';
+     
             }
         }
         

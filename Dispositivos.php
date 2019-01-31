@@ -117,7 +117,7 @@
 
             if ($disp=1 && $tipo=1) {
 				echo'<script type="text/javascript">
-						alert("Tarea Guardada");
+						alert("Registro guardado!");
 						window.location.href="vistaDispositivos.php"	;
 						</script>';
             }

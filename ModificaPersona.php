@@ -25,7 +25,11 @@ if ($nombre!=null) {
     $mysqli->query($sql2);
     
     if ($RFC=1) {
-        header("location:personal.php");
+		echo'<script type="text/javascript">
+			alert("Registro actualizado!");
+			window.location.href="personal.php"	;
+			</script>';
+     
     }
 }
 ?>

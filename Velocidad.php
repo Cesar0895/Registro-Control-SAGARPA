@@ -113,7 +113,11 @@
             $mysqli->query($sqlvelocidad);
 
             if ($velocidad=1) {
-                header("location:vistaVelocidad.php");
+				echo'<script type="text/javascript">
+			alert("Registro actualizado!");
+			window.location.href="vistaVelocidad.php"	;
+			</script>';
+               // header("location:vistaVelocidad.php");
             }
         }
 

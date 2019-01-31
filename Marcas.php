@@ -9,7 +9,11 @@
             $mysqli->query($sqlmarca);
 
             if ($marca2=1) {
-                header("location:vistaMarcas.php");
+				echo'<script type="text/javascript">
+			alert("Registro Guardado");
+			window.location.href="vistaMarcas.php"	;
+			</script>';
+               
             }
         }
         

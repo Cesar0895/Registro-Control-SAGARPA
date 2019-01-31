@@ -29,7 +29,11 @@
                 $resultado = $mysqli->query($sql);
     
                 if ($RFC=1) {
-                    header("location:personal.php");
+					echo'<script type="text/javascript">
+			alert("Registro guardado!");
+			window.location.href="personal.php"	;
+			</script>';
+                    //header("location:personal.php");
                 }
             }
 ?>
