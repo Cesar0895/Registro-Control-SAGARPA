@@ -38,7 +38,7 @@
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
 	 crossorigin="anonymous">
 
-	<link rel="stylesheet" href="./css/general.css">
+	<link rel="stylesheet" href="./css/estilo.css">
 	<title>Control de dispositivos</title>
 
 </head>
@@ -112,111 +112,116 @@
 	<main role="main" class="container">
 
 		<br>
-		<div class="row ml-3">
-			<h2 style="text-align:center">PERSONAL</h2>
-		</div>
+		<div class="card">
+			<div class="card-header bg-info">
+				<div class="row ml-3">
+					<h2 style="text-align:center">PERSONAL</h2>
+				</div>
+			</div>
+
+			<div class="card-body">
+
+				<div class="ml-3">
 
 
+					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+						<b>Nombre: </b>
+						<input type="text" id="campo" name="campo" />
+						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
+					</form>
 
-		<div class="ml-3">
-			
+					<a href="RegistroPersonal.php" class="btn btn-primary float-right mr-3">Nuevo Registro</a>
+					<a href="ReportePersonal.php" class="btn btn-secondary float-right mr-3">Generar Reporte</a>
 
-			<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-				<b>Nombre: </b>
-				<input type="text" id="campo" name="campo" />
-				<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
-			</form>
-			
-			<a href="RegistroPersonal.php" class="btn btn-primary float-right mr-3">Nuevo Registro</a>
-			<a href="ReportePersonal.php" class="btn btn-secondary float-right mr-3">Generar Reporte</a>
-
-		</div>
+				</div>
 
 
-		<br>
+				<br>
 
-		<div class="row table-responsive mx-auto">
-			<table class="table table-hover table-secondary">
-				<thead>
-					<tr>
-						<th>RFC</th>
-						<th>Nombre</th>
-						<th>Apellido Paterno</th>
-						<th>Apellido Materno</th>
-						
-						<th>Area</th>
-						<th>Subarea</th>
-						<th>Puesto</th>
-						
-						<th>Telefono</th>
-						<th>Extención</th>
-						
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-					</tr>
-				</thead>
+				<div class="row table-responsive mx-auto">
+					<table class="table table-hover table-secondary">
+						<thead>
+							<tr>
+								<th>RFC</th>
+								<th>Nombre</th>
+								<th>Apellido Paterno</th>
+								<th>Apellido Materno</th>
 
-				<tbody>
-					<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-					<tr>
-						<td>
-							<?php echo $row['RFC']; ?>
-						</td>
-						<td>
-							<?php echo $row['Nombre']; ?>
-						</td>
-						<td>
-							<?php echo $row['ApePaterno']; ?>
-						</td>
-						<td>
-							<?php echo $row['ApeMaterno']; ?>
-						</td>
-						
-						<td>
-							<?php echo $row['Area']; ?>
-						</td>
-						<td>
-							<?php echo $row['Subarea']; ?>
-						</td>
-						<td>
-							<?php echo $row['Puesto']; ?>
-						</td>
-						
-						<td>
-							<?php echo $row['Telefono']; ?>
-						</td>
-						<td>
-							<?php echo $row['Extension']; ?>
-						</td>
+								<th>Area</th>
+								<th>Subarea</th>
+								<th>Puesto</th>
 
-						<td>
-							<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
-								<span class="fas fa-eye"></span>
-							</a>
-						</td>
-						<td>
-							<a href="ReportePersonalXUno.php?RFC=<?php echo $row['RFC']; ?>">
-								<span class="fas fa-download"></span>
-							</a>
-						</td>
-						<td>
-							<a href="ModificaPersona.php?RFC=<?php echo $row['RFC']; ?>">
-								<span class="far fa-edit"></span>
-							</a>
-						</td>
-						<td>
-							<a href="personal.php" data-href="personal.php?RFC=<?php echo $row['RFC']; ?>"
-							 data-toggle="modal" data-target="#confirm-delete">
-								<span class="far fa-trash-alt"></span>
-							</a>
-						</td>
+								<th>Telefono</th>
+								<th>Extención</th>
 
-					</tr>
-					<?php } ?>
-				</tbody>
-			</table>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
+							<tr>
+								<td>
+									<?php echo $row['RFC']; ?>
+								</td>
+								<td>
+									<?php echo $row['Nombre']; ?>
+								</td>
+								<td>
+									<?php echo $row['ApePaterno']; ?>
+								</td>
+								<td>
+									<?php echo $row['ApeMaterno']; ?>
+								</td>
+
+								<td>
+									<?php echo $row['Area']; ?>
+								</td>
+								<td>
+									<?php echo $row['Subarea']; ?>
+								</td>
+								<td>
+									<?php echo $row['Puesto']; ?>
+								</td>
+
+								<td>
+									<?php echo $row['Telefono']; ?>
+								</td>
+								<td>
+									<?php echo $row['Extension']; ?>
+								</td>
+
+								<td>
+									<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+										<span class="fas fa-eye"></span>
+									</a>
+								</td>
+								<td>
+									<a href="ReportePersonalXUno.php?RFC=<?php echo $row['RFC']; ?>">
+										<span class="fas fa-download"></span>
+									</a>
+								</td>
+								<td>
+									<a href="ModificaPersona.php?RFC=<?php echo $row['RFC']; ?>">
+										<span class="far fa-edit"></span>
+									</a>
+								</td>
+								<td>
+									<a href="personal.php" data-href="personal.php?RFC=<?php echo $row['RFC']; ?>"
+									 data-toggle="modal" data-target="#confirm-delete">
+										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
+
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 
 
