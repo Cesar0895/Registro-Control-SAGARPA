@@ -127,7 +127,7 @@
 
 					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
 						<b>Buscador: </b>
-						<input type="text" id="campo" name="campo" />
+						<input title="Escribe el folio del dispositivo" type="text" id="campo" name="campo" />
 						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
 					</form>
 				</div>
@@ -162,6 +162,7 @@
 
 								<th></th>
 								<th></th>
+								<th></th>
 							</tr>
 						</thead>
 
@@ -175,7 +176,8 @@
 									<?php echo $row['Nombre']; ?>
 								</td>
 								<td>
-									$<?php echo $row['Presupuesto']; ?>.00
+									$
+									<?php echo $row['Presupuesto']; ?>.00
 								</td>
 								<td>
 									<?php echo $row['Nomb_Dispositivo']; ?>
@@ -226,9 +228,14 @@
 									<?php echo $row['RFC']; ?>
 								</td>
 								<td>
-									$<?php echo $row['Valor']; ?>.00
+									$ <?php echo $row['Valor']; ?>.00
 								</td>
-								
+
+								<td>
+									<a href="DetalleAux.php?Folio=<?php echo $row['Folio']; ?>">
+										<span class="fas fa-eye"></span>
+									</a>
+								</td>
 
 								<td>
 									<a href="ModificaAux.php?Folio=<?php echo $row['Folio']; ?>">
