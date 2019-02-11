@@ -13,6 +13,7 @@
 	<link rel="stylesheet" href="./css/estilo.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
 	 crossorigin="anonymous">
+	
 	<title>Control de dispositivos</title>
 
 </head>
@@ -34,9 +35,9 @@
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
 					<li class="nav-item">
-						<a class="nav-link" href="inicio.php">Inicio</a>
+						<a class="nav-link mask flex-center rgba-red-strong" href="inicio.php">Inicio</a>
 					</li>
-				
+
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
 						<div class="dropdown-menu">
@@ -70,8 +71,8 @@
 				</ul>
 				<ul class="nav navbar-nav">
 					<li>
-						
-							<span class="fas fa-user nav-link"> Bienvenido (a): @[Usuario] </span>
+
+						<span class="fas fa-user nav-link"> Bienvenido (a): @[Usuario] </span>
 					</li>
 					<li>
 						<a href="#">
@@ -85,8 +86,7 @@
 
 
 	<main role="main" class="container principal">
-		<br>
-		<h1 class="text-center usuario">Bienvenido @[Usuario]</h1>
+		
 		<br>
 		<div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
 			<div class="carousel-inner">

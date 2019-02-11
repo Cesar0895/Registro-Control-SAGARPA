@@ -12,7 +12,7 @@ $subarea = isset($_GET['Subarea']) ? $_GET['Subarea'] : null ;
 $puesto = isset($_GET['Puesto']) ? $_GET['Puesto'] : null ;
 $denominacion = isset($_GET['Denominacion']) ? $_GET['Denominacion'] : null ;
 $telefono = isset($_GET['telefono']) ? $_GET['telefono'] : null ;
-$extencion = isset($_GET['extension']) ? $_GET['extension'] : null ;
+$extension = isset($_GET['extension']) ? $_GET['extension'] : null ;
 $domicilio = isset($_GET['domicilio']) ? $_GET['domicilio'] : null ;
 $correo = isset($_GET['correo']) ? $_GET['correo'] : null ;
 $GFC = isset($_GET['GFC']) ? $_GET['GFC'] : null ;
@@ -20,7 +20,7 @@ $accesoCorreo = isset($_GET['accesoCorreo']) ? $_GET['accesoCorreo'] : null ;
 $estatus = isset($_GET['estatus']) ? $_GET['estatus'] : null ;
 
 if ($nombre!=null) {
-    $sql2= "update persona set  Nombre='".$nombre."', ApePaterno='".$apePaterno."',ApeMaterno='".$apeMaterno."', Adscripcion='".$adscripcion."', Area='$area',Subarea='$subarea', Puesto='$puesto', Denominacion='$denominacion', Telefono='$telefono', Extension='$extencion', Domicilio='$domicilio', Correo='$correo', GFC='$GFC', Acceso_correo='$accesoCorreo', Estatus='$estatus'
+    $sql2= "update persona set  Nombre='".$nombre."', ApePaterno='".$apePaterno."',ApeMaterno='".$apeMaterno."', Adscripcion='".$adscripcion."', Area='$area',Subarea='$subarea', Puesto='$puesto', Denominacion='$denominacion', Telefono='$telefono', Extension='$extension', Domicilio='$domicilio', Correo='$correo', GFC='$GFC', Acceso_correo='$accesoCorreo', Estatus='$estatus'
     Where RFC='".$RFC."'";
     $mysqli->query($sql2);
     
@@ -216,7 +216,7 @@ if ($nombre!=null) {
 					<div class="form-group">
 						<label for="extencion" class="col-sm-2 controllabel">Extención</label>
 						<div class="col-sm-10">
-							<input type="tel" class="form-control" id="esxtencion" name="extencion" placeholder="Extencion" value="<?php echo $row['Extension']; ?>">
+							<input type="tel" class="form-control" id="extencion" name="extension" placeholder="Extencion" value="<?php echo $row['Extension']; ?>">
 						</div>
 					</div>
 

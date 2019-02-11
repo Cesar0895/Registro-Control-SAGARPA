@@ -1,8 +1,7 @@
 <?php
-		error_reporting(E_ALL & ~E_NOTICE);
-		error_reporting(E_ERROR | E_PARSE);
-        include 'conexion.php';
-        
+error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(E_ERROR | E_PARSE);
+require 'conexion.php';
 		$folio = $_GET['Folio'];
 		$id_Zona = $_GET['Id_zona'];
 		$presupuesto = $_GET['Presupuesto'];
@@ -19,104 +18,111 @@
 		$direccion_ip = $_GET['Direccion_ip'];
 		$mac_Eth = $_GET['Mac_Eth'];
 		$mac_wifi = $_GET['Mac_wifi'];
-		$estatus = $_GET['estatus'];
+		$estatus = $_GET['Estatus'];
 		$documento = $_GET['Documento'];
 		$RFC = $_GET['RFC'];
 		$valor = $_GET['Valor'];
-		
-            if ($folio!=null) {
-                $sql= "INSERT INTO auxiliares(Folio, Id_zona, Presupuesto, Id_dispositivo, Inventario, id_Marca, id_modelo, serie, Adquisicion, Fecha_adquisicion, Fin_Garantia, DT, Observaciones, Direccion_ip, Mac_Eth, Mac_wifi, estatus, Documento, RFC, Valor)
-                VALUES ('".$folio."','".$id_Zona."','".$presupuesto."','".$id_Dispositivo."','".$invetario."','$id_Marca','$id_Modelo','$serie','$adquisicion','$fecha_Adquisicion','$fin_Garantia','$DT','$observaciones','$direccion_ip','$mac_Eth','$mac_wifi','$estatus','$documento','$RFC','$valor')";
-				$resultado = $mysqli->query($sql);
-				
 			
+
+if ($folio!=null && $id_Zona!=null) {
+    $sql2= "UPDATE auxiliares SET Folio='$folio',Id_zona='$id_Zona',Id_dispositivo='$id_Dispositivo'id_Marca='$id_Marca',id_modelo='$id_Modelo',serie='$serie', RFC='$RFC',Valor='$valor'
+	Where Folio='".$folio."'";
+    $mysqli->query($sql2);
     
-                if ($folio=1) {
-					echo'<script type="text/javascript">
-						alert("Tarea Guardada");
-						window.location.href="Auxiliares.php"	;
-						</script>';
-                    
-                }
-			}
+    if ($folio=1) {
+		echo'<script type="text/javascript">
+			alert("Registro Actualizado");
+			window.location.href="Auxiliares.php"	;
+			</script>';
+		
+	}
+}
 
-			$sql = "SELECT * FROM zona ORDER BY Nombre ASC";
-			$result = $mysqli->query($sql);
-			if ($result->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
-			{
-				$combobitzona="";
-				while ($row = $result->fetch_array(MYSQLI_ASSOC)) 
-				{
-					$combobitzona .="<option value='".$row['id_Zona']."'>".$row['Nombre']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
-				}
-			}
-			else
-			{
-				echo "No hubo resultados";
-			}
+$folio = $_GET['Folio'];        
+            
+$sqlaux = "SELECT * FROM auxiliares WHERE Folio = '$folio'";
+$resultado = $mysqli->query($sqlaux);
+$row = $resultado->fetch_array(MYSQLI_ASSOC);
 
-			$sql = "SELECT Id_Dispositivo, concat(Nomb_Dispositivo,' | ', Tipo) As NombTipo FROM dispositivos ORDER BY NombTipo ASC";
-			$result = $mysqli->query($sql);
-			if ($result->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
-			{
-				$combobitdisp="";
-				while ($row = $result->fetch_array(MYSQLI_ASSOC)) 
-				{
-					$combobitdisp .="<option value='".$row['Id_Dispositivo']."'>".$row['NombTipo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
-				}
-			}
-			else
-			{
-				echo "No hubo resultados";
-			}
-			
-			
-			$sql = "SELECT * FROM modelo ORDER BY Modelo ASC";
-			$result = $mysqli->query($sql);
-			if ($result->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
-			{
-				$combobit="";
-				while ($row = $result->fetch_array(MYSQLI_ASSOC)) 
-				{
-					$combobit .="<option value='".$row['id_Modelo']."'>".$row['Modelo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
-				}
-			}
-			else
-			{
-				echo "No hubo resultados";
-			}
-			
-			$sql = "SELECT * FROM marca ORDER BY Marca ASC";
-			$resultmarca = $mysqli->query($sql);
-			if ($resultmarca->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
-			{
-				$combobitmarca="";
-				while ($row = $resultmarca->fetch_array(MYSQLI_ASSOC)) 
-				{
-					$combobitmarca .="<option value='".$row['id_Marca']."'>".$row['Marca']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
-				}
-			}
-			else
-			{
-				echo "No hubo resultados";
-			}
+$sql = "SELECT * FROM zona ORDER BY Nombre ASC";
+$result = $mysqli->query($sql);
 
-			$sql = "SELECT * FROM persona ORDER BY RFC ASC";
-			$resultrfc = $mysqli->query($sql);
-			if ($resultrfc->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
-			{
-				$combobitrfc="";
-				while ($row = $resultrfc->fetch_array(MYSQLI_ASSOC)) 
-				{
-					$combobitrfc .="<option value='".$row['RFC']."'>".$row['RFC']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
-				}
-			}
-			else
-			{
-				echo "No hubo resultados";
-			}
+if ($result->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
+{
+	$combobitzona="";
+	while ($row2 = $result->fetch_array(MYSQLI_ASSOC)) 
+	{
+		$combobitzona .="<option value='".$row2['id_Zona']."'>".$row2['Nombre']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+	}
+}
+else
+{
+	echo "No hubo resultados";
+}
+
+$sql = "SELECT Id_Dispositivo, concat(Nomb_Dispositivo,' | ', Tipo) As NombTipo FROM dispositivos ORDER BY NombTipo ASC";
+$result = $mysqli->query($sql);
+if ($result->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
+{
+	$combobitdisp="";
+	while ($row2 = $result->fetch_array(MYSQLI_ASSOC)) 
+	{
+		$combobitdisp .="<option value='".$row2['Id_Dispositivo']."'>".$row2['NombTipo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+	}
+}
+else
+{
+	echo "No hubo resultados";
+}
+
+
+$sql = "SELECT * FROM modelo ORDER BY Modelo ASC";
+$result = $mysqli->query($sql);
+if ($result->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
+{
+	$combobit="";
+	while ($row2 = $result->fetch_array(MYSQLI_ASSOC)) 
+	{
+		$combobit .="<option value='".$row2['id_Modelo']."'>".$row2['Modelo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+	}
+}
+else
+{
+	echo "No hubo resultados";
+}
+
+$sql = "SELECT * FROM marca ORDER BY Marca ASC";
+$resultmarca = $mysqli->query($sql);
+if ($resultmarca->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
+{
+	$combobitmarca="";
+	while ($row2 = $resultmarca->fetch_array(MYSQLI_ASSOC)) 
+	{
+		$combobitmarca .="<option value='".$row2['id_Marca']."'>".$row2['Marca']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+	}
+}
+else
+{
+	echo "No hubo resultados";
+}
+
+$sql = "SELECT * FROM persona ORDER BY RFC ASC";
+$resultrfc = $mysqli->query($sql);
+if ($resultrfc->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
+{
+	$combobitrfc="";
+	while ($row2 = $resultrfc->fetch_array(MYSQLI_ASSOC)) 
+	{
+		$combobitrfc .="<option value='".$row2['RFC']."'>".$row2['RFC']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+	}
+}
+else
+{
+	echo "No hubo resultados";
+}
+			
+
 ?>
-
 <!doctype html>
 <html lang="en">
 
@@ -210,17 +216,19 @@
 				</div>
 			</div>
 			<div class="card-body">
-				<form class="form-horizontal">
+				<form>
+
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Folio</label>
 						<div class="col-sm-10">
-							<input type="number" class="form-control" id="folio" name="Folio" placeholder="Folio" required>
+							<input type="number" class="form-control" id="Folio" name="Folio" placeholder="Folio" value="<?php echo $row['Folio']; ?>" required>
 						</div>
 					</div>
 
-					<div class="form-group">
+						<div class="form-group">
 						<label>Zona</label>
 						<select class="form-control col-sm-10" id="id_zona" name="Id_zona">
+							<option><?php echo $row['Id_zona']; ?> </option>
 							<?php echo $combobitzona; ?>
 						</select>
 					</div>
@@ -228,13 +236,14 @@
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Presupuesto</label>
 						<div class="col-sm-4">
-							<input type="number" class="form-control" id="presupuesto" name="Presupuesto" placeholder="Presupuesto ($)" required>
+							<input type="number" class="form-control" id="presupuesto" name="Presupuesto" placeholder="Presupuesto ($)" value="<?php echo $row['Presupuesto']; ?>" required>
 						</div>
 					</div>
 
 					<div class="form-group ">
 						<label>Dispositivo</label>
 						<select class="form-control col-sm-10" id="id_Dispositivo" name="Id_dispositivo">
+							<option><?php echo $row['Id_dispositivo']; ?> </option>
 							<?php echo $combobitdisp; ?>
 						</select>
 					</div>
@@ -242,13 +251,14 @@
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Inventario</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="inventario" name="Inventario" placeholder="Inventario" required>
+							<input type="text" class="form-control" id="inventario" name="Inventario" placeholder="Inventario" value="<?php echo $row['Inventario']; ?>" required>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label>Marca</label>
 						<select class="form-control col-sm-10" id="id_Marca" name="id_Marca">
+							<option><?php echo $row['id_Marca']; ?> </option>
 							<?php echo $combobitmarca; ?>
 						</select>
 					</div>
@@ -256,6 +266,7 @@
 					<div class="form-group">
 						<label>Modelo</label>
 						<select class="form-control col-sm-10" id="id_modelo" name="id_modelo">
+							<option><?php echo $row['id_modelo']; ?> </option>
 							<?php echo $combobit; ?>
 						</select>
 					</div>
@@ -263,87 +274,87 @@
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Serie</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="serie" name="serie" placeholder="Serie" required>
+							<input type="text" class="form-control" id="serie" name="serie" placeholder="Serie" value="<?php echo $row['serie']; ?>" required>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Tipo de adquisición</label>
 						<select class="form-control col-sm-10" id="adquisicion" name="Adquisicion">
-							<option value="Compra">Compra</option>
-							<option value="Transferencia">Transferencia</option>
-							<option value="Comodato">Comodato</option>
-							<option value="Arrendamiento">Arrendamiento</option>
-							<option value="Prestamo">Prestamo</option>
-							<option value="Otro">Otro</option>
+						<option value="Compra" <?php if( $row[ 'Adquisicion']=='Compra' ) echo 'Selected'; ?>>Compra</option>
+							<option value="Transferencia" <?php if( $row[ 'Adquisicion']=='Transferencia' ) echo 'Selected';
+							 ?>>Transferencia</option>
+							<option value="Comodato" <?php if( $row[ 'Adquisicion']=='Comodato' ) echo 'Selected'; ?>>Comodato</option>
+							<option value="Arrendamiento" <?php if( $row[ 'Adquisicion']=='Arrendamiento' ) echo 'Selected';
+							 ?>>Arrendamiento</option>
+							<option value="Prestamo" <?php if( $row[ 'Adquisicion']=='Compra' ) echo 'Prestamo'; ?>>Prestamo</option>
+							<option value="Otro" <?php if( $row[ 'Adquisicion']=='Otro' ) echo 'Selected'; ?>>Otro</option>
 						</select>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Fecha de adquisicion</label>
 						<div class="col-sm-10">
-							<input type="date" class="form-control" id="Fecha_adquisicion" name="Fecha_adquisicion" placeholder="Fecha de Adquisicion">
+							<input type="date" class="form-control" id="Fecha_adquisicion" name="Fecha_adquisicion" value="<?php echo $row['Fecha_adquisicion']; ?>" placeholder="Fecha de Adquisicion">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Fecha de la garantia</label>
 						<div class="col-sm-10">
-							<input type="date" class="form-control" id="Fin_Garantia" name="Fin_Garantia" placeholder="Fin de la garantia">
+							<input type="date" class="form-control" id="Fin_Garantia" name="Fin_Garantia" value="<?php echo $row['Fin_Garantia']; ?>" placeholder="Fin de la garantia">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">DT</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="DT" name="DT" placeholder="DT">
+							<input type="text" class="form-control" id="DT" name="DT" value="<?php echo $row['DT']; ?>"placeholder="DT">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Obsevaciones</label>
 						<div class="col-sm-10">
-							<textarea class="form-control" rows=5 id="Obsrvaciones" name="Observaciones" placeholder="Observaciones"></textarea>
+							<textarea class="form-control" rows=5 id="Obsrvaciones" name="Observaciones" placeholder="Observaciones"><?php echo $row['Observaciones']; ?></textarea>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Direccion IP</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="Direccion_ip" name="Direccion_ip" placeholder="Direccion IP">
+							<input type="text" class="form-control" id="Direccion_ip" name="Direccion_ip" value="<?php echo $row['Direccion_ip']; ?>" placeholder="Direccion IP">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Mac Ethernet</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="Mac_Eth" name="Mac_Eth" placeholder="Mac Ethernet">
+							<input type="text" class="form-control" id="Mac_Eth" name="Mac_Eth" value="<?php echo $row['Mac_Eth']; ?>" placeholder="Mac Ethernet">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Mac Wifi</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="Mac_wifi" name="Mac_wifi" placeholder="Mac wifi">
+							<input type="text" class="form-control" id="Mac_wifi" name="Mac_wifi" value="<?php echo $row['Mac_wifi']; ?>" placeholder="Mac wifi">
 						</div>
 					</div>
 
 					<div class="form-group">
-						<label for="estatus" class="col-sm-2 controllabel">Status</label>
-						<div class="col-sm-10">
-							<select class="form-control" id="estatus" name="estatus">
-								<option value="BUENO">BUENO</option>
-								<option value="REG	ULAR">REGULAR</option>
-								<option value="MALO">MALO</option>
-								<option value="OTRO">OTRO</option>
-							</select>
-						</div>
+						<label class="col-sm-2 controllabel">Estatus</label>
+						<select class="form-control col-sm-10" id="estatus" name="Estatus">
+							<option value="Bueno" <?php if( $row[ 'estatus']=='Bueno' ) echo 'Selected'; ?>>Bueno</option>
+							<option value="Regular" <?php if( $row[ 'estatus']=='Regular' ) echo 'Selected'; ?>>Regular</option>
+							<option value="Malo" <?php if( $row[ 'estatus']=='Malo' ) echo 'Selected'; ?>>Malo</option>
+							<option value="Otro" <?php if( $row[ 'estatus']=='Otro' ) echo 'Selected'; ?>>Otro</option>
+						</select>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Documento</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="Documento" name="Documento" placeholder="Documento">
+							<input type="text" class="form-control" id="Documento" name="Documento" value="<?php echo $row['Documento']; ?>" placeholder="Documento">
 						</div>
 					</div>
 
@@ -357,9 +368,10 @@
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Valor</label>
 						<div class="col-sm-4">
-							<input type="number" class="form-control" id="Valor" name="Valor" placeholder="Valor ($)" required>
+							<input type="number" class="form-control" id="Valor" name="Valor" placeholder="Valor ($)" value="<?php echo $row['Valor']; ?>" required>
 						</div>
 					</div>
+
 
 
 					<div class="form-group">
@@ -374,6 +386,7 @@
 			</div>
 
 		</div>
+
 
 	</main>
 	<!-- Optional JavaScript -->

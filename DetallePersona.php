@@ -1,28 +1,14 @@
 <?php
-	error_reporting(E_ALL & ~E_NOTICE);
-	error_reporting(E_ERROR | E_PARSE);
+	
 	require 'conexion.php';
 
-	$RFC = $_GET['RFC'];
-	
-	$sql2 = "DELETE FROM persona WHERE RFC = '$RFC'";
-	$resultado = $mysqli->query($sql2);
-	
-	$where = "";
-	
-	if(!empty($_POST))
-	{
-		$valor = $_POST['campo'];
-	
-		if(!empty($valor)){
-			$where = "WHERE RFC LIKE '$valor%' or Nombre like '$valor%' or ApePaterno like '$valor%' or ApeMaterno like '$valor%' or Area like '$valor%'";
-		}
-	}
-	$sql = "SELECT * FROM persona $where";
-	$resultadoTabla = $mysqli->query($sql);
-	
+	        $RFC = $_GET['RFC'];        
+            
+			$sql = "SELECT RFC, concat(ApePaterno,' ', ApeMaterno,' ', Nombre) as NombreComp, Adscripcion, Area, Subarea, Puesto, Denominacion, Telefono, Extension, Domicilio, Correo, GFC, Acceso_correo, Estatus, Usuario, Contra 
+			FROM persona WHERE RFC = '$RFC'";
+            $resultado = $mysqli->query($sql);
+            $row = $resultado->fetch_array(MYSQLI_ASSOC);
 ?>
-
 <!doctype html>
 <html lang="en">
 
@@ -35,10 +21,7 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
 
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-	 crossorigin="anonymous">
 
-	<link rel="stylesheet" href="./css/general.css">
 	<title>Control de dispositivos</title>
 
 </head>
@@ -109,117 +92,166 @@
 		</nav>
 
 	</div>
+
 	<main role="main" class="container">
-
 		<br>
-		<div class="row ml-3">
-			<h2 style="text-align:center">PERSONAL</h2>
-		</div>
+		<div class="card">
+			<div class="card-header bg-info">
+				<h3 style="text-align:center">DETALLES</h3>
+			</div>
+			<div class="card-body">
+				<div class="row">
+					<div class="col-3">
+						<h3>Nombre: </h3>
+					</div>
+					<div class="col-5">
+						<h4>
+							<?php echo $row['NombreComp']; ?>
+						</h4>
+					</div>
+				</div>
 
-
-
-		<div class="ml-3">
-			
-
-			<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-				<b>Nombre: </b>
-				<input type="text" id="campo" name="campo" />
-				<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
-			</form>
-			
-			<a href="RegistroPersonal.php" class="btn btn-primary float-right mr-3">Nuevo Registro</a>
-			<a href="ReportePersonal.php" class="btn btn-secondary float-right mr-3">Generar Reporte</a>
-
-		</div>
-
-
-		<br>
-
-		<div class="row table-responsive mx-auto">
-			<table class="table table-hover table-secondary">
-				<thead>
-					<tr>
-						<th>RFC</th>
-						<th>Nombre</th>
-						<th>Apellido Paterno</th>
-						<th>Apellido Materno</th>
-						
-						<th>Area</th>
-						<th>Subarea</th>
-						<th>Puesto</th>
-						
-						<th>Telefono</th>
-						<th>Extención</th>
-						
-						<th></th>
-						<th></th>
-						<th></th>
-						<th></th>
-					</tr>
-				</thead>
-
-				<tbody>
-					<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-					<tr>
-						<td>
+				<div class="row">
+					<div class="col-3">
+						<h4>RFC: </h4>
+					</div>
+					<div class="col-5">
+						<h5>
 							<?php echo $row['RFC']; ?>
-						</td>
-						<td>
-							<?php echo $row['Nombre']; ?>
-						</td>
-						<td>
-							<?php echo $row['ApePaterno']; ?>
-						</td>
-						<td>
-							<?php echo $row['ApeMaterno']; ?>
-						</td>
-						
-						<td>
+						</h5>
+					</div>
+				</div>
+
+				<hr color="blue" size=3>
+
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Adscripción: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Adscripcion']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Area: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
 							<?php echo $row['Area']; ?>
-						</td>
-						<td>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Subarea: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
 							<?php echo $row['Subarea']; ?>
-						</td>
-						<td>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Puesto: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
 							<?php echo $row['Puesto']; ?>
-						</td>
-						
-						<td>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Denominación: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Denominacion']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Telefono: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
 							<?php echo $row['Telefono']; ?>
-						</td>
-						<td>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Extension: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
 							<?php echo $row['Extension']; ?>
-						</td>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Domicilio: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Domicilio']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Correo: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Correo']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">GFC: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['GFC']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Acceso del correo: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Acceso_correo']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Status: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Estatus']; ?>
+						</p>
+					</div>
+				</div>
 
-						<td>
-							<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
-								<span class="fas fa-eye"></span>
-							</a>
-						</td>
-						<td>
-							<a href="ReportePersonalXUno.php?RFC=<?php echo $row['RFC']; ?>">
-								<span class="fas fa-download"></span>
-							</a>
-						</td>
-						<td>
-							<a href="ModificaPersona.php?RFC=<?php echo $row['RFC']; ?>">
-								<span class="far fa-edit"></span>
-							</a>
-						</td>
-						<td>
-							<a href="personal.php" data-href="personal.php?RFC=<?php echo $row['RFC']; ?>"
-							 data-toggle="modal" data-target="#confirm-delete">
-								<span class="far fa-trash-alt"></span>
-							</a>
-						</td>
+				<a href="personal.php" class="btn btn-primary">Regresar</a>
+				<a href="ReportePersonalXUno.php?RFC=<?php echo $row['RFC']; ?>">
+					Reporte
+				</a>
+			</div>
 
-					</tr>
-					<?php } ?>
-				</tbody>
-			</table>
 		</div>
-
-
 
 
 	</main>
@@ -231,37 +263,6 @@
 	 crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	 crossorigin="anonymous"></script>
-
-
-	<!-- Modal -->
-	<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
-				</div>
-
-				<div class="modal-body">
-					¿Desea eliminar este registro?
-				</div>
-
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-					<a class="btn btn-danger btn-ok">Delete</a>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<script>
-		$('#confirm-delete').on('show.bs.modal', function(e) {
-			$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-
-			$('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
-		});
-	</script>
 </body>
 
 </html>

@@ -18,7 +18,7 @@
 			$where = "WHERE Folio LIKE '$valor%'";
 		}
 	}
-	$sql = "SELECT auxiliares.Folio, zona.Nombre, auxiliares.Presupuesto, dispositivos.Nomb_Dispositivo, auxiliares.Inventario, marca.Marca, modelo.Modelo, auxiliares.serie, auxiliares.Tipo_Dispositivo, auxiliares.Adquisicion, auxiliares.Fecha_adquisicion, auxiliares.Fin_Garantia, auxiliares.DT, auxiliares.Observaciones, auxiliares.Direccion_ip, auxiliares.Mac_Eth, auxiliares.Mac_wifi, auxiliares.estatus, auxiliares.RFC, auxiliares.Valor FROM auxiliares inner join modelo on auxiliares.id_Modelo=modelo.id_Modelo inner join marca on auxiliares.id_Marca=marca.id_Marca inner join dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo inner join zona on auxiliares.Id_zona=zona.id_Zona $where";
+	$sql = "SELECT auxiliares.Folio, zona.Nombre, auxiliares.Presupuesto, dispositivos.Nomb_Dispositivo, auxiliares.Inventario, marca.Marca, modelo.Modelo, auxiliares.serie, dispositivos.Tipo, auxiliares.Adquisicion, auxiliares.Fecha_adquisicion, auxiliares.Fin_Garantia, auxiliares.DT, auxiliares.Observaciones, auxiliares.Direccion_ip, auxiliares.Mac_Eth, auxiliares.Mac_wifi, auxiliares.estatus, auxiliares.RFC, auxiliares.Valor FROM auxiliares inner join modelo on auxiliares.id_Modelo=modelo.id_Modelo inner join marca on auxiliares.id_Marca=marca.id_Marca inner join dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo inner join zona on auxiliares.Id_zona=zona.id_Zona $where";
 	$resultadoTabla = $mysqli->query($sql);
 	
 ?>
@@ -115,12 +115,12 @@
 		<div class="card">
 			<div class="card-header bg-info">
 				<div class="row ml-3">
-					<h2 style="text-align:center">Telefonia</h2>
+					<h2 style="text-align:center">Auxiliares</h2>
 				</div>
 			</div>
 			<div class="card-body">
 
-				<a href="RegistroTelefonia.php" class="btn btn-primary float-right mr-3">Nuevo Registro</a>
+				<a href="RegistroAuxiliares2.php" class="btn btn-primary float-right mr-3">Nuevo Registro</a>
 
 				<div class="row ml-3">
 
@@ -147,7 +147,7 @@
 								<th>Marca</th>
 								<th>Modelo</th>
 								<th>Serie</th>
-								<th>Tipo de dispositivo (??)</th>
+								<th>Tipo de dispositivo</th>
 								<th>Adquisicion</th>
 								<th>Fecha de adquisicion</th>
 								<th>Fin de garantia</th>
@@ -193,7 +193,7 @@
 									<?php echo $row['serie']; ?>
 								</td>
 								<td>
-									<?php echo $row['Tipo_Dispositivo']; ?>
+									<?php echo $row['Tipo']; ?>
 								</td>
 								<td>
 									<?php echo $row['Adquisicion']; ?>
@@ -231,7 +231,7 @@
 								
 
 								<td>
-									<a href="ModificaAuxiliares.php?Folio=<?php echo $row['Folio']; ?>">
+									<a href="ModificaAux.php?Folio=<?php echo $row['Folio']; ?>">
 										<span class="far fa-edit"></span>
 									</a>
 								</td>

@@ -25,29 +25,36 @@
 		$valor = $_GET['Valor'];
 		
             if ($folio!=null) {
-                $sql= "INSERT INTO auxiliares(Folio, Id_zona, Presupuesto, Id_dispositivo, Inventario, id_Marca, id_modelo, serie, Adquisicion, Fecha_adquisicion, Fin_Garantia, DT, Observaciones, Direccion_ip, Mac_Eth, Mac_wifi, estatus, Documento, RFC, Valor)
-                VALUES ('".$folio."','".$id_Zona."','".$presupuesto."','".$id_Dispositivo."','".$invetario."','$id_Marca','$id_Modelo','$serie','$adquisicion','$fecha_Adquisicion','$fin_Garantia','$DT','$observaciones','$direccion_ip','$mac_Eth','$mac_wifi','$estatus','$documento','$RFC','$valor')";
-				$resultado = $mysqli->query($sql);
+
+                $sql= "UPDATE auxiliares SET Folio='$folio',Id_zona='$id_Zona',Presupuesto='$presupuesto',Id_dispositivo='$id_Dispositivo',Inventario='$invetario',id_Marca='$id_Marca',id_modelo='$id_Modelo',serie='$serie',Adquisicion='$adquisicion',Fecha_adquisicion='$fecha_Adquisicion',Fin_Garantia=$fin_Garantia,DT='$DT',Observaciones='$obsevaciones',Direccion_ip='$direccion_ip',Mac_Eth='$mac_Eth',Mac_wifi='$mac_wifi',estatus='$estatus',Documento='$documento',RFC='$RFC',Valor='$valor'
+                Where Folio='".$folio."'";
+				        $resultado = $mysqli->query($sql);
 				
 			
     
                 if ($folio=1) {
-					echo'<script type="text/javascript">
-						alert("Tarea Guardada");
-						window.location.href="Auxiliares.php"	;
-						</script>';
+                  echo'<script type="text/javascript">
+                    alert("Registo Actualizado");
+                    window.location.href="Auxiliares.php"	;
+                    </script>';
                     
                 }
-			}
+			        }
+
+      $folio = $_GET['Folio'];        
+            
+			$sqlaux = "SELECT * FROM auxiliares WHERE Folio = '$folio'";
+      $resultado = $mysqli->query($sqlaux);
+      $row = $resultado->fetch_array(MYSQLI_ASSOC);
 
 			$sql = "SELECT * FROM zona ORDER BY Nombre ASC";
 			$result = $mysqli->query($sql);
 			if ($result->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
 			{
 				$combobitzona="";
-				while ($row = $result->fetch_array(MYSQLI_ASSOC)) 
+				while ($row2 = $result->fetch_array(MYSQLI_ASSOC)) 
 				{
-					$combobitzona .="<option value='".$row['id_Zona']."'>".$row['Nombre']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+					$combobitzona .="<option value='".$row2['id_Zona']."'>".$row2['Nombre']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
 				}
 			}
 			else
@@ -60,9 +67,9 @@
 			if ($result->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
 			{
 				$combobitdisp="";
-				while ($row = $result->fetch_array(MYSQLI_ASSOC)) 
+				while ($row2 = $result->fetch_array(MYSQLI_ASSOC)) 
 				{
-					$combobitdisp .="<option value='".$row['Id_Dispositivo']."'>".$row['NombTipo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+					$combobitdisp .="<option value='".$row2['Id_Dispositivo']."'>".$row2['NombTipo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
 				}
 			}
 			else
@@ -76,9 +83,9 @@
 			if ($result->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
 			{
 				$combobit="";
-				while ($row = $result->fetch_array(MYSQLI_ASSOC)) 
+				while ($row2 = $result->fetch_array(MYSQLI_ASSOC)) 
 				{
-					$combobit .="<option value='".$row['id_Modelo']."'>".$row['Modelo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+					$combobit .="<option value='".$row2['id_Modelo']."'>".$row2['Modelo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
 				}
 			}
 			else
@@ -91,9 +98,9 @@
 			if ($resultmarca->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
 			{
 				$combobitmarca="";
-				while ($row = $resultmarca->fetch_array(MYSQLI_ASSOC)) 
+				while ($row2 = $resultmarca->fetch_array(MYSQLI_ASSOC)) 
 				{
-					$combobitmarca .="<option value='".$row['id_Marca']."'>".$row['Marca']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+					$combobitmarca .="<option value='".$row2['id_Marca']."'>".$row2['Marca']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
 				}
 			}
 			else
@@ -106,9 +113,9 @@
 			if ($resultrfc->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
 			{
 				$combobitrfc="";
-				while ($row = $resultrfc->fetch_array(MYSQLI_ASSOC)) 
+				while ($row2 = $resultrfc->fetch_array(MYSQLI_ASSOC)) 
 				{
-					$combobitrfc .="<option value='".$row['RFC']."'>".$row['RFC']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+					$combobitrfc .="<option value='".$row2['RFC']."'>".$row2['RFC']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
 				}
 			}
 			else
@@ -129,8 +136,8 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
 
+	<title>Registro de auxiliares </title>
 
-	<title>Control de dispositivos</title>
 
 </head>
 
@@ -138,68 +145,68 @@
 
 	<div class="allNavbar">
 
-		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a href="inicio.php" class="logo">
-				<img src="./img/logoSader.jpg" width="180" height="80" class="d-inline-block align-top" alt="">
-			</a>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a href="inicio.php" class="logo">
+    <img src="./img/logoSader.jpg" width="180" height="80" class="d-inline-block align-top" alt="">
+  </a>
 
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
-			 aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
+   aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
 
-			<div class="collapse navbar-collapse" id="navbarCollapse">
-				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
-					<li class="nav-item">
-						<a class="nav-link" href="inicio.php">Inicio</a>
-					</li>
+      <li class="nav-item">
+        <a class="nav-link" href="inicio.php">Inicio</a>
+      </li>
 
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
-						<div class="dropdown-menu">
-							<a class="dropdown-item" href="registroEquipoComputo.php">Equipo de computo</a>
-							<a class="dropdown-item" href="registroAuxiliares.php">Auxiliares</a>
-							<a class="dropdown-item" href="#">Telefonia</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Separated link</a>
-						</div>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="personal.php">Personal</a>
-					</li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro Complementos</a>
-						<div class="dropdown-menu">
-							<a class="dropdown-item" href="Marcas.php ">Marcas</a>
-							<a class="dropdown-item" href="Modelos.php">Modelos</a>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="registroEquipoComputo.php">Equipo de computo</a>
+          <a class="dropdown-item" href="registroAuxiliares.php">Auxiliares</a>
+          <a class="dropdown-item" href="#">Telefonia</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Separated link</a>
+        </div>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="personal.php">Personal</a>
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro Complementos</a>
+        <div class="dropdown-menu">
+          <a class="dropdown-item" href="Marcas.php ">Marcas</a>
+          <a class="dropdown-item" href="Modelos.php">Modelos</a>
 
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="Dispositivos.php">Dispositivos</a>
-							<a class="dropdown-item" href="Soft.php">Software</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="DiscoDuro.php">Disco duro</a>
-							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
-							<a class="dropdown-item" href="Procesador.php">Procesador</a>
-							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
-							<a class="dropdown-item" href="Zonas.php">Zonas</a>
-						</div>
-					</li>
-				</ul>
-				<ul class="nav navbar-nav">
-					<li>
-						<a href="#">
-							<span class="fas fa-user nav-link"></span> Sign Up</a>
-					</li>
-					<li>
-						<a href="#">
-							<span class="fas fa-sign-in-alt nav-link"></span> Salir</a>
-					</li>
-				</ul>
-			</div>
-		</nav>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="Dispositivos.php">Dispositivos</a>
+          <a class="dropdown-item" href="Soft.php">Software</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="DiscoDuro.php">Disco duro</a>
+          <a class="dropdown-item" href="RAM.php">Memoria RAM</a>
+          <a class="dropdown-item" href="Procesador.php">Procesador</a>
+          <a class="dropdown-item" href="Velocidad.php">Velocidad</a>
+          <a class="dropdown-item" href="Zonas.php">Zonas</a>
+        </div>
+      </li>
+    </ul>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="#">
+          <span class="fas fa-user nav-link"></span> Sign Up</a>
+      </li>
+      <li>
+        <a href="#">
+          <span class="fas fa-sign-in-alt nav-link"></span> Salir</a>
+      </li>
+    </ul>
+  </div>
+</nav>
 
-	</div>
+</div>
 
 	<main role="main" class="container">
 		<br>
@@ -209,18 +216,20 @@
 					<h3 style="text-align:center">NUEVO REGISTRO</h3>
 				</div>
 			</div>
+      
 			<div class="card-body">
 				<form class="form-horizontal">
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Folio</label>
 						<div class="col-sm-10">
-							<input type="number" class="form-control" id="folio" name="Folio" placeholder="Folio" required>
+							<input type="number" class="form-control" id="Folio" name="Folio" placeholder="Folio" value="<?php echo $row['Folio']; ?>" required>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label>Zona</label>
 						<select class="form-control col-sm-10" id="id_zona" name="Id_zona">
+             
 							<?php echo $combobitzona; ?>
 						</select>
 					</div>
@@ -333,7 +342,7 @@
 						<div class="col-sm-10">
 							<select class="form-control" id="estatus" name="estatus">
 								<option value="BUENO">BUENO</option>
-								<option value="REG	ULAR">REGULAR</option>
+								<option value="REGULAR">REGULAR</option>
 								<option value="MALO">MALO</option>
 								<option value="OTRO">OTRO</option>
 							</select>

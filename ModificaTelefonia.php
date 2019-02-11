@@ -35,7 +35,7 @@ $estatus = $_GET['Estatus'];
 			
 
 if ($display!=null && $RFC!=null) {
-    $sql2= "update telefonia set  Display='$display', RFC='$RFC', Inmueble='$inmueble', Sitio='$sitio',Serie='$serie', id_Marca='$marca', id_Modelo='$modelo', Mac='$mac', NodoRed='$nodoRed', GpoCaptura='$gpoCaptura', Nivel_Cor='$nivel_cor', Nivel_Aut='$nivel_Aut', Codigo_Aut='$codigo_Aut', Funcion='$funcion', DID='$DID', CorreoVoz='$correoVoz', Puerto='$puerto', Dir_IP='$dir_ip', Mask='$mask', Gateway='$gateway', VLAN='$vlan', Notas='$notas', Adquisicion='$adquisicion', Eliminador='$eliminador', F_Resguardo='$f_resguardo', Fecha_Resguardo='$fecha_resguardo', Observaciones='$observaciones', Estatus='$estatus'
+    $sql2= "UPDATE telefonia set  Display='$display', RFC='$RFC', Inmueble='$inmueble', Sitio='$sitio',Serie='$serie', id_Marca='$marca', id_Modelo='$modelo', Mac='$mac', NodoRed='$nodoRed', GpoCaptura='$gpoCaptura', Nivel_Cor='$nivel_cor', Nivel_Aut='$nivel_Aut', Codigo_Aut='$codigo_Aut', Funcion='$funcion', DID='$DID', CorreoVoz='$correoVoz', Puerto='$puerto', Dir_IP='$dir_ip', Mask='$mask', Gateway='$gateway', VLAN='$vlan', Notas='$notas', Adquisicion='$adquisicion', Eliminador='$eliminador', F_Resguardo='$f_resguardo', Fecha_Resguardo='$fecha_resguardo', Observaciones='$observaciones', Estatus='$estatus'
     Where Extencion='".$extencion."'";
     $mysqli->query($sql2);
     
