@@ -264,7 +264,11 @@
 								<td>
 									<?php echo $row['Estatus']; ?>
 								</td>
-
+								<td>
+									<a href="DetalleTel.php?Extencion=<?php echo $row['Extencion']; ?>">
+										<span class="fas fa-eye"></span>
+									</a>
+								</td>
 
 								<td>
 									<a href="ModificaTelefonia.php?Extencion=<?php echo $row['Extencion']; ?>">
