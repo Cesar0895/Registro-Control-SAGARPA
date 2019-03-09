@@ -2,9 +2,9 @@
 	error_reporting(E_ALL & ~E_NOTICE);
 	error_reporting(E_ERROR | E_PARSE);
 	require 'conexion.php';
-	$id_zona = $_GET['id_Zona'];
+	$idArea_Subarea = $_GET['idarea_Subarea'];
 
-	$sql2 = "DELETE FROM zona WHERE id_Zona = '$id_zona'";
+	$sql2 = "DELETE FROM area_subarea WHERE idarea_Subarea = '$idarea_Subarea'";
 	$resultado = $mysqli->query($sql2);
 	
 	$where = "";
@@ -14,11 +14,11 @@
 		$valor = $_POST['campo'];
 	
 		if(!empty($valor)){
-			$where = "WHERE Nombre LIKE '%$valor'";
+			$where = "WHERE Nombre LIKE '$valor%' or NombreSubarea LIKE '$valor%'";
 		}
 	}
 
-	$sqlmostrar = "SELECT * FROM zona $where";
+	$sqlmostrar = "SELECT zona.Nombre, subareas.NombreSubarea FROM `area_subarea` INNER JOIN zona ON area_subarea.id_Zona=zona.id_Zona INNER JOIN subareas on area_subarea.id_SubArea=subareas.IdSubarea $where";
 	$resultadoTabla = $mysqli->query($sqlmostrar);
 
 ?>
@@ -113,11 +113,19 @@
 	<br>
 	<main role="main" class="container">
 		<div class="row">
-			<h2 style="text-align:center">Zonas</h2>
+			<h2 style="text-align:center">Áreas y Subáreas </h2>
 		</div>
 
-		<a href="Zonas.php" class="btn btn-primary float-right">Nuevo Registro</a>
+		<a href="Areas.php" class="btn btn-primary float-right">Nuevo Registro</a>
+		<div class="row">
 
+
+			<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+				<b style="color:white;">Buscador: </b>
+				<input type="text" id="campo" name="campo"  />
+				<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
+			</form>
+		</div>
 
 		<br>
 
@@ -126,7 +134,8 @@
 				<thead>
 					<tr>
 
-						<th>zona</th>
+						<th>Áreas</th>
+						<th>Subáreas</th>
 
 						<th></th>
 
@@ -141,7 +150,10 @@
 							<?php echo $row['Nombre']; ?>
 						</td>
 						<td>
-							<a href="vistaZonas.php" data-href="vistaZonas.php?id_Zona=<?php echo $row['id_Zona']; ?>"
+							<?php echo $row['NombreSubarea']; ?>
+						</td>
+						<td>
+							<a href="vistaAreas.php" data-href="vistaAreas.php?idarea_Subarea=<?php echo $row['idarea_Subarea']; ?>"
 							 data-toggle="modal" data-target="#confirm-delete">
 								<span class="far fa-trash-alt"></span>
 							</a>

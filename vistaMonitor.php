@@ -180,7 +180,7 @@
 							</a>
 						</td>
 						<td>
-							<a href="vistaSoft.php" data-href="vistaSoft.php?id_Software=<?php echo $row['id_Software']; ?>"
+							<a href="vistaMonitor.php" data-href="vistaMonitor.php?id_Monitor=<?php echo $row['id_Monitor']; ?>"
 							 data-toggle="modal" data-target="#confirm-delete">
 								<span class="far fa-trash-alt"></span>
 							</a>

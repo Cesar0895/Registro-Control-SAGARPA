@@ -44,8 +44,7 @@
 							<a class="dropdown-item" href="registroEquipoComputo.php">Equipo de computo</a>
 							<a class="dropdown-item" href="Auxiliares.php">Auxiliares</a>
 							<a class="dropdown-item" href="Telefonia.php">Telefonia</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Separated link</a>
+							
 						</div>
 					</li>
 					<li class="nav-item">
@@ -65,7 +64,10 @@
 							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
 							<a class="dropdown-item" href="Procesador.php">Procesador</a>
 							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
+							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
+							<a class="dropdown-item" href="Areas.php">Áreas</a>
+							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 				</ul>

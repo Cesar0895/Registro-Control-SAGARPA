@@ -2,23 +2,24 @@
 	error_reporting(E_ALL & ~E_NOTICE);
 	error_reporting(E_ERROR | E_PARSE);
 	require 'conexion.php';
-	$id_zona = $_GET['id_Zona'];
 
-	$sql2 = "DELETE FROM zona WHERE id_Zona = '$id_zona'";
-	$resultado = $mysqli->query($sql2);
 	
+	$id_mouse = $_GET['Id_mouse'];
+	$sql2 = "DELETE FROM mouse WHERE Id_mouse = '$id_mouse'";
+	$resultado = $mysqli->query($sql2);
+		
 	$where = "";
-
+	
 	if(!empty($_POST))
 	{
 		$valor = $_POST['campo'];
-	
+		
 		if(!empty($valor)){
-			$where = "WHERE Nombre LIKE '%$valor'";
+			$where = "WHERE Marca LIKE '$valor%' or Modelo LIKE '$valor%' or Inventario LIKE '$valor%'";
 		}
 	}
 
-	$sqlmostrar = "SELECT * FROM zona $where";
+	$sqlmostrar = "SELECT m.Id_mouse, m.Serie, m.Inventario, m.Descripcion, m.Adquisicion, marca.Marca, modelo.Modelo FROM mouse m INNER JOIN marca ON m.Id_Marca=marca.id_Marca INNER JOIN modelo on m.Id_Modelo=modelo.id_Modelo $where";
 	$resultadoTabla = $mysqli->query($sqlmostrar);
 
 ?>
@@ -113,10 +114,20 @@
 	<br>
 	<main role="main" class="container">
 		<div class="row">
-			<h2 style="text-align:center">Zonas</h2>
+			<h2 style="text-align:center">Monitores</h2>
 		</div>
 
-		<a href="Zonas.php" class="btn btn-primary float-right">Nuevo Registro</a>
+		<a href="registroEquipoComputo.php" class="btn btn-primary float-right">Nuevo Registro</a>
+
+		<div class="row">
+
+
+			<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+				<b>Nombre: </b>
+				<input type="text" id="campo" name="campo" />
+				<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
+			</form>
+		</div>
 
 
 		<br>
@@ -126,8 +137,13 @@
 				<thead>
 					<tr>
 
-						<th>zona</th>
-
+						<th>Serie</th>
+						<th>Marca</th>
+						<th>Modelo</th>
+						<th>No. de inventario</th>
+						<th>Descripcion</th>
+						<th>Adquisicion</th>
+						<th></th>
 						<th></th>
 
 					</tr>
@@ -138,10 +154,31 @@
 					<tr>
 
 						<td>
-							<?php echo $row['Nombre']; ?>
+							<?php echo $row['Serie']; ?>
 						</td>
 						<td>
-							<a href="vistaZonas.php" data-href="vistaZonas.php?id_Zona=<?php echo $row['id_Zona']; ?>"
+							<?php echo $row['Marca']; ?>
+						</td>
+						<td>
+							<?php echo $row['Modelo']; ?>
+						</td>
+						<td>
+							<?php echo $row['Inventario']; ?>
+						</td>
+						<td>
+							<?php echo $row['Descripcion']; ?>
+						</td>
+						<td>
+							<?php echo $row['Adquisicion']; ?>
+						</td>
+
+						<td>
+							<a href "#">
+								<span class="far fa-edit"></span>
+							</a>
+						</td>
+						<td>
+							<a href="vistaMouse.php" data-href="vistaMouse.php?Id_mouse=<?php echo $row['Id_mouse']; ?>"
 							 data-toggle="modal" data-target="#confirm-delete">
 								<span class="far fa-trash-alt"></span>
 							</a>
@@ -151,8 +188,7 @@
 				</tbody>
 			</table>
 		</div>
-
-
+		</div>
 
 
 
@@ -173,7 +209,7 @@
 
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Eliminar Zona</h4>
+					<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
 				</div>
 
 				<div class="modal-body">
@@ -195,7 +231,6 @@
 			$('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
 		});
 	</script>
-
 </body>
 
 </html>

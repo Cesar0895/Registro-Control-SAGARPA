@@ -2,27 +2,27 @@
 	error_reporting(E_ALL & ~E_NOTICE);
 	error_reporting(E_ERROR | E_PARSE);
 	require 'conexion.php';
-	$id_zona = $_GET['id_Zona'];
 
-	$sql2 = "DELETE FROM zona WHERE id_Zona = '$id_zona'";
-	$resultado = $mysqli->query($sql2);
 	
+	$Folio = $_GET['Folio'];
+	$sql2 = "DELETE FROM equipos WHERE Folio = '$Folio'";
+	$resultado = $mysqli->query($sql2);
+		
 	$where = "";
-
+	
 	if(!empty($_POST))
 	{
 		$valor = $_POST['campo'];
-	
+		
 		if(!empty($valor)){
-			$where = "WHERE Nombre LIKE '%$valor'";
+			$where = "WHERE Folio LIKE '$valor%'";
 		}
 	}
 
-	$sqlmostrar = "SELECT * FROM zona $where";
+	$sqlmostrar = "SELECT `Folio`, zona.Nombre, concat(persona.Nombre,' ',persona.ApePaterno,' ',persona.ApeMaterno) as nombResp, Filtrado,`Identificacion`, concat(p.Nombre,' ',p.ApePaterno,' ',p.ApeMaterno) as nombUser,`Nodo`, `Fecha_Adquisicion`, `DT_adquisicion`, `DTB`, `Tipo_HW`, `Folio_Resduardo`, `Observaciones`, `Fin_Garantia`, `Candado`, `Valor`,equipos.Estatus, `Ubicacion`, `Fecha_Llenado`, `Oficio_Mexico`, `Contra_Admin`, `Id_CPU`, `id_Monitor`, `Id_mouse`, `Id_Teclado` FROM `equipos`INNER JOIN zona on equipos.Id_Zona=zona.id_Zona INNER JOIN persona on equipos.RFC=persona.RFC INNER JOIN persona p on equipos.RFC_Usuario=p.RFC $where ORDER BY `equipos`.`Fecha_Llenado` ASC";
 	$resultadoTabla = $mysqli->query($sqlmostrar);
 
 ?>
-
 <!doctype html>
 <html lang="en">
 
@@ -113,10 +113,20 @@
 	<br>
 	<main role="main" class="container">
 		<div class="row">
-			<h2 style="text-align:center">Zonas</h2>
+			<h2 style="text-align:center">Registro de inventario</h2>
 		</div>
 
-		<a href="Zonas.php" class="btn btn-primary float-right">Nuevo Registro</a>
+		<a href="registroEquipoComputo.php" class="btn btn-primary float-right">Nuevo Registro</a>
+
+		<div class="row">
+
+
+			<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+				<b style="color:white">Folio: </b>
+				<input type="text" id="campo" name="campo" />
+				<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
+			</form>
+		</div>
 
 
 		<br>
@@ -126,8 +136,15 @@
 				<thead>
 					<tr>
 
-						<th>zona</th>
-
+						<th>Folio</th>
+						<th>Zona</th>
+						<th>Responsable</th>
+						<th>Usuario</th>
+						<th>Fecha Adquisición</th>
+						<th>Folio_Resguardo</th>
+						<th>Ubicación</th>
+						<th>Fecha_Llenado</th>
+						<th></th>
 						<th></th>
 
 					</tr>
@@ -138,10 +155,41 @@
 					<tr>
 
 						<td>
+							<?php echo $row['Folio']; ?>
+						</td>
+						<td>
 							<?php echo $row['Nombre']; ?>
 						</td>
 						<td>
-							<a href="vistaZonas.php" data-href="vistaZonas.php?id_Zona=<?php echo $row['id_Zona']; ?>"
+							<?php echo $row['nombResp']; ?>
+						</td>
+						<td>
+							<?php echo $row['nombUser']; ?>
+						</td>
+						<td>
+							<?php echo $row['Fecha_Adquisicion']; ?>
+						</td>
+						<td>
+							<?php echo $row['Folio_Resduardo']; ?>
+						</td>
+						<td>
+							<?php echo $row['Ubicacion']; ?>
+						</td>
+						<td>
+							<?php echo $row['Fecha_Llenado']; ?>
+						</td>
+						<td>
+							<a href="DetalleInventario.php?Folio=<?php echo $row['Folio']; ?>">
+								<span class="fas fa-eye"></span>
+							</a>
+						</td>
+						<td>
+							<a href="ModificaEquipoComputo.php?Folio=<?php echo $row['Folio']; ?>">
+								<span class="far fa-edit"></span>
+							</a>
+						</td>
+						<td>
+							<a href="vistaEquipoComputo.php" data-href="vistaEquipoComputo.php?Folio=<?php echo $row['Folio']; ?>"
 							 data-toggle="modal" data-target="#confirm-delete">
 								<span class="far fa-trash-alt"></span>
 							</a>
@@ -151,8 +199,7 @@
 				</tbody>
 			</table>
 		</div>
-
-
+		</div>
 
 
 
@@ -173,7 +220,7 @@
 
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Eliminar Zona</h4>
+					<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
 				</div>
 
 				<div class="modal-body">
@@ -195,7 +242,6 @@
 			$('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
 		});
 	</script>
-
 </body>
 
 </html>

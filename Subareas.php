@@ -1,25 +1,22 @@
 <?php
-	error_reporting(E_ALL & ~E_NOTICE);
-	error_reporting(E_ERROR | E_PARSE);
-	require 'conexion.php';
-	$id_zona = $_GET['id_Zona'];
+        error_reporting(E_ALL & ~E_NOTICE);
+        error_reporting(E_ERROR | E_PARSE);
+        require 'conexion.php';
 
-	$sql2 = "DELETE FROM zona WHERE id_Zona = '$id_zona'";
-	$resultado = $mysqli->query($sql2);
-	
-	$where = "";
+		
+		$nombreSubArea = $_GET['NombreSubarea'];
+        if ($nombreSubArea!=null) {
+            $sqlsub= "INSERT INTO subareas(NombreSubarea) VALUES ('$nombreSubArea')";
+            $mysqli->query($sqlsub);
 
-	if(!empty($_POST))
-	{
-		$valor = $_POST['campo'];
-	
-		if(!empty($valor)){
-			$where = "WHERE Nombre LIKE '%$valor'";
-		}
-	}
-
-	$sqlmostrar = "SELECT * FROM zona $where";
-	$resultadoTabla = $mysqli->query($sqlmostrar);
+            if ($nombreSubArea=1) {
+				echo'<script type="text/javascript">
+			alert("Registro guardado!");
+			window.location.href="vistaSubareas.php"	;
+			</script>';
+               // header("location:vistaZonas.php");
+            }
+        }
 
 ?>
 
@@ -35,16 +32,13 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
 
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-	 crossorigin="anonymous">
-
 	<link rel="stylesheet" href="./css/estilo.css">
-
 	<title>Control de dispositivos</title>
 
 </head>
 
 <body>
+
 
 	<div class="allNavbar">
 
@@ -111,52 +105,28 @@
 
 	</div>
 	<br>
-	<main role="main" class="container">
-		<div class="row">
-			<h2 style="text-align:center">Zonas</h2>
+
+	<div class="container">
+		<div class="card">
+			<form>
+				<div class="form-group">
+					<h5 class="card-title">Subáreas</h5>
+					<input type="text" class="form-control" id="sub" name="NombreSubarea" placeholder="Escribe una Subárea" require>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<a href="index.php" class="btn btn-default">Regresar</a>
+						<button type="submit" class="btn btn-primary">Guardar</button>
+					</div>
+				</div>
+			</form>
+			<a href="vistaSubareas.php" class="btn btn-success">Ver lista de zonas registradas</a>
+
 		</div>
 
-		<a href="Zonas.php" class="btn btn-primary float-right">Nuevo Registro</a>
+		
 
-
-		<br>
-
-		<div class="row table-responsive">
-			<table class="table table-hover table-secondary">
-				<thead>
-					<tr>
-
-						<th>zona</th>
-
-						<th></th>
-
-					</tr>
-				</thead>
-
-				<tbody>
-					<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-					<tr>
-
-						<td>
-							<?php echo $row['Nombre']; ?>
-						</td>
-						<td>
-							<a href="vistaZonas.php" data-href="vistaZonas.php?id_Zona=<?php echo $row['id_Zona']; ?>"
-							 data-toggle="modal" data-target="#confirm-delete">
-								<span class="far fa-trash-alt"></span>
-							</a>
-						</td>
-					</tr>
-					<?php } ?>
-				</tbody>
-			</table>
-		</div>
-
-
-
-
-
-	</main>
+	</div>
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -165,37 +135,6 @@
 	 crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	 crossorigin="anonymous"></script>
-
-	<!-- Modal -->
-	<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Eliminar Zona</h4>
-				</div>
-
-				<div class="modal-body">
-					¿Desea eliminar este registro?
-				</div>
-
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-					<a class="btn btn-danger btn-ok">Delete</a>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<script>
-		$('#confirm-delete').on('show.bs.modal', function(e) {
-			$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-
-			$('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
-		});
-	</script>
-
 </body>
 
 </html>

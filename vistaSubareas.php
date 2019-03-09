@@ -2,9 +2,9 @@
 	error_reporting(E_ALL & ~E_NOTICE);
 	error_reporting(E_ERROR | E_PARSE);
 	require 'conexion.php';
-	$id_zona = $_GET['id_Zona'];
+	$id_Subarea = $_GET['IdSubarea'];
 
-	$sql2 = "DELETE FROM zona WHERE id_Zona = '$id_zona'";
+	$sql2 = "DELETE FROM subareas WHERE IdSubarea = '$id_Subarea'";
 	$resultado = $mysqli->query($sql2);
 	
 	$where = "";
@@ -14,11 +14,11 @@
 		$valor = $_POST['campo'];
 	
 		if(!empty($valor)){
-			$where = "WHERE Nombre LIKE '%$valor'";
+			$where = "WHERE NombreSubarea LIKE '%$valor'";
 		}
 	}
 
-	$sqlmostrar = "SELECT * FROM zona $where";
+	$sqlmostrar = "SELECT * FROM subareas $where ORDER BY NombreSubarea ASC";
 	$resultadoTabla = $mysqli->query($sqlmostrar);
 
 ?>
@@ -113,10 +113,10 @@
 	<br>
 	<main role="main" class="container">
 		<div class="row">
-			<h2 style="text-align:center">Zonas</h2>
+			<h2 style="text-align:center">Almacenamiento</h2>
 		</div>
 
-		<a href="Zonas.php" class="btn btn-primary float-right">Nuevo Registro</a>
+		<a href="Subareas.php" class="btn btn-primary float-right">Nuevo Registro</a>
 
 
 		<br>
@@ -126,7 +126,7 @@
 				<thead>
 					<tr>
 
-						<th>zona</th>
+						<th>Subáreas</th>
 
 						<th></th>
 
@@ -138,10 +138,10 @@
 					<tr>
 
 						<td>
-							<?php echo $row['Nombre']; ?>
+							<?php echo $row['NombreSubarea']; ?>
 						</td>
 						<td>
-							<a href="vistaZonas.php" data-href="vistaZonas.php?id_Zona=<?php echo $row['id_Zona']; ?>"
+							<a href="vistaSubareas.php" data-href="vistaSubareas.php?IdSubarea=<?php echo $row['IdSubarea']; ?>"
 							 data-toggle="modal" data-target="#confirm-delete">
 								<span class="far fa-trash-alt"></span>
 							</a>
