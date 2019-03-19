@@ -16,16 +16,18 @@
             $correo = isset($_GET['correo']) ? $_GET['correo'] : null ;
             $GFC = isset($_GET['GFC']) ? $_GET['GFC'] : null ;
             $accesoCorreo = isset($_GET['accesoCorreo']) ? $_GET['accesoCorreo'] : null ;
-            $estatus = isset($_GET['estatus']) ? $_GET['estatus'] : null ;
+			$estatus = isset($_GET['estatus']) ? $_GET['estatus'] : null ;
+			$usuario = isset($_GET['usuario']) ? $_GET['usuario'] : null ;
+			$contra = isset($_GET['contra']) ? $_GET['contra'] : null ;
         
 
             if ($RFC!=null) {
                 $sql= "INSERT INTO persona (RFC, Nombre, ApePaterno, ApeMaterno, 
                 Adscripcion, Area, Subarea, Puesto, Denominacion, Telefono, Extension, 
-                Domicilio, Correo, GFC, Acceso_correo, Estatus) 
+                Domicilio, Correo, GFC, Acceso_correo, Estatus, Usuario, Contra) 
                 VALUES ('".$RFC."','".$nombre."','".$apePaterno."','".$apeMaterno."','".$adscripcion."','$area','$subarea',
                     '$puesto','$denominacion','$telefono','$extencion','$domicilio','$correo','$GFC',
-                    '$accesoCorreo','$estatus')";
+                    '$accesoCorreo','$estatus', '$usuario', '$contra')";
                 $resultado = $mysqli->query($sql);
     
                 if ($RFC=1) {
@@ -245,6 +247,18 @@
 				</div>
 			</div>
 
+			<div class="form-group">
+				<label for="accesoCorreo" class="col-sm-2 controllabel">Nombre se usuario</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="usuario" name="usuario" placeholder="Nombre de usuario">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="accesoCorreo" class="col-sm-2 controllabel">Contraseña</label>
+				<div class="col-sm-10">
+					<input type="text" class="form-control" id="contra" name="contra" placeholder="Contraseña">
+				</div>
+			</div>
 
 			<div class="form-group">
 				<div class="col-sm-offset-2 col-sm-10">

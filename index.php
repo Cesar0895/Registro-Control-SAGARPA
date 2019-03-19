@@ -1,3 +1,11 @@
+<?php
+session_start();
+	
+
+
+
+?>
+
 <!doctype html>
 <html lang="en">
   <head>
@@ -18,13 +26,13 @@
      <div class="login-box">
       <img src="img/userlogo.png" class="avatar" alt="Avatar Image">
 
-      <form>
+      <form action="validar.php" method="post">
         <!-- USERNAME INPUT -->
         <label for="username">Usuario</label>
-        <input type="text" placeholder="Nombre de usuario">
+        <input type="text" placeholder="Nombre de usuario" name="user">
         <!-- PASSWORD INPUT -->
         <label for="password">Contraseña</label>
-        <input type="password" placeholder="Ingrese contraseña">
+        <input type="password" placeholder="Ingrese contraseña" name="pass">
 
         <input type="submit" value="Iniciar sesión">
         <a href="#">¿Olvidaste tu contraseña?</a><br>

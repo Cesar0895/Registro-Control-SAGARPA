@@ -89,9 +89,15 @@
             if ($id_pc=1) {
                 echo'<script type="text/javascript">
 						alert("Registro guardado");
-						
+						window.location.href="registroEquipoComputo.php";
 						</script>';
-            }
+			}else{
+			echo'<script type="text/javascript">
+						alert("Registro NO guardado");
+						window.location.href="registroEquipoComputo.php";
+						</script>';
+			}
+            
 		}
 
 		if ($Folio!=null) {
@@ -696,7 +702,8 @@ $where = "";
 
 
 					<!-- Modal Datos CPU-->
-					<div class="modal fade" id="datosCPU" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal fade" id="datosCPU" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+					 aria-hidden="true">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -923,7 +930,8 @@ $where = "";
 											</div>
 										</fieldset>
 										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-										<button type="submit" class="btn btn-primary">Guardar</button>
+
+										<button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#DatosSoft">Guardar</button>
 
 										<a type="button" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal" data-target="#DatosSoft">
 											Añadir Software
@@ -939,7 +947,8 @@ $where = "";
 					</div>
 
 					<!-- Modal Datos Software de CPU-->
-					<div class="modal fade" id="DatosSoft" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal fade" id="DatosSoft" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+					 aria-hidden="true">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -975,7 +984,8 @@ $where = "";
 					</div>
 
 					<!-- Modal Datos Monitor-->
-					<div class="modal fade" id="datosMonitor" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal fade" id="datosMonitor" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+					 aria-hidden="true">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -1041,7 +1051,8 @@ $where = "";
 					</div>
 
 					<!-- Modal Datos Teclado-->
-					<div class="modal fade" id="datosTeclado" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal fade" id="datosTeclado" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+					 aria-hidden="true">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -1107,7 +1118,8 @@ $where = "";
 					</div>
 
 					<!-- Modal Datos Mouse-->
-					<div class="modal fade" id="datosMouse" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal fade" id="datosMouse" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+					 aria-hidden="true">
 						<div class="modal-dialog" role="document">
 							<div class="modal-content">
 								<div class="modal-header">
@@ -1190,7 +1202,8 @@ $where = "";
 </body>
 
 <script>
-	$('#DatosSoft').modal('show');//se abre la ventana de nuevo
+	//$('#DatosSoft').modal('show');//se abre la ventana de nuevo
+	//$('#DatosSoft').modal({backdrop: 'static', keyboard: false})
 </script>
 
 </html>

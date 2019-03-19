@@ -4,7 +4,7 @@ session_start();
 	$varsesion=$_SESSION['user'];
 	//$contrasesion=$_SESSION['pass'];
 	
-    require 'conexion.php';
+    require '../conexion.php';
     $consulta="SELECT * FROM persona WHERE Usuario='$varsesion'";
     //'or '1'='1
     $resultado = $mysqli->query($consulta);
@@ -15,11 +15,6 @@ session_start();
 	
 		if ($varsesion==null || $varsesion='' ) {
 			header('location:index.php');
-			die();
-		}
-		
-		if ($puesto!='encargado') {
-			header('location:Resguardante/inicioRes.php');
 			die();
 		}
 		
@@ -37,7 +32,7 @@ session_start();
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
 
-	<link rel="stylesheet" href="./css/estilo.css">
+	<link rel="stylesheet" href="../css/estilo.css">
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
 	 crossorigin="anonymous">
 	
@@ -49,8 +44,8 @@ session_start();
 	<div class="allNavbar">
 
 		<nav class="navbar navbar-expand-lg navbar-light bg-light">
-			<a href="inicio.php" class="logo">
-				<img src="./img/logoSader.jpg" width="180" height="80" class="d-inline-block align-top" alt="">
+			<a href="inicioRes.php" class="logo">
+				<img src="../img/logoSader.jpg" width="180" height="80" class="d-inline-block align-top" alt="">
 			</a>
 
 			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse"
@@ -62,41 +57,13 @@ session_start();
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
 					<li class="nav-item">
-						<a class="nav-link mask flex-center rgba-red-strong" href="inicio.php">Inicio</a>
+						<a class="nav-link mask flex-center rgba-red-strong" href="#">Inicio</a>
+					</li>
+                    <li class="nav-item">
+						<a class="nav-link mask flex-center rgba-red-strong" href="VistaRes.php">Equipo a cargo</a>
 					</li>
 
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
-						<div class="dropdown-menu">
-							<a class="dropdown-item" href="registroEquipoComputo.php">Equipo de computo</a>
-							<a class="dropdown-item" href="Auxiliares.php">Auxiliares</a>
-							<a class="dropdown-item" href="Telefonia.php">Telefonia</a>
-							
-						</div>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" href="personal.php">Personal</a>
-					</li>
-					<li class="nav-item dropdown">
-						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro Complementos</a>
-						<div class="dropdown-menu">
-							<a class="dropdown-item" href="Marcas.php ">Marcas</a>
-							<a class="dropdown-item" href="Modelos.php">Modelos</a>
-
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="Dispositivos.php">Dispositivos</a>
-							<a class="dropdown-item" href="Soft.php">Software</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="DiscoDuro.php">Disco duro</a>
-							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
-							<a class="dropdown-item" href="Procesador.php">Procesador</a>
-							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="Zonas.php">Zonas</a>
-							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
-						</div>
-					</li>
+					
 				</ul>
 				<ul class="nav navbar-nav">
 					<li>
@@ -104,9 +71,8 @@ session_start();
 						<span class="fas fa-user nav-link"> Bienvenido (a): <?php echo $_SESSION['user']; ?> </span>
 					</li>
 					<li>
-						<a href="cerrar_session.php">
+						<a href="../cerrar_session.php">
 							<span class="fas fa-sign-in-alt nav-link"></span> (Cerrar sesion)</a>
-							
 					</li>
 				</ul>
 			</div>
@@ -116,34 +82,33 @@ session_start();
 
 
 	<main role="main" class="container principal">
-	
-		<h1><?php echo $nombr; ?></h1>
+		
 		<br>
 		<div id="carouselExampleFade" class="carousel slide carousel-fade" data-ride="carousel">
 			<div class="carousel-inner">
 				<div class="carousel-item active">
-					<img class="d-block w-100" src="./img/slide1.png" class="img-fluid" alt="Responsive image">
+					<img class="d-block w-100" src="../img/slide1.png" class="img-fluid" alt="Responsive image">
 				</div>
 				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide2.png" class="img-fluid" alt="Responsive image">
+					<img class="d-block w-100" src="../img/slide2.png" class="img-fluid" alt="Responsive image">
 				</div>
 				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide3.jpg" class="img-fluid" alt="Responsive image">
+					<img class="d-block w-100" src="../img/slide3.jpg" class="img-fluid" alt="Responsive image">
 				</div>
 				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide4.jpg" class="img-fluid" alt="Responsive image">
+					<img class="d-block w-100" src="../img/slide4.jpg" class="img-fluid" alt="Responsive image">
 				</div>
 				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide5.jpg" class="img-fluid" alt="Responsive image">
+					<img class="d-block w-100" src="../img/slide5.jpg" class="img-fluid" alt="Responsive image">
 				</div>
 				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide6.jpg" class="img-fluid" alt="Responsive image">
+					<img class="d-block w-100" src="../img/slide6.jpg" class="img-fluid" alt="Responsive image">
 				</div>
 				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide7.jpg" class="img-fluid" alt="Responsive image">
+					<img class="d-block w-100" src="../img/slide7.jpg" class="img-fluid" alt="Responsive image">
 				</div>
 				<div class="carousel-item">
-					<img class="d-block w-100" src="./img/slide8.jpg" class="img-fluid" alt="Responsive image">
+					<img class="d-block w-100" src="../img/slide8.jpg" class="img-fluid" alt="Responsive image">
 				</div>
 			</div>
 			<a class="carousel-control-prev" href="#carouselExampleFade" role="button" data-slide="prev">
