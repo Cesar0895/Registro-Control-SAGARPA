@@ -112,54 +112,58 @@
 	</div>
 	<br>
 	<main role="main" class="container">
-		<div class="row">
-			<h2 style="text-align:center">Procesador</h2>
-		</div>
+		<div class="card">
+			<div class="card-header bg-info">
+				<h3 style="text-align:center">PROCESADOR</h3>
+			</div>
+			<div class="card-body">
 
-		<a href="Procesador.php" class="btn btn-primary float-right">Nuevo Registro</a>
+				<a href="Procesador.php" class="btn btn-primary float-right">Nuevo Registro</a>
 
-		<div class="row">
-
-
-			<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-				<b>Procesador: </b>
-				<input type="text" id="campo" name="campo" />
-				<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
-			</form>
-		</div>
+				<div class="row">
 
 
-		<br>
+					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+						<b>Procesador: </b>
+						<input type="text" id="campo" name="campo" />
+						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
+					</form>
+				</div>
 
-		<div class="row table-responsive">
-			<table class="table table-hover table-secondary">
-				<thead>
-					<tr>
 
-						<th>Procesador</th>
+				<br>
 
-						<th></th>
+				<div class="row table-responsive">
+					<table class="table table-hover table-secondary">
+						<thead>
+							<tr>
 
-					</tr>
-				</thead>
+								<th>Procesador</th>
 
-				<tbody>
-					<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-					<tr>
+								<th></th>
 
-						<td>
-							<?php echo $row['Procesador']; ?>
-						</td>
-						<td>
-							<a href="vistaProcesador.php" data-href="vistaProcesador.php?id_Procesador=<?php echo $row['id_Procesador']; ?>"
-							 data-toggle="modal" data-target="#confirm-delete">
-								<span class="far fa-trash-alt"></span>
-							</a>
-						</td>
-					</tr>
-					<?php } ?>
-				</tbody>
-			</table>
+							</tr>
+						</thead>
+
+						<tbody>
+							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
+							<tr>
+
+								<td>
+									<?php echo $row['Procesador']; ?>
+								</td>
+								<td>
+									<a href="vistaProcesador.php" data-href="vistaProcesador.php?id_Procesador=<?php echo $row['id_Procesador']; ?>"
+									 data-toggle="modal" data-target="#confirm-delete">
+										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 
 

@@ -105,44 +105,48 @@
 	</div>
 	<br>
 	<main role="main" class="container">
-		<div class="row">
-			<h2 style="text-align:center">Memoria RAM</h2>
-		</div>
+		<div class="card">
+			<div class="card-header bg-info">
+				<h3 style="text-align:center">MEMORIA RAM</h3>
+			</div>
+			<div class="card-body">
 
-		<a href="RAM.php" class="btn btn-primary float-right">Nuevo Registro</a>
+				<a href="RAM.php" class="btn btn-primary float-right">Nuevo Registro</a>
 
 
-		<br>
+				<br>
 
-		<div class="row table-responsive">
-			<table class="table table-hover table-secondary">
-				<thead>
-					<tr>
+				<div class="row table-responsive">
+					<table class="table table-hover table-secondary">
+						<thead>
+							<tr>
 
-						<th>Memoria RAM</th>
+								<th>Memoria RAM</th>
 
-						<th></th>
+								<th></th>
 
-					</tr>
-				</thead>
+							</tr>
+						</thead>
 
-				<tbody>
-					<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-					<tr>
+						<tbody>
+							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
+							<tr>
 
-						<td>
-							<?php echo $row['Memoria_RAM']; ?>GB
-						</td>
-						<td>
-							<a href="vistaRAM.php" data-href="vistaRAM.php?Id_Memoria=<?php echo $row['Id_Memoria']; ?>"
-							 data-toggle="modal" data-target="#confirm-delete">
-								<span class="far fa-trash-alt"></span>
-							</a>
-						</td>
-					</tr>
-					<?php } ?>
-				</tbody>
-			</table>
+								<td>
+									<?php echo $row['Memoria_RAM']; ?>GB
+								</td>
+								<td>
+									<a href="vistaRAM.php" data-href="vistaRAM.php?Id_Memoria=<?php echo $row['Id_Memoria']; ?>"
+									 data-toggle="modal" data-target="#confirm-delete">
+										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 
 

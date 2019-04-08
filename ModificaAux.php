@@ -2,6 +2,7 @@
 error_reporting(E_ALL & ~E_NOTICE);
 error_reporting(E_ERROR | E_PARSE);
 require 'conexion.php';
+		$idAux=$_GET['IdAux'];
 		$folio = $_GET['Folio'];
 		$id_Zona = $_GET['Id_zona'];
 		$presupuesto = $_GET['Presupuesto'];
@@ -25,9 +26,10 @@ require 'conexion.php';
 			
 
 if ($folio!=null && $id_Zona!=null) {
-    $sql2= "UPDATE auxiliares SET Folio='$folio',Id_zona='$id_Zona',Id_dispositivo='$id_Dispositivo'id_Marca='$id_Marca',id_modelo='$id_Modelo',serie='$serie', RFC='$RFC',Valor='$valor'
-	Where Folio='".$folio."'";
-    $mysqli->query($sql2);
+    $sql2= "UPDATE auxiliares SET Folio='$folio',Id_zona='$id_Zona',Presupuesto='$presupuesto', Id_dispositivo='$id_Dispositivo',Inventario='$invetario',id_Marca='$id_Marca',id_modelo='$id_Modelo',serie='$serie',Adquisicion='$adquisicion',Fecha_adquisicion='$fecha_Adquisicion',Fin_Garantia='$fin_Garantia',DT='$DT', Observaciones='$obsevaciones',Direccion_ip='$direccion_ip',Mac_Eth='$mac_Eth',Mac_wifi='$mac_wifi',estatus='$estatus',Documento='$documento',RFC='$RFC',Valor='$valor' Where IdAux='$idAux'";
+	$mysqli->query($sql2);
+	
+	//`Id_zona`=[value-2],`Presupuesto`=[value-3],`Id_dispositivo`=[value-4],`Inventario`=[value-5],`id_Marca`=[value-6],`id_modelo`=[value-7],`serie`=[value-8],`Adquisicion`=[value-9],`Fecha_adquisicion`=[value-10],`Fin_Garantia`=[value-11],`DT`=[value-12],`Observaciones`=[value-13],`Direccion_ip`=[value-14],`Mac_Eth`=[value-15],`Mac_wifi`=[value-16],`estatus`=[value-17],`Documento`=[value-18],`RFC`=[value-19],`Valor`=[value-20],`Folio`=[value-21]
     
     if ($folio=1) {
 		echo'<script type="text/javascript">
@@ -38,9 +40,9 @@ if ($folio!=null && $id_Zona!=null) {
 	}
 }
 
-$folio = $_GET['Folio'];        
+$idAux=$_GET['IdAux'];       
             
-$sqlaux = "SELECT * FROM auxiliares WHERE Folio = '$folio'";
+$sqlaux = "SELECT * FROM auxiliares WHERE IdAux = '$idAux'";
 $resultado = $mysqli->query($sqlaux);
 $row = $resultado->fetch_array(MYSQLI_ASSOC);
 
@@ -221,6 +223,13 @@ else
 				<form>
 
 					<div class="form-group">
+						
+						<div class="col-sm-10">
+							<input type="hidden" class="form-control" id="idAux" name="IdAux"  value="<?php echo $row['IdAux']; ?>">
+						</div>
+					</div>
+
+					<div class="form-group">
 						<label class="col-sm-2 controllabel">Folio</label>
 						<div class="col-sm-10">
 							<input type="number" class="form-control" id="Folio" name="Folio" placeholder="Folio" value="<?php echo $row['Folio']; ?>" required>
@@ -309,7 +318,7 @@ else
 					</div>
 
 					<div class="form-group">
-						<label class="col-sm-2 controllabel">DT</label>
+						<label class="col-sm-2 controllabel">Dictamen</label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control" id="DT" name="DT" value="<?php echo $row['DT']; ?>"placeholder="DT">
 						</div>

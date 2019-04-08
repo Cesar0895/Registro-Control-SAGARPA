@@ -112,93 +112,101 @@
 	</div>
 	<br>
 	<main role="main" class="container">
-		<div class="row">
-			<h2 style="text-align:center">Registro de inventario</h2>
-		</div>
+		<div class="card">
+			<div class="card-header bg-info">
+				<h3 style="text-align:center">REGISTRO DE INVENTARIO</h3>
+			</div>
+			<div class="card-body">
 
-		<a href="registroEquipoComputo.php" class="btn btn-primary float-right">Nuevo Registro</a>
+				<a href="registroEquipoComputo.php" class="btn btn-primary float-right">Nuevo Registro</a>
 
-		<div class="row">
-
-
-			<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-				<b style="color:white">Folio: </b>
-				<input type="text" id="campo" name="campo" />
-				<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
-			</form>
-		</div>
+				<div class="row">
 
 
-		<br>
+					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+						<b style="color:black">Folio: </b>
+						<input type="text" id="campo" name="campo" />
+						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
+					</form>
+				</div>
 
-		<div class="row table-responsive">
-			<table class="table table-hover table-secondary">
-				<thead>
-					<tr>
 
-						<th>Folio</th>
-						<th>Zona</th>
-						<th>Responsable</th>
-						<th>Usuario</th>
-						<th>Fecha Adquisición</th>
-						<th>Folio_Resguardo</th>
-						<th>Ubicación</th>
-						<th>Fecha_Llenado</th>
-						<th></th>
-						<th></th>
+				<br>
 
-					</tr>
-				</thead>
+				<div class="row table-responsive">
+					<table class="table table-hover table-secondary">
+						<thead>
+							<tr>
 
-				<tbody>
-					<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-					<tr>
+								<th>Folio</th>
+								<th>Zona</th>
+								<th>Responsable</th>
+								<th>Usuario</th>
+								<th>Fecha Adquisición</th>
+								<th>Folio Resguardo</th>
+								<th>Ubicación</th>
+								<th>Fecha_Llenado</th>
+								<th></th>
+								<th></th>
 
-						<td>
-							<?php echo $row['Folio']; ?>
-						</td>
-						<td>
-							<?php echo $row['Nombre']; ?>
-						</td>
-						<td>
-							<?php echo $row['nombResp']; ?>
-						</td>
-						<td>
-							<?php echo $row['nombUser']; ?>
-						</td>
-						<td>
-							<?php echo $row['Fecha_Adquisicion']; ?>
-						</td>
-						<td>
-							<?php echo $row['Folio_Resduardo']; ?>
-						</td>
-						<td>
-							<?php echo $row['Ubicacion']; ?>
-						</td>
-						<td>
-							<?php echo $row['Fecha_Llenado']; ?>
-						</td>
-						<td>
-							<a href="DetalleInventario.php?Folio=<?php echo $row['Folio']; ?>">
-								<span class="fas fa-eye"></span>
-							</a>
-						</td>
-						<td>
-							<a href="ModificaEquipoComputo.php?Folio=<?php echo $row['Folio']; ?>">
-								<span class="far fa-edit"></span>
-							</a>
-						</td>
-						<td>
-							<a href="vistaEquipoComputo.php" data-href="vistaEquipoComputo.php?Folio=<?php echo $row['Folio']; ?>"
-							 data-toggle="modal" data-target="#confirm-delete">
-								<span class="far fa-trash-alt"></span>
-							</a>
-						</td>
-					</tr>
-					<?php } ?>
-				</tbody>
-			</table>
-		</div>
+							</tr>
+						</thead>
+
+						<tbody>
+							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
+							<tr>
+
+								<td>
+									<?php echo $row['Folio']; ?>
+								</td>
+								<td>
+									<?php echo $row['Nombre']; ?>
+								</td>
+								<td>
+									<?php echo $row['nombResp']; ?>
+								</td>
+								<td>
+									<?php echo $row['nombUser']; ?>
+								</td>
+								<td>
+									<?php echo $row['Fecha_Adquisicion']; ?>
+								</td>
+								<td>
+									<?php echo $row['Folio_Resduardo']; ?>
+								</td>
+								<td>
+									<?php echo $row['Ubicacion']; ?>
+								</td>
+								<td>
+									<?php echo $row['Fecha_Llenado']; ?>
+								</td>
+								<td>
+									<a href="Cedula.php?Folio=<?php echo $row['Folio']; ?>">
+										<span class="fas fa-download"></span>
+									</a>
+								</td>
+								<td>
+									<a href="DetalleInventario.php?Folio=<?php echo $row['Folio']; ?>">
+										<span class="fas fa-eye"></span>
+									</a>
+								</td>
+								<td>
+									<a href="ModificaEquipoComputo.php?Folio=<?php echo $row['Folio']; ?>">
+										<span class="far fa-edit"></span>
+									</a>
+								</td>
+								<td>
+									<a href="vistaEquipoComputo.php" data-href="vistaEquipoComputo.php?Folio=<?php echo $row['Folio']; ?>"
+									 data-toggle="modal" data-target="#confirm-delete">
+										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 
 

@@ -15,7 +15,7 @@
 		$fecha_Adquisicion = $_GET['Fecha_adquisicion'];
 		$fin_Garantia = $_GET['Fin_Garantia'];
 		$DT = $_GET['DT'];
-		$obsevaciones = $_GET['Observaciones'];
+		$observaciones = $_GET['Observaciones'];
 		$direccion_ip = $_GET['Direccion_ip'];
 		$mac_Eth = $_GET['Mac_Eth'];
 		$mac_wifi = $_GET['Mac_wifi'];
@@ -109,6 +109,21 @@
 				while ($row = $resultrfc->fetch_array(MYSQLI_ASSOC)) 
 				{
 					$combobitrfc .="<option value='".$row['RFC']."'>".$row['RFC']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+				}
+			}
+			else
+			{
+				echo "No hubo resultados";
+			}
+
+			$sql = "SELECT Folio FROM `equipos` ORDER BY `Folio` ASC";
+			$resultFolio = $mysqli->query($sql);
+			if ($resultFolio->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
+			{
+				$combobitFolio="";
+				while ($row = $resultFolio->fetch_array(MYSQLI_ASSOC)) 
+				{
+					$combobitFolio .="<option value='".$row['Folio']."'>".$row['Folio']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
 				}
 			}
 			else
@@ -213,10 +228,10 @@
 			<div class="card-body">
 				<form class="form-horizontal">
 					<div class="form-group">
-						<label class="col-sm-2 controllabel">Folio</label>
-						<div class="col-sm-10">
-							<input type="number" class="form-control" id="folio" name="Folio" placeholder="Folio" required>
-						</div>
+						<label>Folio</label>
+						<select class="form-control col-sm-10" id="folio" name="Folio">
+							<?php echo $combobitFolio; ?>
+						</select>
 					</div>
 
 					<div class="form-group">

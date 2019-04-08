@@ -1,11 +1,34 @@
 <?php
-	error_reporting(E_ALL & ~E_NOTICE);
-	error_reporting(E_ERROR | E_PARSE);
-	require 'conexion.php';
-
-	$folio = $_GET['Folio'];
+session_start();
 	
-	$sql2 = "DELETE FROM auxiliares WHERE Folio = '$folio'";
+error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(E_ERROR | E_PARSE);
+	$varsesion=$_SESSION['user'];
+	//$contrasesion=$_SESSION['pass'];
+	
+    require 'conexion.php';
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Denominacion`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion'";
+    //'or '1'='1
+    $resultado = $mysqli->query($consulta);
+    $row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+		$puesto=$row['Puesto'];
+		$nombr=$row['nombComple'];
+	
+		if ($varsesion==null || $varsesion='' ) {
+			header('location:index.php');
+			die();
+		}
+		
+		if ($puesto!='encargado') {
+			header('location:Resguardante/inicioRes.php');
+			die();
+		}
+		
+
+	$idAux = $_GET['IdAux'];
+	
+	$sql2 = "DELETE FROM auxiliares WHERE IdAux = '$idAux'";
 	$resultado = $mysqli->query($sql2);
 	
 	$where = "";
@@ -15,10 +38,10 @@
 		$valor = $_POST['campo'];
 	
 		if(!empty($valor)){
-			$where = "WHERE Folio LIKE '$valor%'";
+			$where = "WHERE Folio LIKE '$valor%' or Nomb_Dispositivo like '$valor%'";
 		}
 	}
-	$sql = "SELECT auxiliares.Folio, zona.Nombre, auxiliares.Presupuesto, dispositivos.Nomb_Dispositivo, auxiliares.Inventario, marca.Marca, modelo.Modelo, auxiliares.serie, dispositivos.Tipo, auxiliares.Adquisicion, auxiliares.Fecha_adquisicion, auxiliares.Fin_Garantia, auxiliares.DT, auxiliares.Observaciones, auxiliares.Direccion_ip, auxiliares.Mac_Eth, auxiliares.Mac_wifi, auxiliares.estatus, auxiliares.RFC, auxiliares.Valor FROM auxiliares inner join modelo on auxiliares.id_Modelo=modelo.id_Modelo inner join marca on auxiliares.id_Marca=marca.id_Marca inner join dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo inner join zona on auxiliares.Id_zona=zona.id_Zona $where";
+	$sql = "SELECT auxiliares.IdAux, auxiliares.Folio, zona.Nombre, auxiliares.Presupuesto, dispositivos.Nomb_Dispositivo, auxiliares.Inventario, marca.Marca, modelo.Modelo, auxiliares.serie, dispositivos.Tipo, auxiliares.Adquisicion, auxiliares.Fecha_adquisicion, auxiliares.Fin_Garantia, auxiliares.DT, auxiliares.Observaciones, auxiliares.Direccion_ip, auxiliares.Mac_Eth, auxiliares.Mac_wifi, auxiliares.estatus,auxiliares.Documento, auxiliares.RFC, auxiliares.Valor FROM auxiliares inner join modelo on auxiliares.id_Modelo=modelo.id_Modelo inner join marca on auxiliares.id_Marca=marca.id_Marca inner join dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo inner join zona on auxiliares.Id_zona=zona.id_Zona $where";
 	$resultadoTabla = $mysqli->query($sql);
 	
 ?>
@@ -61,17 +84,16 @@
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
 					<li class="nav-item">
-						<a class="nav-link" href="inicio.php">Inicio</a>
+						<a class="nav-link mask flex-center rgba-red-strong" href="inicio.php">Inicio</a>
 					</li>
 
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="registroEquipoComputo.php">Equipo de computo</a>
-							<a class="dropdown-item" href="registroAuxiliares.php">Auxiliares</a>
-							<a class="dropdown-item" href="#">Telefonia</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Separated link</a>
+							<a class="dropdown-item" href="Auxiliares.php">Auxiliares</a>
+							<a class="dropdown-item" href="Telefonia.php">Telefonia</a>
+
 						</div>
 					</li>
 					<li class="nav-item">
@@ -91,18 +113,24 @@
 							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
 							<a class="dropdown-item" href="Procesador.php">Procesador</a>
 							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
+							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
+							<a class="dropdown-item" href="Areas.php">Áreas</a>
+							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav">
 					<li>
-						<a href="#">
-							<span class="fas fa-user nav-link"></span> Sign Up</a>
+
+						<span class="fas fa-user nav-link"> Bienvenido (a):
+							<?php echo $nombr; ?>
+						</span>
 					</li>
 					<li>
-						<a href="#">
-							<span class="fas fa-sign-in-alt nav-link"></span> Salir</a>
+						<a href="cerrar_session.php">
+							<span class="fas fa-sign-in-alt nav-link"></span> (Cerrar sesion)</a>
+
 					</li>
 				</ul>
 			</div>
@@ -151,12 +179,13 @@
 								<th>Adquisicion</th>
 								<th>Fecha de adquisicion</th>
 								<th>Fin de garantia</th>
-								<th>DT.....</th>
+								<th>Dictamen</th>
 								<th>Observaciones</th>
 								<th>Direccion IP</th>
 								<th>Mac Ethernet</th>
 								<th>Mac Wifi</th>
 								<th>Estatus</th>
+								<th>Documento</th>
 								<th>RFC</th>
 								<th>Valor</th>
 
@@ -225,25 +254,28 @@
 									<?php echo $row['estatus']; ?>
 								</td>
 								<td>
+									<?php echo $row['Documento']; ?>
+								</td>
+								<td>
 									<?php echo $row['RFC']; ?>
 								</td>
 								<td>
-									$ <?php echo $row['Valor']; ?>.00
+									$<?php echo $row['Valor']; ?>.00
 								</td>
 
 								<td>
-									<a href="DetalleAux.php?Folio=<?php echo $row['Folio']; ?>">
+									<a href="DetalleAux.php?IdAux=<?php echo $row['IdAux']; ?>">
 										<span class="fas fa-eye"></span>
 									</a>
 								</td>
 
 								<td>
-									<a href="ModificaAux.php?Folio=<?php echo $row['Folio']; ?>">
+									<a href="ModificaAux.php?IdAux=<?php echo $row['IdAux']; ?>">
 										<span class="far fa-edit"></span>
 									</a>
 								</td>
 								<td>
-									<a href="Auxiliares.php" data-href="Auxiliares.php?Folio=<?php echo $row['Folio']; ?>"
+									<a href="Auxiliares.php" data-href="Auxiliares.php?IdAux=<?php echo $row['IdAux']; ?>"
 									 data-toggle="modal" data-target="#confirm-delete">
 										<span class="far fa-trash-alt"></span>
 									</a>

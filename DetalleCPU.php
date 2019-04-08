@@ -24,51 +24,20 @@ session_start();
 		}
 		
 
-			$folio = $_GET['Folio'];        
+		$id_CPU = $_GET['Id_CPU'];        
             
-			$sql = "SELECT `Folio`, zona.Nombre, concat(persona.Nombre,' ',persona.ApePaterno,' ',persona.ApeMaterno) as nombResp, persona.RFC, Filtrado,`Identificacion`, concat(p.Nombre,' ',p.ApePaterno,' ',p.ApeMaterno) as nombUser,p.RFC as RFCUser, `Nodo`, `Fecha_Adquisicion`, `DT_adquisicion`, `DTB`, `Tipo_HW`, `Folio_Resduardo`, `Observaciones`, `Fin_Garantia`, `Candado`, `Valor`,equipos.Estatus, `Ubicacion`, `Fecha_Llenado`, `Oficio_Mexico`, `Contra_Admin`, 
-			cpu.Serie as serieCPU, marCPU.Marca as marcaCPU, modCPU.Modelo as modCPU, cpu.Invetario as InvCPU, 
-			monitor.Serie as serieMon, marMoni.Marca as marcaMoni, modMoni.Modelo as modMoni, monitor.Inventario as InvMoni,
-			mouse.Serie as serieMou, marMou.Marca as marcaMou, modMou.Modelo as modMou, mouse.Inventario as InvMou,
-			teclado.Serie as serieTec, marTec.Marca as marcaTec, modTec.Modelo as modTec, teclado.Inventario as InvTec
-			FROM `equipos`
-			INNER JOIN zona on equipos.Id_Zona=zona.id_Zona 
-			INNER JOIN persona on equipos.RFC=persona.RFC 
-			INNER JOIN persona p on equipos.RFC_Usuario=p.RFC 
-			INNER JOIN (cpu 
-						INNER JOIN marca marCPU on cpu.Id_Marca=marCPU.id_Marca
-						INNER JOIN modelo modCPU on cpu.Id_Modelo=modCPU.id_Modelo) 
-						on equipos.Id_CPU=cpu.Id_CPU 
-			INNER JOIN (monitor 
-						INNER JOIN marca marMoni on monitor.id_Marca=marMoni.id_Marca 
-						INNER JOIN modelo modMoni on monitor.id_Modelo=modMoni.id_Modelo)
-						on equipos.id_Monitor=monitor.id_Monitor
-			INNER JOIN (mouse 
-						INNER JOIN marca marMou on mouse.Id_Marca=marMou.id_Marca 
-						INNER JOIN modelo modMou on mouse.Id_Modelo=modMou.id_Modelo) 
-						ON equipos.Id_mouse=mouse.Id_mouse 
-			INNER JOIN (teclado 
-						INNER JOIN marca marTec on teclado.Id_Marca=marTec.id_Marca 
-						INNER JOIN modelo modTec on teclado.IdModelo=modTec.id_Modelo) 
-						on equipos.Id_Teclado=teclado.Id_Teclado WHERE Folio = '$folio'";
+			$sql = "SELECT `Id_CPU`, marca.Marca, modelo.Modelo, procesador.Procesador, memoria_ram.Memoria_RAM, disco_duro.Almacenamiento, velocidad.Velocidad, `Serie`, `Invetario`, `Adquisicion`, `UnidadOptica`, `Bosinas`, `P_USB`, `P_Serial`, `P_Paralelo`, `RedTipo`, `IP`, `MacEth`, `Mac_wifi`, `Dominio`, `Antivirus` FROM `cpu` INNER JOIN marca on cpu.Id_Marca=marca.id_Marca INNER JOIN modelo on cpu.Id_Modelo=modelo.id_Modelo INNER JOIN procesador on cpu.Id_Procesador=procesador.id_Procesador INNER JOIN memoria_ram on cpu.Id_MemoriaRam=memoria_ram.Id_Memoria INNER JOIN disco_duro on cpu.Id_DD=disco_duro.id_DD INNER JOIN velocidad on cpu.Id_Velocidad=velocidad.Id_velocidad WHERE Id_CPU = '$id_CPU'";
             $resultado = $mysqli->query($sql);
 			$row = $resultado->fetch_array(MYSQLI_ASSOC);
-
-			$serieMou= $row['serieMou'];
-			$serieMon= $row['serieMon'];
-			$serieTec= $row['serieTec'];
 			
-			
-			$sqlmou = "SELECT m.Id_mouse, m.Serie, m.Inventario, m.Descripcion, m.Adquisicion, marca.Marca, modelo.Modelo FROM mouse m INNER JOIN marca ON m.Id_Marca=marca.id_Marca INNER JOIN modelo on m.Id_Modelo=modelo.id_Modelo where Serie= '$serieMou'";
-			$resultadoTabla = $mysqli->query($sqlmou);
+		
+		$serie=$row['Serie'];
 
-			$sqlmon = "SELECT monitor.id_Monitor, monitor.Serie, marca.Marca, modelo.Modelo, monitor.Inventario, monitor.Descripcion, monitor.Adquisicion FROM monitor 
-			inner join modelo on monitor.id_Modelo=modelo.id_Modelo
-			inner join marca on monitor.id_Marca=marca.id_Marca where Serie='$serieMon'";
-			$resultadoMon = $mysqli->query($sqlmon);
-
-			$sqltec = "SELECT t.Id_Teclado, t.Serie, t.Inventario, t.Descripcion, t.Adquisicion, marca.Marca, modelo.Modelo FROM teclado t INNER JOIN marca ON t.Id_Marca=marca.id_Marca INNER JOIN modelo on t.IdModelo=modelo.id_Modelo where Serie='$serieTec'";
-			$resultadoTec = $mysqli->query($sqltec);
+		$sqlSoft="SELECT software.Nombre, software.Version, software.Licencia, software.Key_soft, software.Plataforma, software.Fabricante, software.Adquisicion, cpu.Serie FROM `cpu_soft` 
+		INNER JOIN software ON cpu_soft.id_Software=software.id_Software 
+		INNER JOIN cpu on cpu_soft.Id_CPU=cpu.Id_CPU  
+		WHERE cpu.Serie='$serie' GROUP by software.Nombre" ;
+		$resultadoSoft=$mysqli->query($sqlSoft);
 ?>
 <!doctype html>
 <html lang="en">
@@ -159,31 +128,32 @@ session_start();
 		</nav>
 
 	</div>
+
 	<main role="main" class="container">
 		<br>
 		<div class="card">
 			<div class="card-header bg-info">
-				<h3 style="text-align:center">DETALLES DE EQUIPO DE COMPUTO</h3>
+				<h3 style="text-align:center">DETALLES DE CPU</h3>
 			</div>
 			<div class="card-body">
 				<div class="row">
 					<div class="col-3">
-						<h3>Folio: </h3>
+						<h3>No. Inventario: </h3>
 					</div>
 					<div class="col-5">
 						<h4>
-							<?php echo $row['Folio']; ?>
+							<?php echo $row['Invetario']; ?>
 						</h4>
 					</div>
 				</div>
 
 				<div class="row">
 					<div class="col-3">
-						<h4>Zona: </h4>
+						<h4>Serie: </h4>
 					</div>
 					<div class="col-5">
 						<h5>
-							<?php echo $row['Nombre']; ?>
+							<?php echo $row['Serie']; ?>
 						</h5>
 					</div>
 				</div>
@@ -192,378 +162,241 @@ session_start();
 
 				<div class="row">
 					<div class="col-3">
-						<p class="h5">Responsable: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['nombResp']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">RFC: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['RFC']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Usuario: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['nombUser']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">RFC: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['RFCUser']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Fecha de Filtrado: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['Filtrado']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Identificación: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['Identificacion']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Nodo: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['Nodo']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Dictamen de adquisición: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['DT_adquisicion']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Dictamen de baja: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['DTB']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Tipo de hardware: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['Tipo_HW']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Folio de Resguardo: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['Folio_Resduardo']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Observaciones: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['Observaciones']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Fin de Fin_Garantia: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['Fin_Garantia']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Candado: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['Candado']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Valor: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							$
-							<?php echo $row['Valor']; ?>.00
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Estatus: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['Estatus']; ?>
-						</p>
-					</div>
-				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Ubicación: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['Ubicacion']; ?>
-						</p>
-					</div>
-				</div>
-
-				<hr color="blue" size=3>
-
-				<h3>CPU</h3>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Serie: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['serieCPU']; ?>
-						</p>
-					</div>
-				</div>
-
-				<div class="row">
-					<div class="col-3">
 						<p class="h5">Marca: </p>
 					</div>
 					<div class="col-5">
 						<p class="h6">
-							<?php echo $row['marcaCPU']; ?>
+							<?php echo $row['Marca']; ?>
 						</p>
 					</div>
 				</div>
-
 				<div class="row">
 					<div class="col-3">
 						<p class="h5">Modelo: </p>
 					</div>
 					<div class="col-5">
 						<p class="h6">
-							<?php echo $row['modCPU']; ?>
+							<?php echo $row['Modelo']; ?>.00
 						</p>
 					</div>
 				</div>
-
 				<div class="row">
 					<div class="col-3">
-						<p class="h5">No. Inventario: </p>
+						<p class="h5">Procesador: </p>
 					</div>
 					<div class="col-5">
 						<p class="h6">
-							<?php echo $row['InvCPU']; ?>
+							<?php echo $row['Procesador']; ?>
 						</p>
 					</div>
 				</div>
-
-				<hr color="blue" size=3>
-
-				<h3>Monitor</h3>
-				<div class="row table-responsive">
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">RAM: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Memoria_RAM']; ?> GB
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Disco duro: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Almacenamiento']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Velocidad: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Velocidad']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Adquisicion: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Adquisicion']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Unidad Optica: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['UnidadOptica']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Bosinas: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Bosinas']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Puertos USB: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['P_USB']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">puerto serial: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['P_Serial']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Pueto Paralelo: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['P_Paralelo']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Tipo de red: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['RedTipo']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">IP: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['IP']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Mac Ethernet: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['MacEth']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Mac Wifi: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Mac_wifi']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Dominio: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Dominio']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Antivirus: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Antivirus']; ?>
+						</p>
+					</div>
+				</div>
+				<br>
+				<div class="col-5">
+					<p class="h4">Software: </p>
+				</div>
+				<div class="row table-responsive mx-auto">
 					<table class="table table-hover table-secondary">
 						<thead>
 							<tr>
-
-								<th>Serie</th>
-								<th>Marca</th>
-								<th>Modelo</th>
-								<th>No. de inventario</th>
-								<th>Descripcion</th>
+								<th>Nombre</th>
+								<th>Version</th>
+								<th>Licencia</th>
+								<th>No. Licencia</th>
+								<th>Plataforma</th>
+								<th>Fabricante</th>
 								<th>Adquisicion</th>
-								<th></th>
-								<th></th>
-
 							</tr>
 						</thead>
 
 						<tbody>
-							<?php while($rowMon = $resultadoMon->fetch_array(MYSQLI_ASSOC)) { ?>
+							<?php while($rowSoft = $resultadoSoft->fetch_array(MYSQLI_ASSOC)) { ?>
 							<tr>
-
 								<td>
-									<?php echo $rowMon['Serie']; ?>
+									<?php echo $rowSoft['Nombre']; ?>
 								</td>
 								<td>
-									<?php echo $rowMon['Marca']; ?>
+									<?php echo $rowSoft['Version']; ?>
 								</td>
 								<td>
-									<?php echo $rowMon['Modelo']; ?>
+									<?php echo $rowSoft['Licencia']; ?>
 								</td>
 								<td>
-									<?php echo $rowMon['Inventario']; ?>
-								</td>
-								<td>
-									<?php echo $rowMon['Descripcion']; ?>
-								</td>
-								<td>
-									<?php echo $rowMon['Adquisicion']; ?>
+									<?php echo $rowSoft['Key_soft']; ?>
 								</td>
 
+								<td>
+									<?php echo $rowSoft['Plataforma']; ?>
+								</td>
+								<td>
+									<?php echo $rowSoft['Fabricante']; ?>
+								</td>
+								<td>
+									<?php echo $rowSoft['Adquisicion']; ?>
+								</td>
 							</tr>
 							<?php } ?>
 						</tbody>
 					</table>
+					<a href="AñadeSoft.php?Serie=<?php echo $row['Serie']; ?>" class="btn btn-primary">Añadir Software</a>
 				</div>
 
-				<hr color="blue" size=3>
-
-				<h3>Mouse</h3>
-				<div class="row table-responsive">
-					<table class="table table-hover table-secondary">
-						<thead>
-							<tr>
-
-								<th>Serie</th>
-								<th>Marca</th>
-								<th>Modelo</th>
-								<th>No. de inventario</th>
-								<th>Descripcion</th>
-								<th>Adquisicion</th>
-
-
-							</tr>
-						</thead>
-
-						<tbody>
-							<?php while($rowMou = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-							<tr>
-
-								<td>
-									<?php echo $rowMou['Serie']; ?>
-								</td>
-								<td>
-									<?php echo $rowMou['Marca']; ?>
-								</td>
-								<td>
-									<?php echo $rowMou['Modelo']; ?>
-								</td>
-								<td>
-									<?php echo $rowMou['Inventario']; ?>
-								</td>
-								<td>
-									<?php echo $rowMou['Descripcion']; ?>
-								</td>
-								<td>
-									<?php echo $rowMou['Adquisicion']; ?>
-								</td>
-
-
-							</tr>
-							<?php } ?>
-						</tbody>
-					</table>
-				</div>
-
-				<hr color="blue" size=3>
-
-				<h3>Teclado</h3>
-				<div class="row table-responsive">
-					<table class="table table-hover table-secondary">
-						<thead>
-							<tr>
-
-								<th>Serie</th>
-								<th>Marca</th>
-								<th>Modelo</th>
-								<th>No. de inventario</th>
-								<th>Descripcion</th>
-								<th>Adquisicion</th>
-								
-
-							</tr>
-						</thead>
-
-						<tbody>
-							<?php while($rowTec = $resultadoTec->fetch_array(MYSQLI_ASSOC)) { ?>
-							<tr>
-
-								<td>
-									<?php echo $rowTec['Serie']; ?>
-								</td>
-								<td>
-									<?php echo $rowTec['Marca']; ?>
-								</td>
-								<td>
-									<?php echo $rowTec['Modelo']; ?>
-								</td>
-								<td>
-									<?php echo $rowTec['Inventario']; ?>
-								</td>
-								<td>
-									<?php echo $rowTec['Descripcion']; ?>
-								</td>
-								<td>
-									<?php echo $rowTec['Adquisicion']; ?>
-								</td>
-
-								
-							</tr>
-							<?php } ?>
-						</tbody>
-					</table>
-				</div>
 
 				<br>
-				<br>
+				<a href="vistaCPU.php" class="btn btn-primary">Regresar</a>
+				
 
-				<a href="personal.php" class="btn btn-primary">Regresar</a>
-				<a href="Cedula.php?Folio=<?php echo $row['Folio']; ?>">
-					Cedula
-				</a>
 			</div>
+
 		</div>
 
 

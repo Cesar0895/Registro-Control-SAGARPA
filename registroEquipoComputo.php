@@ -498,6 +498,10 @@ $where = "";
 						Datos CPU
 					</a>
 
+					<a type="button" class="list-group-item list-group-item-action list-group-item-primary" data-toggle="modal" data-target="#DatosSoft">
+						Añadir Software
+					</a>
+
 					<a type="button" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal" data-target="#datosMonitor">
 						Datos Monitor
 					</a>
@@ -509,6 +513,8 @@ $where = "";
 					<a type="button" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal" data-target="#datosMouse">
 						Datos Mouse
 					</a>
+
+
 
 				</div>
 			</div>
@@ -653,7 +659,7 @@ $where = "";
 							<label>Fecha de llenado: </label>
 
 							<input type="date" class="form-control" id="fechaLlenado" name="fechaLlenado" value="<?php echo date("
-							 Y-m-d ");?>">
+							 Y-m-d "); ?>">
 						</div>
 
 						<div class="form-group">
@@ -716,9 +722,13 @@ $where = "";
 
 									<form>
 
+										<a href="vistaCPU.php" class="btn btn-success">Ver lista de CPU registrados</a>
+
+										<br><br>
+
 										<div class="form-group">
 											<label>No_Serie</label>
-											<input type="number" class="form-control" id="serie" name="Seriepc" placeholder="Introduce el no. de serie">
+											<input type="text" class="form-control" id="serie" name="Seriepc" placeholder="Introduce el no. de serie">
 										</div>
 
 										<div class="form-group">
@@ -933,13 +943,10 @@ $where = "";
 
 										<button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#DatosSoft">Guardar</button>
 
-										<a type="button" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal" data-target="#DatosSoft">
-											Añadir Software
-										</a>
 
 									</form>
 								</div>
-								<a href="vistaMonitor.php" class="btn btn-success">Ver lista de Monitores registrados</a>
+
 
 
 							</div>
@@ -968,17 +975,16 @@ $where = "";
 										</div>
 										<div class="form-group">
 											<label>Software</label>
-											<select class="form-control" id="Id_soft" name="Id_sof">
+											<select class="form-control col-sm-10" id="Id_soft" name="Id_sof">
 												<?php echo $combobitsoft; ?>
 											</select>
 										</div>
 
 										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
 										<button type="submit" class="btn btn-primary">Guardar</button>
 									</form>
 								</div>
-
-								<a href="vistaMonitor.php" class="btn btn-success">Ver lista de Monitores registrados</a>
 							</div>
 						</div>
 					</div>

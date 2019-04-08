@@ -154,7 +154,7 @@
 								<th>Telefono</th>
 								<th>Extención</th>
 
-								<th></th>
+								
 								<th></th>
 								<th></th>
 								<th></th>
@@ -197,11 +197,6 @@
 								<td>
 									<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
 										<span class="fas fa-eye"></span>
-									</a>
-								</td>
-								<td>
-									<a href="ReportePersonalXUno.php?RFC=<?php echo $row['RFC']; ?>">
-										<span class="fas fa-download"></span>
 									</a>
 								</td>
 								<td>

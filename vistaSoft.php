@@ -113,84 +113,87 @@
 	</div>
 	<br>
 	<main role="main" class="container">
-		<div class="row">
-			<h2 style="text-align:center">Software</h2>
-		</div>
+		<div class="card">
+			<div class="card-header bg-info">
+				<h3 style="text-align:center">SOFTWARE</h3>
+			</div>
+			<div class="card-body">
 
-		<a href="Soft.php" class="btn btn-primary float-right">Nuevo Registro</a>
+				<a href="Soft.php" class="btn btn-primary float-right">Nuevo Registro</a>
 
-		<div class="row">
-
-
-			<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-				<b>Nombre: </b>
-				<input type="text" id="campo" name="campo" />
-				<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
-			</form>
-		</div>
+				<div class="row">
 
 
-		<br>
+					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+						<b>Nombre: </b>
+						<input type="text" id="campo" name="campo" />
+						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
+					</form>
+				</div>
 
-		<div class="row table-responsive">
-			<table class="table table-hover table-secondary">
-				<thead>
-					<tr>
 
-						<th>Nombre</th>
-						<th>Version</th>
-						<th>Licencia</th>
-						<th>Key</th>
-						<th>Plataforma</th>
-						<th>Fabricante</th>
-						<th>Adquisición</th>
-						<th></th>
-						<th></th>
+				<br>
 
-					</tr>
-				</thead>
+				<div class="row table-responsive">
+					<table class="table table-hover table-secondary">
+						<thead>
+							<tr>
 
-				<tbody>
-					<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-					<tr>
+								<th>Nombre</th>
+								<th>Version</th>
+								<th>Licencia</th>
+								<th>Key</th>
+								<th>Plataforma</th>
+								<th>Fabricante</th>
+								<th>Adquisición</th>
+								<th></th>
+								<th></th>
 
-						<td>
-							<?php echo $row['Nombre']; ?>
-						</td>
-						<td>
-							<?php echo $row['Version']; ?>
-						</td>
-						<td>
-							<?php echo $row['Licencia']; ?>
-						</td>
-						<td>
-							<?php echo $row['Key_soft']; ?>
-						</td>
-						<td>
-							<?php echo $row['Plataforma']; ?>
-						</td>
-						<td>
-							<?php echo $row['Fabricante']; ?>
-						</td>
-						<td>
-							<?php echo $row['Adquisicion']; ?>
-						</td>
-						<td>
-							<a href="ModificaSoft.php?id_Software=<?php echo $row['id_Software']; ?>">
-								<span class="far fa-edit"></span>
-							</a>
-						</td>
-						<td>
-							<a href="vistaSoft.php" data-href="vistaSoft.php?id_Software=<?php echo $row['id_Software']; ?>"
-							 data-toggle="modal" data-target="#confirm-delete">
-								<span class="far fa-trash-alt"></span>
-							</a>
-						</td>
-					</tr>
-					<?php } ?>
-				</tbody>
-			</table>
-		</div>
+							</tr>
+						</thead>
+
+						<tbody>
+							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
+							<tr>
+
+								<td>
+									<?php echo $row['Nombre']; ?>
+								</td>
+								<td>
+									<?php echo $row['Version']; ?>
+								</td>
+								<td>
+									<?php echo $row['Licencia']; ?>
+								</td>
+								<td>
+									<?php echo $row['Key_soft']; ?>
+								</td>
+								<td>
+									<?php echo $row['Plataforma']; ?>
+								</td>
+								<td>
+									<?php echo $row['Fabricante']; ?>
+								</td>
+								<td>
+									<?php echo $row['Adquisicion']; ?>
+								</td>
+								<td>
+									<a href="ModificaSoft.php?id_Software=<?php echo $row['id_Software']; ?>">
+										<span class="far fa-edit"> edita</span>
+									</a>
+								</td>
+								<td>
+									<a href="vistaSoft.php" data-href="vistaSoft.php?id_Software=<?php echo $row['id_Software']; ?>"
+									 data-toggle="modal" data-target="#confirm-delete">
+										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 
 

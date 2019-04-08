@@ -113,58 +113,61 @@
 	</div>
 	<br>
 	<main role="main" class="container">
-		<div class="row">
-			<h2 style="text-align:center">Dispositivos</h2>
-		</div>
+		<div class="card">
+			<div class="card-header bg-info">
+				<h3 style="text-align:center">DISPOSITIVOS</h3>
+			</div>
+			<div class="card-body">
 
-		<a href="Dispositivos.php" class="btn btn-primary float-right">Nuevo Registro</a>
+				<a href="Dispositivos.php" class="btn btn-primary float-right">Nuevo Registro</a>
 
-		<div class="row">
-
-
-			<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-				<b>Nombre o Tipo: </b>
-				<input type="text" id="campo" name="campo" />
-				<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
-			</form>
-		</div>
+				<div class="row">
 
 
-		<br>
+					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+						<b>Nombre o Tipo: </b>
+						<input type="text" id="campo" name="campo" />
+						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
+					</form>
+				</div>
 
-		<div class="row table-responsive">
-			<table class="table table-hover table-secondary">
-				<thead>
-					<tr>
 
-						<th>Nombre dispositivo</th>
-						<th>Tipo</th>
-						<th></th>
+				<br>
 
-					</tr>
-				</thead>
+				<div class="row table-responsive">
+					<table class="table table-hover table-secondary">
+						<thead>
+							<tr>
 
-				<tbody>
-					<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-					<tr>
+								<th>Nombre dispositivo</th>
+								<th>Tipo</th>
+								<th></th>
 
-						<td>
-							<?php echo $row['Nomb_Dispositivo']; ?>
-						</td>
-						<td>
-							<?php echo $row['Tipo']; ?>
-						</td>
-						<td>
-							<a href="vistaDispositivos.php" data-href="vistaDispositivos.php?Id_Dispositivo=<?php echo $row['Id_Dispositivo']; ?>"
-							 data-toggle="modal" data-target="#confirm-delete">
-								<span class="far fa-trash-alt"></span>
-							</a>
-						</td>
-					</tr>
-					<?php } ?>
-				</tbody>
-			</table>
-		</div>
+							</tr>
+						</thead>
+
+						<tbody>
+							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
+							<tr>
+
+								<td>
+									<?php echo $row['Nomb_Dispositivo']; ?>
+								</td>
+								<td>
+									<?php echo $row['Tipo']; ?>
+								</td>
+								<td>
+									<a href="vistaDispositivos.php" data-href="vistaDispositivos.php?Id_Dispositivo=<?php echo $row['Id_Dispositivo']; ?>"
+									 data-toggle="modal" data-target="#confirm-delete">
+										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 
 

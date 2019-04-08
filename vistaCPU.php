@@ -2,23 +2,24 @@
 	error_reporting(E_ALL & ~E_NOTICE);
 	error_reporting(E_ERROR | E_PARSE);
 	require 'conexion.php';
-	$idArea_Subarea = $_GET['idarea_Subarea'];
 
-	$sql2 = "DELETE FROM area_subarea WHERE idarea_Subarea = '$idarea_Subarea'";
-	$resultado = $mysqli->query($sql2);
 	
+	$id_CPU = $_GET['Id_CPU'];
+	$sql2 = "DELETE FROM cpu WHERE Id_CPU = '$id_CPU'";
+	$resultado = $mysqli->query($sql2);
+		
 	$where = "";
-
+	
 	if(!empty($_POST))
 	{
 		$valor = $_POST['campo'];
-	
+		
 		if(!empty($valor)){
-			$where = "WHERE Nombre LIKE '$valor%' or NombreSubarea LIKE '$valor%'";
+			$where = "WHERE Marca LIKE '$valor%' or Modelo LIKE '$valor%' or Invetario LIKE '$valor%' or Serie LIKE '$valor%'";
 		}
 	}
 
-	$sqlmostrar = "SELECT zona.Nombre, subareas.NombreSubarea FROM `area_subarea` INNER JOIN zona ON area_subarea.id_Zona=zona.id_Zona INNER JOIN subareas on area_subarea.id_SubArea=subareas.IdSubarea $where";
+	$sqlmostrar = "SELECT `Id_CPU`, marca.Marca, modelo.Modelo, procesador.Procesador, memoria_ram.Memoria_RAM, disco_duro.Almacenamiento, velocidad.Velocidad, `Serie`, `Invetario`, `Adquisicion`, `UnidadOptica`, `Bosinas`, `P_USB`, `P_Serial`, `P_Paralelo`, `RedTipo`, `IP`, `MacEth`, `Mac_wifi`, `Dominio`, `Antivirus` FROM `cpu` INNER JOIN marca on cpu.Id_Marca=marca.id_Marca INNER JOIN modelo on cpu.Id_Modelo=modelo.id_Modelo INNER JOIN procesador on cpu.Id_Procesador=procesador.id_Procesador INNER JOIN memoria_ram on cpu.Id_MemoriaRam=memoria_ram.Id_Memoria INNER JOIN disco_duro on cpu.Id_DD=disco_duro.id_DD INNER JOIN velocidad on cpu.Id_Velocidad=velocidad.Id_velocidad $where";
 	$resultadoTabla = $mysqli->query($sqlmostrar);
 
 ?>
@@ -114,20 +115,25 @@
 	<main role="main" class="container">
 		<div class="card">
 			<div class="card-header bg-info">
-				<h3 style="text-align:center">AREAS</h3>
+				<div class="row ml-3">
+					<h2 style="text-align:center">CPU</h2>
+				</div>
 			</div>
+
 			<div class="card-body">
 
-				<a href="Areas.php" class="btn btn-primary float-right">Nuevo Registro</a>
+				<a href="registroEquipoComputo.php" class="btn btn-primary float-right">Nuevo Registro</a>
+
 				<div class="row">
 
 
 					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-						<b style="color:white;">Buscador: </b>
+						<b>Buscador: </b>
 						<input type="text" id="campo" name="campo" />
 						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
 					</form>
 				</div>
+
 
 				<br>
 
@@ -136,9 +142,14 @@
 						<thead>
 							<tr>
 
-								<th>Áreas</th>
-								<th>Subáreas</th>
+								<th>Serie</th>
+								<th>Marca</th>
+								<th>Modelo</th>
+								<th>No. de inventario</th>
 
+								<th>Adquisicion</th>
+								<th></th>
+								<th></th>
 								<th></th>
 
 							</tr>
@@ -149,15 +160,37 @@
 							<tr>
 
 								<td>
-									<?php echo $row['Nombre']; ?>
+									<?php echo $row['Serie']; ?>
 								</td>
 								<td>
-									<?php echo $row['NombreSubarea']; ?>
+									<?php echo $row['Marca']; ?>
 								</td>
 								<td>
-									<a href="vistaAreas.php" data-href="vistaAreas.php?idarea_Subarea=<?php echo $row['idarea_Subarea']; ?>"
+									<?php echo $row['Modelo']; ?>
+								</td>
+								<td>
+									<?php echo $row['Invetario']; ?>
+								</td>
+
+								<td>
+									<?php echo $row['Adquisicion']; ?>
+								</td>
+
+								<td>
+									<a href="DetalleCPU.php?Id_CPU=<?php echo $row['Id_CPU']; ?>">
+										<span class="fas fa-eye">ver mas</span>
+									</a>
+								</td>
+
+								<td>
+									<a href="ModificaCPU.php?Id_CPU=<?php echo $row['Id_CPU']; ?>">
+										<span class="far fa-edit"> edit</span>
+									</a>
+								</td>
+								<td>
+									<a href="vistaCPU.php" data-href="vistaCPU.php?Id_CPU=<?php echo $row['Id_CPU']; ?>"
 									 data-toggle="modal" data-target="#confirm-delete">
-										<span class="far fa-trash-alt"></span>
+										<span class="far fa-trash-alt">delete</span>
 									</a>
 								</td>
 							</tr>
@@ -167,8 +200,6 @@
 				</div>
 			</div>
 		</div>
-
-
 
 
 
@@ -189,7 +220,7 @@
 
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Eliminar Zona</h4>
+					<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
 				</div>
 
 				<div class="modal-body">
@@ -211,7 +242,6 @@
 			$('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
 		});
 	</script>
-
 </body>
 
 </html>

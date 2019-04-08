@@ -112,44 +112,48 @@
 	</div>
 	<br>
 	<main role="main" class="container">
-		<div class="row">
-			<h2 style="text-align:center">Almacenamiento</h2>
-		</div>
+		<div class="card">
+			<div class="card-header bg-info">
+				<h3 style="text-align:center">VELOCIDAD</h3>
+			</div>
+			<div class="card-body">
 
-		<a href="Velocidad.php" class="btn btn-primary float-right">Nuevo Registro</a>
+				<a href="Velocidad.php" class="btn btn-primary float-right">Nuevo Registro</a>
 
 
-		<br>
+				<br>
 
-		<div class="row table-responsive">
-			<table class="table table-hover table-secondary">
-				<thead>
-					<tr>
+				<div class="row table-responsive">
+					<table class="table table-hover table-secondary">
+						<thead>
+							<tr>
 
-						<th>Velocidad</th>
+								<th>Velocidad</th>
 
-						<th></th>
+								<th></th>
 
-					</tr>
-				</thead>
+							</tr>
+						</thead>
 
-				<tbody>
-					<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-					<tr>
+						<tbody>
+							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
+							<tr>
 
-						<td>
-							<?php echo $row['Velocidad']; ?>
-						</td>
-						<td>
-							<a href="vistaVelocidad.php" data-href="vistaVelocidad.php?Id_velocidad=<?php echo $row['Id_velocidad']; ?>"
-							 data-toggle="modal" data-target="#confirm-delete">
-								<span class="far fa-trash-alt"></span>
-							</a>
-						</td>
-					</tr>
-					<?php } ?>
-				</tbody>
-			</table>
+								<td>
+									<?php echo $row['Velocidad']; ?>
+								</td>
+								<td>
+									<a href="vistaVelocidad.php" data-href="vistaVelocidad.php?Id_velocidad=<?php echo $row['Id_velocidad']; ?>"
+									 data-toggle="modal" data-target="#confirm-delete">
+										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 
 

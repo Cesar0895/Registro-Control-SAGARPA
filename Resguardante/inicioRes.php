@@ -5,16 +5,21 @@ session_start();
 	//$contrasesion=$_SESSION['pass'];
 	
     require '../conexion.php';
-    $consulta="SELECT * FROM persona WHERE Usuario='$varsesion'";
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Denominacion`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion'";
     //'or '1'='1
     $resultado = $mysqli->query($consulta);
     $row = $resultado->fetch_array(MYSQLI_ASSOC);
 
 		$puesto=$row['Puesto'];
-		$nombr=$row['Nombre'];
+		$nombr=$row['nombComple'];
 	
 		if ($varsesion==null || $varsesion='' ) {
-			header('location:index.php');
+			header('location:../index.php');
+			die();
+		}
+
+		if ($puesto=='encargado') {
+			header('location:../inicio.php');
 			die();
 		}
 		
@@ -68,7 +73,7 @@ session_start();
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a): <?php echo $_SESSION['user']; ?> </span>
+						<span class="fas fa-user nav-link"> Bienvenido (a): <?php echo $nombr; ?> </span>
 					</li>
 					<li>
 						<a href="../cerrar_session.php">

@@ -113,81 +113,84 @@
 	</div>
 	<br>
 	<main role="main" class="container">
-		<div class="row">
-			<h2 style="text-align:center">Monitores</h2>
-		</div>
+		<div class="card">
+			<div class="card-header bg-info">
+				<h3 style="text-align:center">MOUSE</h3>
+			</div>
+			<div class="card-body">
 
-		<a href="registroEquipoComputo.php" class="btn btn-primary float-right">Nuevo Registro</a>
+				<a href="registroEquipoComputo.php" class="btn btn-primary float-right">Nuevo Registro</a>
 
-		<div class="row">
-
-
-			<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-				<b>Nombre: </b>
-				<input type="text" id="campo" name="campo" />
-				<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
-			</form>
-		</div>
+				<div class="row">
 
 
-		<br>
+					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+						<b>Nombre: </b>
+						<input type="text" id="campo" name="campo" />
+						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
+					</form>
+				</div>
 
-		<div class="row table-responsive">
-			<table class="table table-hover table-secondary">
-				<thead>
-					<tr>
 
-						<th>Serie</th>
-						<th>Marca</th>
-						<th>Modelo</th>
-						<th>No. de inventario</th>
-						<th>Descripcion</th>
-						<th>Adquisicion</th>
-						<th></th>
-						<th></th>
+				<br>
 
-					</tr>
-				</thead>
+				<div class="row table-responsive">
+					<table class="table table-hover table-secondary">
+						<thead>
+							<tr>
 
-				<tbody>
-					<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-					<tr>
+								<th>Serie</th>
+								<th>Marca</th>
+								<th>Modelo</th>
+								<th>No. de inventario</th>
+								<th>Descripcion</th>
+								<th>Adquisicion</th>
+								<th></th>
+								<th></th>
 
-						<td>
-							<?php echo $row['Serie']; ?>
-						</td>
-						<td>
-							<?php echo $row['Marca']; ?>
-						</td>
-						<td>
-							<?php echo $row['Modelo']; ?>
-						</td>
-						<td>
-							<?php echo $row['Inventario']; ?>
-						</td>
-						<td>
-							<?php echo $row['Descripcion']; ?>
-						</td>
-						<td>
-							<?php echo $row['Adquisicion']; ?>
-						</td>
+							</tr>
+						</thead>
 
-						<td>
-							<a href "#">
-								<span class="far fa-edit"></span>
-							</a>
-						</td>
-						<td>
-							<a href="vistaMouse.php" data-href="vistaMouse.php?Id_mouse=<?php echo $row['Id_mouse']; ?>"
-							 data-toggle="modal" data-target="#confirm-delete">
-								<span class="far fa-trash-alt"></span>
-							</a>
-						</td>
-					</tr>
-					<?php } ?>
-				</tbody>
-			</table>
-		</div>
+						<tbody>
+							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
+							<tr>
+
+								<td>
+									<?php echo $row['Serie']; ?>
+								</td>
+								<td>
+									<?php echo $row['Marca']; ?>
+								</td>
+								<td>
+									<?php echo $row['Modelo']; ?>
+								</td>
+								<td>
+									<?php echo $row['Inventario']; ?>
+								</td>
+								<td>
+									<?php echo $row['Descripcion']; ?>
+								</td>
+								<td>
+									<?php echo $row['Adquisicion']; ?>
+								</td>
+
+								<td>
+									<a href "#">
+										<span class="far fa-edit"></span>
+									</a>
+								</td>
+								<td>
+									<a href="vistaMouse.php" data-href="vistaMouse.php?Id_mouse=<?php echo $row['Id_mouse']; ?>"
+									 data-toggle="modal" data-target="#confirm-delete">
+										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 
 

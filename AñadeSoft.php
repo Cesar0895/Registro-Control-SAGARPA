@@ -1,28 +1,66 @@
 <?php
-	error_reporting(E_ALL & ~E_NOTICE);
-	error_reporting(E_ERROR | E_PARSE);
-	require 'conexion.php';
-	$idArea_Subarea = $_GET['idarea_Subarea'];
+        error_reporting(E_ALL & ~E_NOTICE);
+        error_reporting(E_ERROR | E_PARSE);
+        require 'conexion.php';
 
-	$sql2 = "DELETE FROM area_subarea WHERE idarea_Subarea = '$idarea_Subarea'";
-	$resultado = $mysqli->query($sql2);
-	
-	$where = "";
+		$id_pc=$_GET['id_pc'];
+		$Id_soft=$_GET['Id_sof'];
+        if ($id_pc!=null) {
+            $sqlpc_Soft= "INSERT INTO `cpu_soft`(`id_Software`, `Id_CPU`) VALUES ('$Id_soft','$id_pc')";
+            $mysqli->query($sqlpc_Soft);
 
-	if(!empty($_POST))
-	{
-		$valor = $_POST['campo'];
-	
-		if(!empty($valor)){
-			$where = "WHERE Nombre LIKE '$valor%' or NombreSubarea LIKE '$valor%'";
+            if ($id_pc=1) {
+                echo'<script type="text/javascript">
+						alert("Registro guardado");
+						</script>';
+			}
+            
 		}
-	}
 
-	$sqlmostrar = "SELECT zona.Nombre, subareas.NombreSubarea FROM `area_subarea` INNER JOIN zona ON area_subarea.id_Zona=zona.id_Zona INNER JOIN subareas on area_subarea.id_SubArea=subareas.IdSubarea $where";
-	$resultadoTabla = $mysqli->query($sqlmostrar);
+		$sql = "SELECT * FROM `software` ORDER BY `Nombre` ASC";
+		$resultsoft = $mysqli->query($sql);
+		if ($resultsoft->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
+		{
+			$combobitsoft="";
+			while ($row = $resultsoft->fetch_array(MYSQLI_ASSOC)) 
+			{
+				$combobitsoft .="<option value='".$row['id_Software']."'>".$row['Nombre']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+			}
+		}
+		else
+		{
+			echo "No hubo resultados";
+		}
 
+		$sql = "SELECT * FROM `cpu` ORDER BY `Id_CPU` DESC";
+		$resultpc = $mysqli->query($sql);
+		if ($resultpc->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
+		{
+			$combobitpc="";
+			while ($row = $resultpc->fetch_array(MYSQLI_ASSOC)) 
+			{
+				$combobitpc .="<option value='".$row['Id_CPU']."'>".$row['Serie']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+			}
+		}
+		else
+		{
+			echo "No hubo resultados";
+		}
+		
+		/*
+		$Serie=$_GET['Serie'];
+
+		$sqlcpu = "SELECT CPU.Serie,software.Nombre
+		FROM `cpu_soft`
+		INNER JOIN CPU ON cpu_soft.Id_CPU = CPU.Id_CPU
+		INNER JOIN software ON cpu_soft.id_Software = software.id_Software
+		WHERE CPU.Serie = '$Serie'";
+		$resultpc = $mysqli->query($sqlcpu);
+		$row = $resultpc->fetch_array(MYSQLI_ASSOC);
+			
+
+		*/
 ?>
-
 <!doctype html>
 <html lang="en">
 
@@ -35,16 +73,13 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
 
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-	 crossorigin="anonymous">
-
 	<link rel="stylesheet" href="./css/estilo.css">
-
 	<title>Control de dispositivos</title>
 
 </head>
 
 <body>
+
 
 	<div class="allNavbar">
 
@@ -111,68 +146,34 @@
 
 	</div>
 	<br>
-	<main role="main" class="container">
+
+	<div class="container">
 		<div class="card">
-			<div class="card-header bg-info">
-				<h3 style="text-align:center">AREAS</h3>
-			</div>
-			<div class="card-body">
-
-				<a href="Areas.php" class="btn btn-primary float-right">Nuevo Registro</a>
-				<div class="row">
-
-
-					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-						<b style="color:white;">Buscador: </b>
-						<input type="text" id="campo" name="campo" />
-						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
-					</form>
+			<form>
+				<div class="form-group">
+					<label>Numero de serie del CPU</label>
+					<select class="form-control col-sm-5" id="id_CPU" name="id_pc">
+						<option >Selecciona la serie del CPU</option>
+						<?php echo $combobitpc ?>
+					</select>
+				</div>
+				<div class="form-group">
+					<label>Software</label>
+					<select class="form-control col-sm-5" id="Id_soft" name="Id_sof">
+						<?php echo $combobitsoft; ?>
+					</select>
 				</div>
 
-				<br>
+				<button type="button" class="btn btn-secondary">Regresar</button>
 
-				<div class="row table-responsive">
-					<table class="table table-hover table-secondary">
-						<thead>
-							<tr>
+				<button type="submit" class="btn btn-primary">Guardar</button>
+			</form>
+			
 
-								<th>Áreas</th>
-								<th>Subáreas</th>
-
-								<th></th>
-
-							</tr>
-						</thead>
-
-						<tbody>
-							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-							<tr>
-
-								<td>
-									<?php echo $row['Nombre']; ?>
-								</td>
-								<td>
-									<?php echo $row['NombreSubarea']; ?>
-								</td>
-								<td>
-									<a href="vistaAreas.php" data-href="vistaAreas.php?idarea_Subarea=<?php echo $row['idarea_Subarea']; ?>"
-									 data-toggle="modal" data-target="#confirm-delete">
-										<span class="far fa-trash-alt"></span>
-									</a>
-								</td>
-							</tr>
-							<?php } ?>
-						</tbody>
-					</table>
-				</div>
-			</div>
 		</div>
 
 
-
-
-
-	</main>
+	</div>
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -181,37 +182,6 @@
 	 crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	 crossorigin="anonymous"></script>
-
-	<!-- Modal -->
-	<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Eliminar Zona</h4>
-				</div>
-
-				<div class="modal-body">
-					¿Desea eliminar este registro?
-				</div>
-
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-					<a class="btn btn-danger btn-ok">Delete</a>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<script>
-		$('#confirm-delete').on('show.bs.modal', function(e) {
-			$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-
-			$('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
-		});
-	</script>
-
 </body>
 
 </html>

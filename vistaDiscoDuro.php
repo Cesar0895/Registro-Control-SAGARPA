@@ -38,7 +38,7 @@
 	 crossorigin="anonymous">
 
 	<link rel="stylesheet" href="./css/estilo.css">
-	
+
 	<title>Control de dispositivos</title>
 
 </head>
@@ -111,44 +111,48 @@
 	</div>
 	<br>
 	<main role="main" class="container">
-		<div class="row">
-			<h2 style="text-align:center">Almacenamiento</h2>
-		</div>
+		<div class="card">
+			<div class="card-header bg-info">
+				<h3 style="text-align:center">ALMACENAMIENTO</h3>
+			</div>
+			<div class="card-body">
 
-		<a href="DiscoDuro.php" class="btn btn-primary float-right">Nuevo Registro</a>
+				<a href="DiscoDuro.php" class="btn btn-primary float-right">Nuevo Registro</a>
 
 
-		<br>
+				<br>
 
-		<div class="row table-responsive">
-			<table class="table table-hover table-secondary">
-				<thead>
-					<tr>
+				<div class="row table-responsive">
+					<table class="table table-hover table-secondary">
+						<thead>
+							<tr>
 
-						<th>Almacenamiento</th>
+								<th>Almacenamiento</th>
 
-						<th></th>
+								<th></th>
 
-					</tr>
-				</thead>
+							</tr>
+						</thead>
 
-				<tbody>
-					<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-					<tr>
+						<tbody>
+							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
+							<tr>
 
-						<td>
-							<?php echo $row['Almacenamiento']; ?>
-						</td>
-						<td>
-							<a href="vistaDiscoDuro.php" data-href="vistaDiscoDuro.php?id_DD=<?php echo $row['id_DD']; ?>"
-							 data-toggle="modal" data-target="#confirm-delete">
-								<span class="far fa-trash-alt"></span>
-							</a>
-						</td>
-					</tr>
-					<?php } ?>
-				</tbody>
-			</table>
+								<td>
+									<?php echo $row['Almacenamiento']; ?>
+								</td>
+								<td>
+									<a href="vistaDiscoDuro.php" data-href="vistaDiscoDuro.php?id_DD=<?php echo $row['id_DD']; ?>"
+									 data-toggle="modal" data-target="#confirm-delete">
+										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+				</div>
+			</div>
 		</div>
 
 

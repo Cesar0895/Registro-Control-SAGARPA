@@ -1,14 +1,21 @@
 <?php
 
     session_start();
-
+/*
     $usuario=$_POST['user'];
     $password=$_POST['pass'];
 
     $_SESSION['user']=$usuario;
     $_SESSION['pass']=$password;
-
+*/
     $conexion =  new mysqli ('localhost','root','','inventariosagarpa');
+    
+    $usuario= mysqli_real_escape_string($conexion, $_POST['user']);
+    $password=mysqli_real_escape_string($conexion,$_POST['pass']);
+
+    $_SESSION['user']=$usuario;
+    $_SESSION['pass']=$password;
+    
     $consulta="SELECT * FROM persona WHERE Usuario='$usuario' and Contra='$password'";
     //'or '1'='1
     $resultado = mysqli_query($conexion, $consulta);
