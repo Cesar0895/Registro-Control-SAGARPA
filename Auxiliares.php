@@ -38,10 +38,10 @@ error_reporting(E_ERROR | E_PARSE);
 		$valor = $_POST['campo'];
 	
 		if(!empty($valor)){
-			$where = "WHERE Folio LIKE '$valor%' or Nomb_Dispositivo like '$valor%'";
+			$where = "WHERE IdAux LIKE '$valor%' or Nomb_Dispositivo like '$valor%'";
 		}
 	}
-	$sql = "SELECT auxiliares.IdAux, auxiliares.Folio, zona.Nombre, auxiliares.Presupuesto, dispositivos.Nomb_Dispositivo, auxiliares.Inventario, marca.Marca, modelo.Modelo, auxiliares.serie, dispositivos.Tipo, auxiliares.Adquisicion, auxiliares.Fecha_adquisicion, auxiliares.Fin_Garantia, auxiliares.DT, auxiliares.Observaciones, auxiliares.Direccion_ip, auxiliares.Mac_Eth, auxiliares.Mac_wifi, auxiliares.estatus,auxiliares.Documento, auxiliares.RFC, auxiliares.Valor FROM auxiliares inner join modelo on auxiliares.id_Modelo=modelo.id_Modelo inner join marca on auxiliares.id_Marca=marca.id_Marca inner join dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo inner join zona on auxiliares.Id_zona=zona.id_Zona $where";
+	$sql = "SELECT auxiliares.IdAux, zona.Sigla, auxiliares.Presupuesto, dispositivos.Nomb_Dispositivo, auxiliares.Inventario, marca.Marca, modelo.Modelo, auxiliares.serie, dispositivos.Tipo, auxiliares.Adquisicion, auxiliares.Fecha_adquisicion, auxiliares.Fin_Garantia, auxiliares.DT, auxiliares.Observaciones, auxiliares.Direccion_ip, auxiliares.Mac_Eth, auxiliares.Mac_wifi, auxiliares.estatus,auxiliares.Documento, auxiliares.RFC, auxiliares.Valor FROM auxiliares inner join modelo on auxiliares.id_Modelo=modelo.id_Modelo inner join marca on auxiliares.id_Marca=marca.id_Marca inner join dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo inner join zona on auxiliares.Id_zona=zona.id_Zona $where";
 	$resultadoTabla = $mysqli->query($sql);
 	
 ?>
@@ -166,23 +166,12 @@ error_reporting(E_ERROR | E_PARSE);
 							<tr>
 								<th>Folio</th>
 								<th>Zona</th>
-								<th>Presupuesto</th>
 								<th>Nombre del dispositivo</th>
 								<th>No. de inventario</th>
 								<th>Marca</th>
 								<th>Modelo</th>
 								<th>Serie</th>
 								<th>Tipo de dispositivo</th>
-								<th>Adquisicion</th>
-								<th>Fecha de adquisicion</th>
-								<th>Fin de garantia</th>
-								<th>Dictamen</th>
-								<th>Observaciones</th>
-								<th>Direccion IP</th>
-								<th>Mac Ethernet</th>
-								<th>Mac Wifi</th>
-								<th>Estatus</th>
-								<th>Documento</th>
 								<th>RFC</th>
 								<th>Valor</th>
 
@@ -196,15 +185,12 @@ error_reporting(E_ERROR | E_PARSE);
 							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
 							<tr>
 								<td>
-									<?php echo $row['Folio']; ?>
+									<?php echo $row['IdAux']; ?>
 								</td>
 								<td>
-									<?php echo $row['Nombre']; ?>
+									<?php echo $row['Sigla']; ?>
 								</td>
-								<td>
-									$
-									<?php echo $row['Presupuesto']; ?>.00
-								</td>
+								
 								<td>
 									<?php echo $row['Nomb_Dispositivo']; ?>
 								</td>
@@ -223,36 +209,7 @@ error_reporting(E_ERROR | E_PARSE);
 								<td>
 									<?php echo $row['Tipo']; ?>
 								</td>
-								<td>
-									<?php echo $row['Adquisicion']; ?>
-								</td>
-								<td>
-									<?php echo $row['Fecha_adquisicion']; ?>
-								</td>
-								<td>
-									<?php echo $row['Fin_Garantia']; ?>
-								</td>
-								<td>
-									<?php echo $row['DT']; ?>
-								</td>
-								<td>
-									<?php echo $row['Observaciones']; ?>
-								</td>
-								<td>
-									<?php echo $row['Direccion_ip']; ?>
-								</td>
-								<td>
-									<?php echo $row['Mac_Eth']; ?>
-								</td>
-								<td>
-									<?php echo $row['Mac_wifi']; ?>
-								</td>
-								<td>
-									<?php echo $row['estatus']; ?>
-								</td>
-								<td>
-									<?php echo $row['Documento']; ?>
-								</td>
+								
 								<td>
 									<?php echo $row['RFC']; ?>
 								</td>

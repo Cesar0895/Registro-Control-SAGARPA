@@ -26,7 +26,7 @@ session_start();
 
 			$idAux = $_GET['IdAux'];        
             
-			$sql = "SELECT auxiliares.IdAux, auxiliares.Folio, zona.Nombre, auxiliares.Presupuesto, dispositivos.Nomb_Dispositivo, auxiliares.Inventario, marca.Marca, modelo.Modelo, auxiliares.serie, dispositivos.Tipo, auxiliares.Adquisicion, auxiliares.Fecha_adquisicion, auxiliares.Fin_Garantia, auxiliares.DT, auxiliares.Observaciones, auxiliares.Direccion_ip, auxiliares.Mac_Eth, auxiliares.Mac_wifi, auxiliares.estatus, auxiliares.RFC, auxiliares.Valor FROM auxiliares inner join modelo on auxiliares.id_Modelo=modelo.id_Modelo inner join marca on auxiliares.id_Marca=marca.id_Marca inner join dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo inner join zona on auxiliares.Id_zona=zona.id_Zona WHERE IdAux = '$idAux'";
+			$sql = "SELECT auxiliares.IdAux, zona.Nombre, auxiliares.Presupuesto, dispositivos.Nomb_Dispositivo, auxiliares.Inventario, marca.Marca, modelo.Modelo, auxiliares.serie, dispositivos.Tipo, auxiliares.Adquisicion, auxiliares.Fecha_adquisicion, auxiliares.Fin_Garantia, auxiliares.DT, auxiliares.Observaciones, auxiliares.Direccion_ip, auxiliares.Mac_Eth, auxiliares.Mac_wifi, auxiliares.estatus, auxiliares.RFC, auxiliares.Valor FROM auxiliares inner join modelo on auxiliares.id_Modelo=modelo.id_Modelo inner join marca on auxiliares.id_Marca=marca.id_Marca inner join dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo inner join zona on auxiliares.Id_zona=zona.id_Zona WHERE IdAux = '$idAux'";
             $resultado = $mysqli->query($sql);
             $row = $resultado->fetch_array(MYSQLI_ASSOC);
 ?>
@@ -133,7 +133,7 @@ session_start();
 					</div>
 					<div class="col-5">
 						<h4>
-							<?php echo $row['Folio']; ?>
+							<?php echo $row['IdAux']; ?>
 						</h4>
 					</div>
 				</div>
