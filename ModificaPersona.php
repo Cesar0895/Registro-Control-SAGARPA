@@ -10,7 +10,6 @@ $adscripcion = isset($_GET['Adscripcion']) ? $_GET['Adscripcion'] : null ;
 $area = isset($_GET['Area']) ? $_GET['Area'] : null ;
 $subarea = isset($_GET['Subarea']) ? $_GET['Subarea'] : null ;
 $puesto = isset($_GET['Puesto']) ? $_GET['Puesto'] : null ;
-$denominacion = isset($_GET['Denominacion']) ? $_GET['Denominacion'] : null ;
 $telefono = isset($_GET['telefono']) ? $_GET['telefono'] : null ;
 $extension = isset($_GET['extension']) ? $_GET['extension'] : null ;
 $domicilio = isset($_GET['domicilio']) ? $_GET['domicilio'] : null ;
@@ -20,7 +19,7 @@ $accesoCorreo = isset($_GET['accesoCorreo']) ? $_GET['accesoCorreo'] : null ;
 $estatus = isset($_GET['estatus']) ? $_GET['estatus'] : null ;
 
 if ($nombre!=null) {
-    $sql2= "update persona set  Nombre='".$nombre."', ApePaterno='".$apePaterno."',ApeMaterno='".$apeMaterno."', Adscripcion='".$adscripcion."', Area='$area',Subarea='$subarea', Puesto='$puesto', Denominacion='$denominacion', Telefono='$telefono', Extension='$extension', Domicilio='$domicilio', Correo='$correo', GFC='$GFC', Acceso_correo='$accesoCorreo', Estatus='$estatus'
+    $sql2= "update persona set  Nombre='".$nombre."', ApePaterno='".$apePaterno."',ApeMaterno='".$apeMaterno."', Adscripcion='".$adscripcion."', Area='$area',Subarea='$subarea', Puesto='$puesto', Telefono='$telefono', Extension='$extension', Domicilio='$domicilio', Correo='$correo', GFC='$GFC', Acceso_correo='$accesoCorreo', Estatus='$estatus'
     Where RFC='".$RFC."'";
     $mysqli->query($sql2);
     
@@ -195,14 +194,6 @@ if ($nombre!=null) {
 						<label for="puestp" class="col-sm-2 controllabel">Puesto</label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control" id="puesto" name="Puesto" placeholder="Puesto" value="<?php echo $row['Puesto']; ?>"
-							 required>
-						</div>
-					</div>
-
-					<div class="form-group">
-						<label for="denominacion" class="col-sm-2 controllabel">Denominación</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" id="denominacion" name="Denominacion" placeholder="Denominación" value="<?php echo $row['Denominacion']; ?>"
 							 required>
 						</div>
 					</div>

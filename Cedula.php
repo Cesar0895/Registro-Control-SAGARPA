@@ -6,7 +6,7 @@ session_start();
     
     include 'plantillaPDF.php';
     require 'conexion.php';
-    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Denominacion`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion'";
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion'";
     //'or '1'='1
     $resultado = $mysqli->query($consulta);
     $row = $resultado->fetch_array(MYSQLI_ASSOC);
@@ -19,17 +19,14 @@ session_start();
 			die();
 		}
 		
-		if ($puesto!='encargado') {
-			header('location:Resguardante/inicioRes.php');
-			die();
-		}
+	
 
 
     $folio = $_GET['Folio'];        
             
 			$sql = "SELECT `Folio`, zona.Nombre, concat(persona.Nombre,' ',persona.ApePaterno,' ',persona.ApeMaterno) as nombResp, persona.RFC,persona.Telefono,persona.Domicilio,persona.Adscripcion,persona.Area,persona.Subarea,persona.Puesto,persona.Extension,persona.Correo,persona.GFC,persona.Acceso_correo,persona.Estatus, Filtrado,`Identificacion`, concat(p.Nombre,' ',p.ApePaterno,' ',p.ApeMaterno) as nombUser,p.RFC as RFCUser, `Nodo`, `Fecha_Adquisicion`, `DT_adquisicion`, `DTB`, `Tipo_HW`, `Folio_Resduardo`, `Observaciones`, `Fin_Garantia`, `Candado`, `Valor`,equipos.Estatus, `Ubicacion`, `Fecha_Llenado`, `Oficio_Mexico`, `Contra_Admin`, 
 			
-            cpu.Serie as serieCPU, marCPU.Marca as marcaCPU, modCPU.Modelo as modCPU, cpu.Invetario as InvCPU, proCPU.Procesador,ram.Memoria_RAM, DD.Almacenamiento, vel.Velocidad, cpu.IP,cpu.MacEth,cpu.Mac_wifi,cpu.Dominio, cpu.RedTipo, cpu.Adquisicion,CPU.Bosinas, CPU.P_USB, CPU.P_Serial, CPU.P_Paralelo,
+            cpu.Serie as serieCPU, marCPU.Marca as marcaCPU, modCPU.Modelo as modCPU, cpu.Invetario as InvCPU, proCPU.Procesador,ram.Memoria_RAM, DD.Almacenamiento, vel.Velocidad, cpu.IP,cpu.MacEth,cpu.Mac_wifi,cpu.Dominio, cpu.RedTipo, cpu.Adquisicion,CPU.Bosinas, CPU.P_USB, CPU.P_Serial, CPU.P_Paralelo, cpu.Antivirus, cpu.CA, cpu.PS2,
 			
             monitor.Serie as serieMon, marMoni.Marca as marcaMoni, modMoni.Modelo as modMoni, monitor.Inventario as InvMoni, monitor.Descripcion as desMoni ,monitor.Adquisicion as adquiMoni,
 			
@@ -64,6 +61,7 @@ session_start();
     $row = $resultado->fetch_array(MYSQLI_ASSOC);
 
     $serie=$row['serieCPU'];
+    $RFCresp=$row['RFC'];
 
     $sqlSoft="SELECT software.Nombre, software.Version, software.Licencia, software.Key_soft, software.Plataforma, software.Fabricante, software.Adquisicion, cpu.Serie FROM `cpu_soft` 
     INNER JOIN software ON cpu_soft.id_Software=software.id_Software 
@@ -71,10 +69,10 @@ session_start();
     WHERE cpu.Serie='$serie' GROUP by software.Nombre" ;
     $resultadoSoft=$mysqli->query($sqlSoft);
 
-    $sqlAux="SELECT `Folio`, dispositivos.Nomb_Dispositivo, `Inventario`, marca.Marca, modelo.Modelo, `serie`, `Adquisicion`, `Observaciones` FROM `auxiliares` 
+    $sqlAux="SELECT dispositivos.Nomb_Dispositivo, `Inventario`, marca.Marca, modelo.Modelo, `serie`, `Adquisicion`, `Observaciones`,RFC FROM `auxiliares` 
     INNER JOIN dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo
     INNER JOIN marca on auxiliares.id_Marca=marca.id_Marca
-    INNER JOIN modelo on auxiliares.id_modelo=modelo.id_Modelo WHERE Folio = '$folio'";
+    INNER JOIN modelo on auxiliares.id_modelo=modelo.id_Modelo WHERE RFC = '$RFCresp'";
     $resultadoAux=$mysqli->query($sqlAux);
 
     $año=date("Y");
@@ -124,7 +122,7 @@ session_start();
     $pdf->Cell(30,4,utf8_decode('ADSCRIPCION:'),0,0,'R');
     $pdf->SetFont('Arial','B',9);
     $pdf->SetX(180);
-    $pdf->Cell(105,4,utf8_decode('DISTRITO DE DESARROLLO RURAL 096 COMPOSTELA'),1,1,'R');
+    $pdf->Cell(105,4,strtoupper(utf8_decode($row['Adscripcion'])),1,1,'R');
     $pdf->ln(2); 
 
     //---NOMBRE DEL RESGUARDANTE---
@@ -263,7 +261,7 @@ session_start();
     //----RESGUARDO CELDA----
     $pdf->SetFont('Arial','',9);
     $pdf->SetX(85);
-    $pdf->Cell(25,4,utf8_decode('?????'),1,0,'C');
+    $pdf->Cell(25,4,strtoupper(utf8_decode($row['Folio_Resduardo'])),1,0,'C');
 
     //----UNIDAN OPTICA----
     $pdf->SetFont('Arial','',9);
@@ -348,7 +346,7 @@ session_start();
     //----GPO. TRABAJO CELDA----
     $pdf->SetFont('Arial','',9);
     $pdf->SetX(85);
-    $pdf->Cell(25,4,utf8_decode('?????'),1,0,'C');
+    $pdf->Cell(25,4,strtoupper(utf8_decode($row['Dominio'])),1,0,'C');
 
     //----SERIAL----
     $pdf->SetFont('Arial','',9);
@@ -430,7 +428,7 @@ session_start();
     $pdf->Cell(36,4,utf8_decode('PS2:'),0,0,'R');
     $pdf->SetFont('Arial','B',9);
     $pdf->SetX(153);  
-    $pdf->Cell(4,4,utf8_decode('?'),1,1,'C');
+    $pdf->Cell(4,4,utf8_decode($row['PS2']),1,1,'C');
   
 
     //---VELOCIDAD----
@@ -487,7 +485,7 @@ session_start();
     //----STATUS----
     $pdf->SetFont('Arial','',9);
     $pdf->SetX(85);
-    $pdf->Cell(25,4,utf8_decode($row['Estatus']),1,0,'C');
+    $pdf->Cell(25,4,strtoupper(utf8_decode($row['Estatus'])),1,0,'C');
 
     //----ACCESO A CORREO----
     $pdf->SetFont('Arial','',9);
@@ -519,7 +517,7 @@ session_start();
     $pdf->Cell(32,4,utf8_decode('NOMBRE PC'),1,0,'C');
     $pdf->SetFont('Arial','B',9);
     $pdf->SetX(47);
-    $pdf->Cell(32,4,strtoupper(utf8_decode('??????')),1,0,'C');
+    $pdf->Cell(32,4,strtoupper(utf8_decode($row['Identificacion'])),1,0,'C');
 
     //----Observaciones----
     $pdf->SetFont('Arial','B',9);
@@ -532,12 +530,12 @@ session_start();
     $pdf->Cell(32,4,utf8_decode('ACTIVE DIRECTORY'),1,0,'C');
     $pdf->SetFont('Arial','B',9);
     $pdf->SetX(47);
-    $pdf->Cell(32,4,strtoupper(utf8_decode($row['Dominio'])),1,0,'C');
+    $pdf->Cell(32,4,strtoupper(utf8_decode('????')),1,0,'C');
 
     //OBSERVACIONES CELDA-----
     $pdf->SetFont('Arial','',9);
     $pdf->SetX(85);
-    $pdf->MultiCell(183,4,utf8_decode($row['Observaciones']),1,'L');
+    $pdf->MultiCell(183,4,strtoupper(utf8_decode($row['Observaciones'])),1,'L');
 
     //---TARJETA DE RED----
     $pdf->SetFont('Arial','',9);
@@ -553,7 +551,7 @@ session_start();
     $pdf->Cell(32,4,utf8_decode('ADAPTADOR CA.'),1,0,'C');
     $pdf->SetFont('Arial','B',9);
     $pdf->SetX(47);
-    $pdf->Cell(32,4,strtoupper(utf8_decode('?????')),1,1,'C');
+    $pdf->Cell(32,4,strtoupper(utf8_decode($row['CA'])),1,1,'C');
 
     $pdf->ln(3);
 
@@ -760,7 +758,7 @@ session_start();
     $pdf->Cell(20,4,utf8_decode('FECHA:'),0,0,'R');
     $pdf->SetFont('Arial','B',9);
     $pdf->SetX(235);
-    $pdf->Cell(50,4,$row['Fecha_Llenado'],1,1,'C');
+    $pdf->Cell(50,4,$fecha_llenado,1,1,'C');
     $pdf->ln(2); 
     
     //---Unidad administrativa---
@@ -776,7 +774,7 @@ session_start();
     $pdf->Cell(30,4,utf8_decode('ADSCRIPCION:'),0,0,'R');
     $pdf->SetFont('Arial','B',9);
     $pdf->SetX(180);
-    $pdf->Cell(105,4,utf8_decode('DISTRITO DE DESARROLLO RURAL 096 COMPOSTELA'),1,1,'R');
+    $pdf->Cell(105,4,strtoupper(utf8_decode($row['Adscripcion'])),1,1,'R');
     $pdf->ln(2); 
 
     //---NOMBRE DEL RESGUARDANTE---

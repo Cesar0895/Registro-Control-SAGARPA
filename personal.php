@@ -131,7 +131,6 @@
 					</form>
 
 					<a href="RegistroPersonal.php" class="btn btn-primary float-right mr-3">Nuevo Registro</a>
-					<a href="ReportePersonal.php" class="btn btn-secondary float-right mr-3">Generar Reporte</a>
 
 				</div>
 

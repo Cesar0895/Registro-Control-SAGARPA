@@ -146,6 +146,8 @@
 								<th>Plataforma</th>
 								<th>Fabricante</th>
 								<th>Adquisición</th>
+								<th>ProducKey</th>
+								<th>Asignada</th>
 								<th></th>
 								<th></th>
 
@@ -176,6 +178,17 @@
 								</td>
 								<td>
 									<?php echo $row['Adquisicion']; ?>
+								</td>
+								<td>
+									<?php echo $row['ProducKey']; ?>
+								</td>
+								<td>
+									<?php if ($row['Asignado']=='SI') { 
+										echo 'X';
+									}else{
+										echo '-';
+									}?>
+
 								</td>
 								<td>
 									<a href="ModificaSoft.php?id_Software=<?php echo $row['id_Software']; ?>">

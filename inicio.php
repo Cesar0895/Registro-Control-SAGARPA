@@ -5,7 +5,7 @@ session_start();
 	//$contrasesion=$_SESSION['pass'];
 	
     require 'conexion.php';
-    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Denominacion`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion'";
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
     //'or '1'='1
     $resultado = $mysqli->query($consulta);
     $row = $resultado->fetch_array(MYSQLI_ASSOC);
@@ -18,7 +18,7 @@ session_start();
 			die();
 		}
 		
-		if ($puesto!='encargado') {
+		if ($puesto!='encargado' && $puesto!='jefe') {
 			header('location:Resguardante/inicioRes.php');
 			die();
 		}

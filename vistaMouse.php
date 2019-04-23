@@ -175,8 +175,8 @@
 								</td>
 
 								<td>
-									<a href "#">
-										<span class="far fa-edit"></span>
+									<a href="ModificaMou.php?Id_mouse=<?php echo $row['Id_mouse'];?>">
+										<span class="far fa-edit">edita</span>
 									</a>
 								</td>
 								<td>

@@ -4,7 +4,7 @@
 
 	        $RFC = $_GET['RFC'];        
             
-			$sql = "SELECT RFC, concat(ApePaterno,' ', ApeMaterno,' ', Nombre) as NombreComp, Adscripcion, Area, Subarea, Puesto, Denominacion, Telefono, Extension, Domicilio, Correo, GFC, Acceso_correo, Estatus, Usuario, Contra 
+			$sql = "SELECT RFC, concat(ApePaterno,' ', ApeMaterno,' ', Nombre) as NombreComp, Adscripcion, Area, Subarea, Puesto, Telefono, Extension, Domicilio, Correo, GFC, Acceso_correo, Estatus, Usuario, Contra 
 			FROM persona WHERE RFC = '$RFC'";
             $resultado = $mysqli->query($sql);
             $row = $resultado->fetch_array(MYSQLI_ASSOC);
@@ -166,16 +166,7 @@
 						</p>
 					</div>
 				</div>
-				<div class="row">
-					<div class="col-3">
-						<p class="h5">Denominación: </p>
-					</div>
-					<div class="col-5">
-						<p class="h6">
-							<?php echo $row['Denominacion']; ?>
-						</p>
-					</div>
-				</div>
+				
 				<div class="row">
 					<div class="col-3">
 						<p class="h5">Telefono: </p>

@@ -10,9 +10,10 @@
 		$plataforma = $_GET['Plataforma'];
 		$fabricante = $_GET['Fabricante'];
 		$adqui = $_GET['Adquisicion'];
+		$producKey=$_GET['ProducKey'];
 
         if ($nombre!=null) {
-            $sqlsoft= "INSERT INTO software (Nombre, Version, Licencia, Key_soft, Plataforma, Fabricante, Adquisicion) VALUES ('$nombre','$version','$licencia', '$key', '$plataforma', '$fabricante', '$adqui')";
+            $sqlsoft= "INSERT INTO software (Nombre, Version, Licencia, Key_soft, Plataforma, Fabricante, Adquisicion, ProducKey) VALUES ('$nombre','$version','$licencia', '$key', '$plataforma', '$fabricante', '$adqui', '$producKey')";
             $mysqli->query($sqlsoft);
 
             if ($nombre=1) {
@@ -130,7 +131,11 @@
 				<div class="form-group row">
 					<label class="col-sm-2 col-form-label ml-4">Licencia</label>
 					<div class="col-sm-4">
-						<input type="text" class="form-control" id="licencia" name="Licencia" placeholder="Licencia" require>
+						<select class="form-control" name="Licencia" id="Licencia">
+							<option value="Corporativa">Corporativa</option>
+							<option value="OEM">OEM</option>
+						</select>
+						
 					</div>
 				</div>
 				<div class="form-group row">
@@ -156,6 +161,13 @@
 					<label class="col-sm-2 col-form-label ml-4">Adquisición</label>
 					<div class="col-sm-4">
 						<input type="text" class="form-control" id="adquisicion" name="Adquisicion" placeholder="datos de adquisición" require>
+					</div>
+				</div>
+
+				<div class="form-group row">
+					<label class="col-sm-2 col-form-label ml-4">Clave del software</label>
+					<div class="col-sm-4">
+						<input type="text" class="form-control" id="ProducKey" name="ProducKey" placeholder="ProducKey" require>
 					</div>
 				</div>
 

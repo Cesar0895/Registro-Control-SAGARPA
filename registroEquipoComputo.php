@@ -44,6 +44,8 @@
 		$MacWifi = $_GET['MacWifi'];
 		$Dominio = $_GET['Dominio'];
 		$Antivirus = $_GET['Antivirus'];
+		$CA = $_GET['CA'];
+		$PS2 = $_GET['PS2'];
 
 		$Folio = $_GET['folio'];
 		$idZona=$_GET['idZona'];
@@ -76,15 +78,21 @@
 
 
 		if ($seriepc!=null) {
-            $sqlpc= "INSERT INTO cpu (Id_Marca, `Id_Modelo`, `Id_Procesador`, `Id_MemoriaRam`, `Id_DD`, `Id_Velocidad`, `Serie`, `Invetario`, `Adquisicion`, `UnidadOptica`, `Bosinas`, `P_USB`, `P_Serial`, `P_Paralelo`, `RedTipo`, `IP`, `MacEth`, `Mac_wifi`, `Dominio`, `Antivirus`) VALUES ('$id_Marcapc','$id_Modelopc','$id_procesador','$idMemoriaRam','$id_DD','$id_velocidad','$seriepc','$inventariopc','$adquipc','$unidadOptica','$bocinas','$P_usb','$P_serial','$P_paralelo','$Red_tipo','$ip','$MacEth','$MacWifi','$Dominio','$Antivirus')";
+            $sqlpc= "INSERT INTO cpu (Id_Marca, `Id_Modelo`, `Id_Procesador`, `Id_MemoriaRam`, `Id_DD`, `Id_Velocidad`, `Serie`, `Invetario`, `Adquisicion`, `UnidadOptica`, `Bosinas`, `P_USB`, `P_Serial`, `P_Paralelo`, `RedTipo`, `IP`, `MacEth`, `Mac_wifi`, `Dominio`, `Antivirus`,CA, PS2) VALUES ('$id_Marcapc','$id_Modelopc','$id_procesador','$idMemoriaRam','$id_DD','$id_velocidad','$seriepc','$inventariopc','$adquipc','$unidadOptica','$bocinas','$P_usb','$P_serial','$P_paralelo','$Red_tipo','$ip','$MacEth','$MacWifi','$Dominio','$Antivirus','$CA','$PS2')";
             $mysqli->query($sqlpc);
 
             
 		}
 
 		if ($id_pc!=null) {
-            $sqlpc_Soft= "INSERT INTO `cpu_soft`(`id_Software`, `Id_CPU`) VALUES ('$Id_soft','$id_pc')";
-            $mysqli->query($sqlpc_Soft);
+			$sqlpc_Soft= "INSERT INTO `cpu_soft`(`id_Software`, `Id_CPU`) VALUES ('$Id_soft','$id_pc')";
+
+			$sqlAsigna="UPDATE `software` SET Asignado='SI' WHERE id_Software='$Id_soft'";
+			
+			$mysqli->query($sqlAsigna);
+			$mysqli->query($sqlpc_Soft);
+
+			
 
             if ($id_pc=1) {
                 echo'<script type="text/javascript">
@@ -250,7 +258,7 @@ else
     echo "No hubo resultados";
 }
 
-$sql = "SELECT * FROM `software` ORDER BY `Nombre` ASC";
+$sql = "SELECT * FROM `software` WHERE (Licencia='OEM' and Asignado='NO') or (Licencia='Corporativa') ORDER BY `Nombre` ASC";
 $resultsoft = $mysqli->query($sql);
 if ($resultsoft->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
 {
@@ -939,9 +947,27 @@ $where = "";
 												</div>
 											</div>
 										</fieldset>
+										<div class="form-group">
+											<label>ADAPTADOR CA</label>
+											<input type="text" class="form-control" id="CA" name="CA" placeholder="Introduce el ADAPTADOR CA">
+										</div>
+										<div class="form-group">
+											<label>PS2</label>
+											<select class="custom-select mr-sm-2" id="PS2" name="PS2">
+
+												<option>1</option>
+												<option>2</option>
+												<option>3</option>
+												<option>4</option>
+												<option>5</option>
+												<option>6</option>
+												
+											</select>
+										</div>
+										
 										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
-										<button type="submit" class="btn btn-primary" data-toggle="modal" data-target="#DatosSoft">Guardar</button>
+										<button type="submit" class="btn btn-primary">Guardar</button>
 
 
 									</form>
@@ -1170,7 +1196,7 @@ $where = "";
 
 										<div class="form-group">
 											<label>Tipo de adquisición</label>
-											<select class="form-control" id="adquisicion" name="Adquisicion">
+											<select class="form-control" id="adquisicion" name="AdquisicionMou">
 												<option value="Compra">Compra</option>
 												<option value="Transferencia">Transferencia</option>
 												<option value="Comodato">Comodato</option>

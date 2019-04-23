@@ -7,7 +7,7 @@ error_reporting(E_ERROR | E_PARSE);
 	//$contrasesion=$_SESSION['pass'];
 	
     require 'conexion.php';
-    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Denominacion`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion'";
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion'";
     //'or '1'='1
     $resultado = $mysqli->query($consulta);
     $row = $resultado->fetch_array(MYSQLI_ASSOC);
@@ -20,7 +20,7 @@ error_reporting(E_ERROR | E_PARSE);
 			die();
 		}
 		
-		if ($puesto!='encargado') {
+		if ($puesto!='encargado' && $puesto!='jefe') {
 			header('location:Resguardante/inicioRes.php');
 			die();
 		}
@@ -148,10 +148,7 @@ error_reporting(E_ERROR | E_PARSE);
 			</div>
 			<div class="card-body">
 
-				<a href="RegistroAuxiliares2.php" class="btn btn-primary float-right mr-3">Nuevo Registro</a>
-
 				<div class="row ml-3">
-
 
 					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
 						<b>Buscador: </b>

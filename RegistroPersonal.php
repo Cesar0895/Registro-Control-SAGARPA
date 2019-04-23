@@ -9,7 +9,7 @@
             $area = isset($_GET['Area']) ? $_GET['Area'] : null ;
             $subarea = isset($_GET['Subarea']) ? $_GET['Subarea'] : null ;
             $puesto = isset($_GET['Puesto']) ? $_GET['Puesto'] : null ;
-            $denominacion = isset($_GET['Denominacion']) ? $_GET['Denominacion'] : null ;
+            
             $telefono = isset($_GET['telefono']) ? $_GET['telefono'] : null ;
             $extencion = isset($_GET['extension']) ? $_GET['extension'] : null ;
             $domicilio = isset($_GET['domicilio']) ? $_GET['domicilio'] : null ;
@@ -23,10 +23,10 @@
 
             if ($RFC!=null) {
                 $sql= "INSERT INTO persona (RFC, Nombre, ApePaterno, ApeMaterno, 
-                Adscripcion, Area, Subarea, Puesto, Denominacion, Telefono, Extension, 
+                Adscripcion, Area, Subarea, Puesto, Telefono, Extension, 
                 Domicilio, Correo, GFC, Acceso_correo, Estatus, Usuario, Contra) 
                 VALUES ('".$RFC."','".$nombre."','".$apePaterno."','".$apeMaterno."','".$adscripcion."','$area','$subarea',
-                    '$puesto','$denominacion','$telefono','$extencion','$domicilio','$correo','$GFC',
+                    '$puesto','$telefono','$extencion','$domicilio','$correo','$GFC',
                     '$accesoCorreo','$estatus', '$usuario', '$contra')";
                 $resultado = $mysqli->query($sql);
     
@@ -127,147 +127,148 @@
 	<main role="main" class="container">
 		<br>
 		<br>
-		<div class="row">
-			<h3 style="text-align:center">NUEVO REGISTRO</h3>
+		<div class="card">
+			<div class="card-header bg-info">
+				<div class="row ml-3">
+					<h2 style="text-align:center">REGISTRO DE PERSONAL</h2>
+				</div>
+			</div>
+			<div class="card-body">
+				<form>
+					<div class="form-group">
+						<label for="rfc" class="col-sm-2 controllabel">RFC</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="RFC" name="RFC" placeholder="RFC" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="nombre" class="col-sm-2 controllabel">Nombre</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="nombre" name="Nombre" placeholder="Nombre" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="apePaterno" class="col-sm-2 controllabel">Apellido Paterno</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="apePaterno" name="ApePaterno" placeholder="Apellido Paterno" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="apeMaterno" class="col-sm-2 controllabel">Apellido Materno</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="apeMaterno" name="ApeMaterno" placeholder="Apellido Materno" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="adscripcion" class="col-sm-2 controllabel">Adscripción</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="adscripcion" name="Adscripcion" placeholder="Adscripción" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="area" class="col-sm-2 controllabel">Area</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="area" name="Area" placeholder="Area" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="subarea" class="col-sm-2 controllabel">Subarea</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="subarea" name="Subarea" placeholder="Subarea" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="puestp" class="col-sm-2 controllabel">Puesto</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="puesto" name="Puesto" placeholder="Puesto" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="telefono" class="col-sm-2 controllabel">Telefono</label>
+						<div class="col-sm-10">
+							<input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Telefono">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="extencion" class="col-sm-2 controllabel">Extención</label>
+						<div class="col-sm-10">
+							<input type="tel" class="form-control" id="esxtencion" name="extencion" placeholder="Extencion">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="Domicilo" class="col-sm-2 controllabel">Domicilio</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="domicilio" name="domicilio" placeholder="Domicilio">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="correo" class="col-sm-2 controllabel">Correo</label>
+						<div class="col-sm-10">
+							<input type="email" class="form-control" id="correo" name="correo" placeholder="Correo">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="GFC" class="col-sm-2 controllabel">GFC</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="GFC" name="GFC" placeholder="GFC">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="accesoCorreo" class="col-sm-2 controllabel">Acceso del correo</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="accesoCorreo" name="accesoCorreo" placeholder="Acceso del correo">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="estatus" class="col-sm-2 controllabel">Status</label>
+						<div class="col-sm-10">
+							<select class="form-control" id="estatus" name="estatus">
+								<option value="ACTIVO">ACTIVO</option>
+								<option value="BAJA">BAJA</option>
+								<option value="OTRO">OTRO</option>
+							</select>
+						</div>
+					</div>
+
+					<hr color="blue">
+
+					<div class="form-group">
+						<label for="accesoCorreo" class="col-sm-2 controllabel">Nombre se usuario</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="usuario" name="usuario" placeholder="Nombre de usuario">
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="accesoCorreo" class="col-sm-2 controllabel">Contraseña</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="contra" name="contra" placeholder="Contraseña">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<div class="col-sm-offset-2 col-sm-10">
+							<a href="index.php" class="btn btndefault">Regresar</a>
+							<button type="submit" class="btn btnprimary">Guardar</button>
+						</div>
+					</div>
+
+				</form>
+			</div>
 		</div>
-		<form>
-			<div class="form-group">
-				<label for="rfc" class="col-sm-2 controllabel">RFC</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="RFC" name="RFC" placeholder="RFC" required>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="nombre" class="col-sm-2 controllabel">Nombre</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="nombre" name="Nombre" placeholder="Nombre" required>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="apePaterno" class="col-sm-2 controllabel">Apellido Paterno</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="apePaterno" name="ApePaterno" placeholder="Apellido Paterno" required>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="apeMaterno" class="col-sm-2 controllabel">Apellido Materno</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="apeMaterno" name="ApeMaterno" placeholder="Apellido Materno" required>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="adscripcion" class="col-sm-2 controllabel">Adscripción</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="adscripcion" name="Adscripcion" placeholder="Adscripción" required>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="area" class="col-sm-2 controllabel">Area</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="area" name="Area" placeholder="Area" required>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="subarea" class="col-sm-2 controllabel">Subarea</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="subarea" name="Subarea" placeholder="Subarea" required>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="puestp" class="col-sm-2 controllabel">Puesto</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="puesto" name="Puesto" placeholder="Puesto" required>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="denominacion" class="col-sm-2 controllabel">Denominación</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="denominacion" name="Denominacion" placeholder="Denominación" required>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="telefono" class="col-sm-2 controllabel">Telefono</label>
-				<div class="col-sm-10">
-					<input type="tel" class="form-control" id="telefono" name="telefono" placeholder="Telefono">
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="extencion" class="col-sm-2 controllabel">Extención</label>
-				<div class="col-sm-10">
-					<input type="tel" class="form-control" id="esxtencion" name="extencion" placeholder="Extencion">
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="Domicilo" class="col-sm-2 controllabel">Domicilio</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="domicilio" name="domicilio" placeholder="Domicilio">
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="correo" class="col-sm-2 controllabel">Correo</label>
-				<div class="col-sm-10">
-					<input type="email" class="form-control" id="correo" name="correo" placeholder="Correo">
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="GFC" class="col-sm-2 controllabel">GFC</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="GFC" name="GFC" placeholder="GFC">
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="accesoCorreo" class="col-sm-2 controllabel">Acceso del correo</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="accesoCorreo" name="accesoCorreo" placeholder="Acceso del correo">
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="estatus" class="col-sm-2 controllabel">Status</label>
-				<div class="col-sm-10">
-					<select class="form-control" id="estatus" name="estatus">
-						<option value="ACTIVO">ACTIVO</option>
-						<option value="BAJA">BAJA</option>
-						<option value="OTRO">OTRO</option>
-					</select>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<label for="accesoCorreo" class="col-sm-2 controllabel">Nombre se usuario</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="usuario" name="usuario" placeholder="Nombre de usuario">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="accesoCorreo" class="col-sm-2 controllabel">Contraseña</label>
-				<div class="col-sm-10">
-					<input type="text" class="form-control" id="contra" name="contra" placeholder="Contraseña">
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<a href="index.php" class="btn btndefault">Regresar</a>
-					<button type="submit" class="btn btnprimary">Guardar</button>
-				</div>
-			</div>
-
-		</form>
 
 
 

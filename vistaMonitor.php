@@ -177,9 +177,11 @@
 								</td>
 
 								<td>
-									<a href "#">
-										<span class="far fa-edit"></span>
+								<td>
+									<a href="ModificaMoni.php?id_Monitor=<?php echo $row['id_Monitor'];?>">
+										<span class="far fa-edit">edita</span>
 									</a>
+								</td>
 								</td>
 								<td>
 									<a href="vistaMonitor.php" data-href="vistaMonitor.php?id_Monitor=<?php echo $row['id_Monitor']; ?>"

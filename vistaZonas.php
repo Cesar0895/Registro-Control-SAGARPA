@@ -14,7 +14,7 @@
 		$valor = $_POST['campo'];
 	
 		if(!empty($valor)){
-			$where = "WHERE Nombre LIKE '%$valor'";
+			$where = "WHERE Nombre LIKE '$valor%'";
 		}
 	}
 
@@ -127,7 +127,7 @@
 					<table class="table table-hover table-secondary">
 						<thead>
 							<tr>
-
+								<th>Sigla</th>
 								<th>zona</th>
 
 								<th></th>
@@ -138,10 +138,13 @@
 						<tbody>
 							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
 							<tr>
-
+								<td>
+									<?php echo $row['Sigla']; ?>
+								</td>
 								<td>
 									<?php echo $row['Nombre']; ?>
 								</td>
+
 								<td>
 									<a href="vistaZonas.php" data-href="vistaZonas.php?id_Zona=<?php echo $row['id_Zona']; ?>"
 									 data-toggle="modal" data-target="#confirm-delete">
