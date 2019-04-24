@@ -148,6 +148,9 @@ error_reporting(E_ERROR | E_PARSE);
 			</div>
 			<div class="card-body">
 
+				<a href="RegistroAuxiliares2.php" class="btn btn-primary float-right mr-3">Nuevo Registro</a>
+
+
 				<div class="row ml-3">
 
 					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">

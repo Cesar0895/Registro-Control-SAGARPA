@@ -536,7 +536,7 @@ $where = "";
 				<div class="card-body">
 					<a href="vistaEquipoComputo.php" class="btn btn-success">Ver lista de Equipos registrados</a>
 					<form>
-						<h4 style="color:red">Primer selecciona un responsable y usuario </h4>
+						<h4 style="color:red">selecciona un responsable y usuario </h4>
 						<div class="form-inline">
 							<div class="form-group mb-2	">
 								<label>Responsable: </label>
@@ -709,7 +709,7 @@ $where = "";
 						</div>
 
 
-						<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+						
 						<button type="submit" class="btn btn-primary">Guardar</button>
 					</form>
 

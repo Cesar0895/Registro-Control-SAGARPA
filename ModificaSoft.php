@@ -10,11 +10,12 @@
 			$key = $_GET['llave'];
 			$plataforma = $_GET['Plataforma'];
 			$fabricante = $_GET['Fabricante'];
-			$adqui = $_GET['Adquisicion'];            
+			$adqui = $_GET['Adquisicion']; 
+			$prodKey = $_GET['ProducKey'];            
         
 
             if ($nombre!=null) {
-                $sql2= "update software set  Nombre='".$nombre."', Version='".$version."',Licencia='".$licencia."', Key_soft='".$key."', Plataforma='".$plataforma."',Fabricante='".$fabricante."', Adquisicion='".$adqui."'
+                $sql2= "update software set  Nombre='".$nombre."', Version='".$version."',Licencia='".$licencia."', Key_soft='".$key."', Plataforma='".$plataforma."',Fabricante='".$fabricante."', Adquisicion='".$adqui."',ProducKey='".$prodKey."'
                 Where id_Software='".$id_soft."'";
                 $mysqli->query($sql2);
     
@@ -124,78 +125,91 @@
 	</div>
 
 	<main role="main" class="container">
-	
-		<br>
-		<div class="row">
-			<h3 style="text-align:center">ACTUALIZAR REGISTRO</h3>
+		<div class="card">
+			<div class="card-header bg-info">
+				<h3 style="text-align:center">ACTUALIZAR REGISTRO</h3>
+			</div>
+			<div class="card-body">
+				<br>
+				<div class="row">
+					<h3 style="text-align:center">ACTUALIZAR REGISTRO</h3>
+				</div>
+				<form>
+					<div class="form-group">
+						<input type="hidden" class="form-control" id="id_soft" name="id_Software" placeholder="id" value="<?php echo $row['id_Software']; ?>"
+						 required>
+					</div>
+
+
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label ml-4">Nombre:</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="nombre" name="Nombre" placeholder="Nombre de software" value="<?php echo $row['Nombre']; ?>"
+							 require>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label ml-4">Version:</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="version" name="Version" placeholder="Version" value="<?php echo $row['Version']; ?>"
+							 require>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label ml-4">Licencia</label>
+						<div class="col-sm-4">
+							<select class="form-control" name="Licencia" id="Licencia">
+								<option value="Corporativa" <?php if( $row[ 'Licencia']=='Corporativa' ) echo 'Selected'; ?>>Corporativa</option>
+								<option value="OEM" <?php if( $row[ 'Licencia']=='OEM' ) echo 'Selected'; ?>>OEM</option>
+							</select>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label ml-4">Key</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="key" name="llave" placeholder="Key" value="<?php echo $row['Key_soft']; ?>"
+							 require>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label ml-4">Plataforma</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="plataforma" name="Plataforma" placeholder="Plataforma (Ejemplo: Windows 8...)"
+							 value="<?php echo $row['Plataforma']; ?>" require>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label ml-4">Fabricante</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="fabricante" name="Fabricante" placeholder="Nombre del fabricante" value="<?php echo $row['Fabricante']; ?>"
+							 require>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label ml-4">Adquisición</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="adquisicion" name="Adquisicion" placeholder="datos de adquisición" value="<?php echo $row['Adquisicion']; ?>"
+							 require>
+						</div>
+					</div>
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label ml-4">Clave del software</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="ProducKey" name="ProducKey" value="<?php echo $row['ProducKey']; ?>" >
+						</div>
+					</div>
+
+
+					<div class="col-sm-offset-2 col-sm-10">
+						<a href="index.php" class="btn btn-default">Regresar</a>
+						<button type="submit" class="btn btn-primary">Actualizar</button>
+					</div>
+
+
+				</form>
+			</div>
 		</div>
-		<form>
-			<div class="form-group">
-				<input type="hidden" class="form-control" id="id_soft" name="id_Software" placeholder="id" value="<?php echo $row['id_Software']; ?>"
-				 required>
-			</div>
-
-
-			<div class="form-group row">
-				<label class="col-sm-2 col-form-label ml-4">Nombre:</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control" id="nombre" name="Nombre" placeholder="Nombre de software" value="<?php echo $row['Nombre']; ?>"
-					 require>
-				</div>
-			</div>
-
-			<div class="form-group row">
-				<label class="col-sm-2 col-form-label ml-4">Version:</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control" id="version" name="Version" placeholder="Version" value="<?php echo $row['Version']; ?>"
-					 require>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-2 col-form-label ml-4">Licencia</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control" id="licencia" name="Licencia" placeholder="Licencia" value="<?php echo $row['Licencia']; ?>"
-					 require>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-2 col-form-label ml-4">Key</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control" id="key" name="llave" placeholder="Key" value="<?php echo $row['Key_soft']; ?>"
-					 require>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-2 col-form-label ml-4">Plataforma</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control" id="plataforma" name="Plataforma" placeholder="Plataforma (Ejemplo: Windows 8...)"
-					 value="<?php echo $row['Plataforma']; ?>" require>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-2 col-form-label ml-4">Fabricante</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control" id="fabricante" name="Fabricante" placeholder="Nombre del fabricante" value="<?php echo $row['Fabricante']; ?>"
-					 require>
-				</div>
-			</div>
-			<div class="form-group row">
-				<label class="col-sm-2 col-form-label ml-4">Adquisición</label>
-				<div class="col-sm-4">
-					<input type="text" class="form-control" id="adquisicion" name="Adquisicion" placeholder="datos de adquisición" value="<?php echo $row['Adquisicion']; ?>"
-					 require>
-				</div>
-			</div>
-
-			<div class="form-group">
-				<div class="col-sm-offset-2 col-sm-10">
-					<a href="index.php" class="btn btn-default">Regresar</a>
-					<button type="submit" class="btn btn-primary">Actualizar</button>
-				</div>
-			</div>
-
-		</form>
-
 
 	</main>
 	<!-- Optional JavaScript -->

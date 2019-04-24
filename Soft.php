@@ -12,8 +12,9 @@
 		$adqui = $_GET['Adquisicion'];
 		$producKey=$_GET['ProducKey'];
 
+
         if ($nombre!=null) {
-            $sqlsoft= "INSERT INTO software (Nombre, Version, Licencia, Key_soft, Plataforma, Fabricante, Adquisicion, ProducKey) VALUES ('$nombre','$version','$licencia', '$key', '$plataforma', '$fabricante', '$adqui', '$producKey')";
+            $sqlsoft= "INSERT INTO software (Nombre, Version, Licencia, Key_soft, Plataforma, Fabricante, Adquisicion, ProducKey, Asignado) VALUES ('$nombre','$version','$licencia', '$key', '$plataforma', '$fabricante', '$adqui', '$producKey','NO')";
             $mysqli->query($sqlsoft);
 
             if ($nombre=1) {

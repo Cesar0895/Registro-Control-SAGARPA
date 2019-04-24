@@ -1,4 +1,6 @@
 <?php
+error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(E_ERROR | E_PARSE);
 session_start();
 	
 	$varsesion=$_SESSION['user'];
@@ -24,6 +26,15 @@ session_start();
 		}
 		
 
+		
+		$id_Soft = $_GET['id_Software'];
+		$id_pc = $_GET['Id_CPU'];
+		$sql2 = "DELETE FROM cpu_soft WHERE id_Software='$id_Soft' and Id_CPU='$id_pc'";
+		$sqlAsigna="UPDATE `software` SET Asignado='NO' WHERE id_Software='$id_Soft'";
+		
+		$resultadoElimina = $mysqli->query($sql2);
+		$resultadoAsigna = $mysqli->query($sqlAsigna);
+
 		$id_CPU = $_GET['Id_CPU'];        
             
 			$sql = "SELECT `Id_CPU`, marca.Marca, modelo.Modelo, procesador.Procesador, memoria_ram.Memoria_RAM, disco_duro.Almacenamiento, velocidad.Velocidad, `Serie`, `Invetario`, `Adquisicion`, `UnidadOptica`, `Bosinas`, `P_USB`, `P_Serial`, `P_Paralelo`, `RedTipo`, `IP`, `MacEth`, `Mac_wifi`, `Dominio`, `Antivirus` FROM `cpu` INNER JOIN marca on cpu.Id_Marca=marca.id_Marca INNER JOIN modelo on cpu.Id_Modelo=modelo.id_Modelo INNER JOIN procesador on cpu.Id_Procesador=procesador.id_Procesador INNER JOIN memoria_ram on cpu.Id_MemoriaRam=memoria_ram.Id_Memoria INNER JOIN disco_duro on cpu.Id_DD=disco_duro.id_DD INNER JOIN velocidad on cpu.Id_Velocidad=velocidad.Id_velocidad WHERE Id_CPU = '$id_CPU'";
@@ -33,11 +44,14 @@ session_start();
 		
 		$serie=$row['Serie'];
 
-		$sqlSoft="SELECT software.Nombre, software.Version, software.Licencia, software.Key_soft, software.Plataforma, software.Fabricante, software.Adquisicion, cpu.Serie FROM `cpu_soft` 
+		$sqlSoft="SELECT  software.id_Software,software.Nombre, software.Version, software.Licencia, software.Key_soft, software.Plataforma, software.Fabricante, software.Adquisicion, cpu.Serie FROM `cpu_soft` 
 		INNER JOIN software ON cpu_soft.id_Software=software.id_Software 
 		INNER JOIN cpu on cpu_soft.Id_CPU=cpu.Id_CPU  
 		WHERE cpu.Serie='$serie' GROUP by software.Nombre" ;
 		$resultadoSoft=$mysqli->query($sqlSoft);
+		$row2 = $resultado->fetch_array(MYSQLI_ASSOC);
+
+		
 ?>
 <!doctype html>
 <html lang="en">
@@ -47,10 +61,14 @@ session_start();
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
+
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
 	<link rel="stylesheet" href="./css/estilo.css">
+
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+	 crossorigin="anonymous">
 
 
 	<title>Control de dispositivos</title>
@@ -355,6 +373,7 @@ session_start();
 								<th>Plataforma</th>
 								<th>Fabricante</th>
 								<th>Adquisicion</th>
+								<th></th>
 							</tr>
 						</thead>
 
@@ -383,6 +402,12 @@ session_start();
 								<td>
 									<?php echo $rowSoft['Adquisicion']; ?>
 								</td>
+								<td>
+									<a  href="DetalleCPU.php" data-href="DetalleCPU.php?id_Software=<?php echo $rowSoft['id_Software'];?>&amp;Id_CPU=<?php echo $row['Id_CPU'];?>"
+									 data-toggle="modal" data-target="#confirm-delete">
+										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
 							</tr>
 							<?php } ?>
 						</tbody>
@@ -409,6 +434,36 @@ session_start();
 	 crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	 crossorigin="anonymous"></script>
+
+	 <!-- Modal -->
+	<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+					<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
+				</div>
+
+				<div class="modal-body">
+					¿Desea eliminar este registro?
+				</div>
+
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+					<a class="btn btn-danger btn-ok">Delete</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		$('#confirm-delete').on('show.bs.modal', function(e) {
+			$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
+
+			$('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
+		});
+	</script>
 </body>
 
 </html>

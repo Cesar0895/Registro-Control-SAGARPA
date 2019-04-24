@@ -653,7 +653,7 @@ session_start();
     $pdf->SetX(62);
     $pdf->Cell(30,4,'VERSION',1,0,'C',1);
     $pdf->SetX(92);
-    $pdf->Cell(25,4,'SI O NO',1,0,'C',1);
+    $pdf->Cell(25,4,'Tipo',1,0,'C',1);
     $pdf->SetX(117);
     $pdf->Cell(60,4,'NO. LICENCIA',1,0,'C',1);
     $pdf->SetX(177);

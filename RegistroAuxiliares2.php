@@ -3,7 +3,7 @@
 		error_reporting(E_ERROR | E_PARSE);
         include 'conexion.php';
         
-		$folio = $_GET['Folio'];
+	
 		$id_Zona = $_GET['Id_zona'];
 		$presupuesto = $_GET['Presupuesto'];
 		$id_Dispositivo = $_GET['Id_dispositivo'];
@@ -24,9 +24,9 @@
 		$RFC = $_GET['RFC'];
 		$valor = $_GET['Valor'];
 		
-            if ($folio!=null) {
-                $sql= "INSERT INTO auxiliares(Folio, Id_zona, Presupuesto, Id_dispositivo, Inventario, id_Marca, id_modelo, serie, Adquisicion, Fecha_adquisicion, Fin_Garantia, DT, Observaciones, Direccion_ip, Mac_Eth, Mac_wifi, estatus, Documento, RFC, Valor)
-                VALUES ('".$folio."','".$id_Zona."','".$presupuesto."','".$id_Dispositivo."','".$invetario."','$id_Marca','$id_Modelo','$serie','$adquisicion','$fecha_Adquisicion','$fin_Garantia','$DT','$observaciones','$direccion_ip','$mac_Eth','$mac_wifi','$estatus','$documento','$RFC','$valor')";
+            if ($id_Zona!=null) {
+                $sql= "INSERT INTO auxiliares(Id_zona, Presupuesto, Id_dispositivo, Inventario, id_Marca, id_modelo, serie, Adquisicion, Fecha_adquisicion, Fin_Garantia, DT, Observaciones, Direccion_ip, Mac_Eth, Mac_wifi, estatus, Documento, RFC, Valor)
+                VALUES ('".$id_Zona."','".$presupuesto."','".$id_Dispositivo."','".$invetario."','$id_Marca','$id_Modelo','$serie','$adquisicion','$fecha_Adquisicion','$fin_Garantia','$DT','$observaciones','$direccion_ip','$mac_Eth','$mac_wifi','$estatus','$documento','$RFC','$valor')";
 				$resultado = $mysqli->query($sql);
 				
 			
@@ -227,12 +227,7 @@
 			</div>
 			<div class="card-body">
 				<form class="form-horizontal">
-					<div class="form-group">
-						<label>Folio</label>
-						<select class="form-control col-sm-10" id="folio" name="Folio">
-							<?php echo $combobitFolio; ?>
-						</select>
-					</div>
+
 
 					<div class="form-group">
 						<label>Zona</label>

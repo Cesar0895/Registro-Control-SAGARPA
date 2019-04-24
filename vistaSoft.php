@@ -183,7 +183,7 @@
 									<?php echo $row['ProducKey']; ?>
 								</td>
 								<td>
-									<?php if ($row['Asignado']=='SI') { 
+									<?php if ($row['Asignado']=='SI' && $row['Licencia']=='OEM') { 
 										echo 'X';
 									}else{
 										echo '-';

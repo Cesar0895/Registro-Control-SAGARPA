@@ -6,7 +6,10 @@
 		$id_pc=$_GET['id_pc'];
 		$Id_soft=$_GET['Id_sof'];
         if ($id_pc!=null) {
-            $sqlpc_Soft= "INSERT INTO `cpu_soft`(`id_Software`, `Id_CPU`) VALUES ('$Id_soft','$id_pc')";
+			$sqlpc_Soft= "INSERT INTO `cpu_soft`(`id_Software`, `Id_CPU`) VALUES ('$Id_soft','$id_pc')";
+			$sqlAsigna="UPDATE `software` SET Asignado='SI' WHERE id_Software='$Id_soft'";
+			
+			$mysqli->query($sqlAsigna);
             $mysqli->query($sqlpc_Soft);
 
             if ($id_pc=1) {
@@ -17,7 +20,7 @@
             
 		}
 
-		$sql = "SELECT * FROM `software` ORDER BY `Nombre` ASC";
+		$sql = "SELECT * FROM `software` WHERE (Licencia='OEM' and Asignado='NO') or (Licencia='Corporativa') ORDER BY `Nombre` ASC";
 		$resultsoft = $mysqli->query($sql);
 		if ($resultsoft->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
 		{
