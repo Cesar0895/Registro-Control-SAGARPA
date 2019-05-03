@@ -41,7 +41,7 @@ error_reporting(E_ERROR | E_PARSE);
 			$where = "WHERE IdAux LIKE '$valor%' or Nomb_Dispositivo like '$valor%'";
 		}
 	}
-	$sql = "SELECT auxiliares.IdAux, zona.Sigla, auxiliares.Presupuesto, dispositivos.Nomb_Dispositivo, auxiliares.Inventario, marca.Marca, modelo.Modelo, auxiliares.serie, dispositivos.Tipo, auxiliares.Adquisicion, auxiliares.Fecha_adquisicion, auxiliares.Fin_Garantia, auxiliares.DT, auxiliares.Observaciones, auxiliares.Direccion_ip, auxiliares.Mac_Eth, auxiliares.Mac_wifi, auxiliares.estatus,auxiliares.Documento, auxiliares.RFC, auxiliares.Valor FROM auxiliares inner join modelo on auxiliares.id_Modelo=modelo.id_Modelo inner join marca on auxiliares.id_Marca=marca.id_Marca inner join dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo inner join zona on auxiliares.Id_zona=zona.id_Zona $where";
+	$sql = "SELECT auxiliares.IdAux, zona.Sigla, auxiliares.Presupuesto, dispositivos.Nomb_Dispositivo, auxiliares.Inventario, marca.Marca, modelo.Modelo, auxiliares.serie, dispositivos.Tipo, auxiliares.Adquisicion, auxiliares.Fecha_adquisicion, auxiliares.Fin_Garantia, auxiliares.DT, auxiliares.Observaciones, auxiliares.Direccion_ip, auxiliares.Mac_Eth, auxiliares.Mac_wifi, auxiliares.estatus,auxiliares.Documento, auxiliares.RFC, auxiliares.Valor, auxiliares.Asignado FROM auxiliares inner join modelo on auxiliares.id_Modelo=modelo.id_Modelo inner join marca on auxiliares.id_Marca=marca.id_Marca inner join dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo inner join zona on auxiliares.Id_zona=zona.id_Zona $where ORDER BY `auxiliares`.`IdAux` ASC" ;
 	$resultadoTabla = $mysqli->query($sql);
 	
 ?>
@@ -177,6 +177,7 @@ error_reporting(E_ERROR | E_PARSE);
 								<th>Tipo de dispositivo</th>
 								<th>RFC</th>
 								<th>Valor</th>
+								<th>Asignado</th>
 
 								<th></th>
 								<th></th>
@@ -218,6 +219,14 @@ error_reporting(E_ERROR | E_PARSE);
 								</td>
 								<td>
 									$<?php echo $row['Valor']; ?>.00
+								</td>
+								<td>
+									<?php if ($row['Asignado']=='SI') { 
+										echo 'X';
+									}else{
+										echo '-';
+									}?>
+
 								</td>
 
 								<td>

@@ -127,7 +127,7 @@
 
 
 					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-						<b>Nombre: </b>
+						<b>Buscador: </b>
 						<input type="text" id="campo" name="campo" />
 						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
 					</form>

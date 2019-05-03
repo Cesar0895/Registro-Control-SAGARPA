@@ -76,6 +76,9 @@
 		$id_pc=$_GET['id_pc'];
 		$Id_soft=$_GET['Id_sof'];
 
+		//$Id_cpu=$_GET['Id_cpu'];
+		//$Id_aux=$_GET['Id_Aux'];		
+
 
 		if ($seriepc!=null) {
             $sqlpc= "INSERT INTO cpu (Id_Marca, `Id_Modelo`, `Id_Procesador`, `Id_MemoriaRam`, `Id_DD`, `Id_Velocidad`, `Serie`, `Invetario`, `Adquisicion`, `UnidadOptica`, `Bosinas`, `P_USB`, `P_Serial`, `P_Paralelo`, `RedTipo`, `IP`, `MacEth`, `Mac_wifi`, `Dominio`, `Antivirus`,CA, PS2) VALUES ('$id_Marcapc','$id_Modelopc','$id_procesador','$idMemoriaRam','$id_DD','$id_velocidad','$seriepc','$inventariopc','$adquipc','$unidadOptica','$bocinas','$P_usb','$P_serial','$P_paralelo','$Red_tipo','$ip','$MacEth','$MacWifi','$Dominio','$Antivirus','$CA','$PS2')";
@@ -107,6 +110,57 @@
 			}
             
 		}
+
+		$whereSoft = "";
+	
+		if(!empty($_POST))
+		{
+			$valor2 = $_POST['campo'];
+		
+			if(!empty($valor2)){
+				$whereSoft = "and (Licencia like '$valor2%' or Nombre like '$valor2%')";
+			}
+		}
+
+		$sqlmostrarsoft = "SELECT * FROM `software` WHERE ((Licencia='OEM' and Asignado='No') or Licencia='Corporativa') $whereSoft";
+		$resultadoTablasoft = $mysqli->query($sqlmostrarsoft);
+
+	
+		//$sqlpc_Aux="INSERT INTO `cpu_aux`(`Id_Aux`, `Id_CPU`) VALUES '. $sql_valores.'";
+		//$insertar=$mysqli->query($sqlpc_Aux);
+
+/*
+		if ($pc!=null && $Auxiliares>0) {
+			foreach($Auxiliares as $Auxiliar){
+				$valor = "'".$Auxiliar."','$pc'";
+				$Auxiliares_aux[] = $valor;
+			}
+			$valores = implode('),( ', $Auxiliares_aux);
+			$sql_valores = "(" .$valores. ")";
+	
+			echo 'INSERT INTO `cpu_aux`(`Id_Aux`, `Id_CPU`) VALUES ' . $sql_valores;
+			$sqlpc_Aux= "INSERT INTO `cpu_aux`(`Id_Aux`, `Id_CPU`) VALUES '. $sql_valores.'";
+
+			$sqlAsignaAux="UPDATE `auxiliares` SET Asignado='SI' WHERE IdAux='$Id_aux'";
+			
+			$mysqli->query($sqlAsignaAux);
+			$mysqli->query($sqlpc_Aux);
+  
+		}	*/
+
+		$where = "";
+	
+		if(!empty($_POST))
+		{
+			$valor = $_POST['campo'];
+		
+			if(!empty($valor)){
+				$where = "and (IdAux LIKE '$valor%' or Nomb_Dispositivo like '$valor%')";
+			}
+		}
+
+		$sql = "SELECT auxiliares.IdAux, zona.Sigla, auxiliares.Presupuesto, dispositivos.Nomb_Dispositivo, auxiliares.Inventario, marca.Marca, modelo.Modelo, auxiliares.serie, dispositivos.Tipo, auxiliares.Adquisicion, auxiliares.Fecha_adquisicion, auxiliares.Fin_Garantia, auxiliares.DT, auxiliares.Observaciones, auxiliares.Direccion_ip, auxiliares.Mac_Eth, auxiliares.Mac_wifi, auxiliares.estatus,auxiliares.Documento, auxiliares.RFC, auxiliares.Valor, auxiliares.Asignado FROM auxiliares inner join modelo on auxiliares.id_Modelo=modelo.id_Modelo inner join marca on auxiliares.id_Marca=marca.id_Marca inner join dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo inner join zona on auxiliares.Id_zona=zona.id_Zona where Asignado='NO' $where  ORDER BY `auxiliares`.`IdAux` ASC" ;
+		$resultadoTabla = $mysqli->query($sql);
 
 		if ($Folio!=null) {
             $sqlgral= "INSERT INTO `equipos`(`Folio`, `Id_Zona`, `RFC`,`Filtrado`, `Identificacion`, `RFC_Usuario`,`Nodo`, `Fecha_Adquisicion`, `DT_adquisicion`, `DTB`, `Tipo_HW`, `Folio_Resduardo`, `Observaciones`, `Fin_Garantia`, `Candado`, `Valor`, `Estatus`, `Ubicacion`, `Fecha_Llenado`, `Oficio_Mexico`, `Contra_Admin`, `Id_CPU`, `id_Monitor`, `Id_mouse`, `Id_Teclado`) VALUES ('$Folio','$idZona','$RFC','$Filtrado','$Identificacion','$RFCusuario','$Nodo','$FechaAdqui','$DTadqui','$DTB','$tipo_HW','$FolioResguardo','$Observaciones','$FinGarantia','$Candado','$Valor','$Estatus','$Ubicacion','$FechaLlenado','$OficioMexico','$ContraAdmin','$id_CPU','$id_Monitor','$id_Mouse','$id_Teclado')";
@@ -160,6 +214,10 @@
 			}
 			
 		}
+
+		$sqlPC = "SELECT * FROM `cpu` ORDER BY `Id_CPU` DESC";
+		$resultpc2 = $mysqli->query($sql);
+		
 
 		
 		
@@ -273,6 +331,21 @@ else
     echo "No hubo resultados";
 }
 
+$sql = "SELECT * FROM `auxiliares` WHERE Asignado='NO' ORDER BY `auxiliares`.`IdAux` ASC";
+$resultAux = $mysqli->query($sql);
+if ($resultAux->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
+{
+    $combobitAux="";
+    while ($row = $resultAux->fetch_array(MYSQLI_ASSOC)) 
+    {
+        $combobitAux .="<option value='".$row['IdAux']."'>".$row['serie']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+    }
+}
+else
+{
+    $combobitAux ="<option>No hay Auxiliares disponibles</option>";
+}
+
 $sql = "SELECT RFC, concat(Nombre,' ',ApePaterno,' ',ApeMaterno) as NombCompleto FROM `persona`";
 $resultrfc = $mysqli->query($sql);
 if ($resultrfc->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
@@ -377,21 +450,6 @@ else
 	echo "No hubo resultados";
 }
 
-
-
-$where = "";
-
-	if(!empty($_POST))
-	{
-		$valor = $_POST['campo'];
-	
-		if(!empty($valor)){
-			$where = "WHERE RFC LIKE '$valor%'";
-		}
-	}
-
-	$sqlpersona = "SELECT Nombre FROM persona $where";
-	$resultadonombre = $mysqli->query($sqlpersona);
 ?>
 <!doctype html>
 <html lang="en">
@@ -491,732 +549,780 @@ $where = "";
 			}
 		</script>
 
-		<div class="card-columns">
-			<div class="card">
-				<div class="card-header bg-info">
-					<h4>Registro de equipo</h4>
-				</div>
-				<div class="card-body"></div>
-				<div btn-group-vertical>
+		<div class="row">
+			<div class="col-sm-4">
+				<div class="card">
+					<div class="card-header bg-info">
+						<h4>Registro de equipo</h4>
+					</div>
+					<div class="card-body"></div>
+					<div btn-group-vertical>
 
 
-					<label>Introduzca los datos de los sigientes dispositivos</label>
-					<!-- Button trigger modal -->
-					<a type="button" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal" data-target="#datosCPU">
-						Datos CPU
-					</a>
+						<label>Introduzca los datos de los sigientes dispositivos</label>
+						<!-- Button trigger modal -->
+						<a type="button" style="width:300px;" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal"
+						 data-target="#datosCPU">
+							Datos CPU
+						</a>
+						
 
-					<a type="button" class="list-group-item list-group-item-action list-group-item-primary" data-toggle="modal" data-target="#DatosSoft">
-						Añadir Software
-					</a>
+						<a type="button" style="width:300px;" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal"
+						 data-target="#datosMonitor">
+							Datos Monitor
+						</a>
 
-					<a type="button" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal" data-target="#datosMonitor">
-						Datos Monitor
-					</a>
+						<a type="button" style="width:300px;" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal"
+						 data-target="#datosTeclado">
+							Datos Teclado
+						</a>
 
-					<a type="button" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal" data-target="#datosTeclado">
-						Datos Teclado
-					</a>
+						<a type="button" style="width:300px;" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal"
+						 data-target="#datosMouse">
+							Datos Mouse
+						</a>
 
-					<a type="button" class="list-group-item list-group-item-action list-group-item-success" data-toggle="modal" data-target="#datosMouse">
-						Datos Mouse
-					</a>
+						<br><br>
+						<a type="button" style="width:300px;" class="list-group-item list-group-item-action list-group-item-primary" href="AñadeSoft.php">
+							Añadir Software
+						</a>
 
+						<a type="button" style="width:300px;" class="list-group-item list-group-item-action list-group-item-primary" href="AñadeAux.php">
+							Añadir Auxiliar
+						</a>
 
-
+					</div>
+					
 				</div>
 			</div>
+			<div class="col-sm-8">
+				<div class="card">
+					<div class="card-header bg-info">
+						<h4>Datos generales de Inventario</h4>
+					</div>
 
+					<div class="card-body">
+						<a href="vistaEquipoComputo.php" class="btn btn-success">Ver lista de Equipos registrados</a>
+						<form>
+							<h4 style="color:red">selecciona un responsable y usuario </h4>
+							<div class="form-inline">
+								<div class="form-group mb-2	">
+									<label>Responsable: </label>
+									<select class="form-control" id="rfc" name="RFC">
+										<?php echo $combobitrfc; ?>
+									</select>
+								</div>
+								<i class="fas fa-arrow-right mx-5" style="width:50px"></i>
+								<div class="form-group mx-sm-3 mb-2">
+									<label>Usuario: </label>
+									<select class="form-control" id="RFCusuario" name="RFCusuario">
+										<?php echo $combobitrfcUser; ?>
+									</select>
+								</div>
+							</div>
 
-			<div class="card" style="width:700px">
-				<div class="card-header bg-info">
-					<h4>Registro de quipos de computo.</h4>
-				</div>
+							<div class="form-group">
+								<label>Folio</label>
+								<input type="number" class="form-control" id="grupo" name='folio' placeholder="Introduce el numero de folio">
+							</div>
 
-				<div class="card-body">
-					<a href="vistaEquipoComputo.php" class="btn btn-success">Ver lista de Equipos registrados</a>
-					<form>
-						<h4 style="color:red">selecciona un responsable y usuario </h4>
-						<div class="form-inline">
-							<div class="form-group mb-2	">
-								<label>Responsable: </label>
-								<select class="form-control" id="rfc" name="RFC">
-									<?php echo $combobitrfc; ?>
+							<div class="form-group">
+								<label>Zona</label>
+								<select class="form-control col-sm-10" id="id_zona" name="idZona">
+									<?php echo $combobitzona; ?>
 								</select>
 							</div>
-							<i class="fas fa-arrow-right mx-5" style="width:50px"></i>
-							<div class="form-group mx-sm-3 mb-2">
-								<label>Usuario: </label>
-								<select class="form-control" id="RFCusuario" name="RFCusuario">
-									<?php echo $combobitrfcUser; ?>
+
+							<h4>Datos Generales</h4>
+
+
+
+							<div class="form-group">
+								<label>Fecha de filtrado</label>
+								<input type="date" class="form-control" id="filtrado" name="filtrado" placeholder="Introduce la fecha de filtrado">
+							</div>
+
+							<div class="form-group">
+								<label>Identificación</label>
+								<input type="text" class="form-control" id="identificacion" name="identificacion" placeholder="Introduce la identificacion">
+							</div>
+
+							<div class="form-group">
+								<label>Nodo</label>
+								<input type="text" class="form-control" id="nodo" name="nodo" placeholder="Introduce el nodo">
+							</div>
+
+							<div class="form-group">
+								<label>Fecha de adquisición</label>
+								<input type="date" class="form-control" id="fechaAdqui" name="fechaAdqui" placeholder="Introduce la fecha de aquisición">
+							</div>
+
+							<div class="form-group">
+								<label>Dictamen de Adquisición</label>
+								<input type="text" class="form-control" id="DTadqui" name="DTadqui" placeholder="Introduce el Dictamen de aquisición">
+							</div>
+
+							<div class="form-group">
+								<label>Dictamen de Baja</label>
+								<input type="text" class="form-control" id="DTB" name="DTB" placeholder="Introduce el diactamen de baja">
+							</div>
+
+							<div class="form-group">
+								<label>Tipo de hardware</label>
+								<input type="text" class="form-control" id="Tipo_HW" name="Tipo_HW" placeholder="introduce el tipo de hw ">
+							</div>
+
+							<div class="form-group">
+								<label>Folio resguardo</label>
+								<input type="text" class="form-control" id="folioResguardo" name="folioResguardo" placeholder="Introduce el Folio de Resguarda">
+							</div>
+							<div class="form-group">
+								<label>Obsevaciones</label>
+								<div class="col-sm-10">
+									<textarea class="form-control" rows=5 id="Obsrvaciones" name="observaciones" placeholder="Observaciones"></textarea>
+								</div>
+							</div>
+
+							<div class="form-group">
+								<label>Fin de garantia</label>
+								<input type="date" class="form-control" id="finGarantia" name="finGarantia" placeholder="Introduce el fin de la garantia">
+							</div>
+
+							<fieldset class="form-group">
+								<div class="row">
+									<legend class="col-form-label col-sm-3 pt-0">Candado</legend>
+									<div class="col-sm-9">
+										<div class="form-check">
+											<input class="form-check-input" type="radio" name="candado" id="candado" value="SI" checked>
+											<label class="form-check-label" for="gridRadios1">
+												SI
+											</label>
+										</div>
+										<div class="form-check">
+											<input class="form-check-input" type="radio" name="candado" id="candado" value="NO">
+											<label class="form-check-label" for="gridRadios2">
+												NO
+											</label>
+										</div>
+
+									</div>
+								</div>
+							</fieldset>
+
+							<div class="form-group">
+								<label>Valor</label>
+								$
+								<input type="number" class="form-control" id="valor" name="valor" placeholder="introduce el valor del equipo">
+							</div>
+
+							<div class="form-group">
+								<label>Estatus</label>
+								<select class="form-control" id="estatus" name="estatus">
+									<option value="Bueno">Bueno</option>
+									<option value="Regular">Regular</option>
+									<option value="Malo">Malo</option>
+									<option value="Otro">Otro</option>
+								</select>
+
+							</div>
+
+							<div class="form-group">
+								<label>Ubicación</label>
+								<input type="text" class="form-control" id="ubicacion" name="ubicacion" placeholder="Introduce la ubicación del equipo ">
+							</div>
+
+							<div class="form-group">
+								<label>Fecha de llenado: </label>
+
+								<input type="date" class="form-control" id="fechaLlenado" name="fechaLlenado" value="<?php echo date("
+								 Y-m-d "); ?>">
+							</div>
+
+							<div class="form-group">
+								<label>Oficio Mexico</label>
+								<input type="text" class="form-control" id="oficioMexico" name="oficioMexico" placeholder="">
+							</div>
+
+							<div class="form-group">
+								<label>Contraseña Administrador</label>
+								<input type="text" class="form-control" id="contraAdmin" name="contraAdmin" placeholder="Introduce la contraseña de administrador">
+							</div>
+
+							<div class="form-group">
+								<label>Numero de serie del CPU</label>
+								<select class="form-control col-sm-10" id="id_CPU" name="id_CPU">
+									<?php echo $combobitpc ?>
 								</select>
 							</div>
-						</div>
 
-						<div class="form-group">
-							<label>Folio</label>
-							<input type="number" class="form-control" id="grupo" name='folio' placeholder="Introduce el numero de folio">
-						</div>
-
-						<div class="form-group">
-							<label>Zona</label>
-							<select class="form-control col-sm-10" id="id_zona" name="idZona">
-								<?php echo $combobitzona; ?>
-							</select>
-						</div>
-
-						<h4>Datos Generales</h4>
-
-
-
-						<div class="form-group">
-							<label>Fecha de filtrado</label>
-							<input type="date" class="form-control" id="filtrado" name="filtrado" placeholder="Introduce la fecha de filtrado">
-						</div>
-
-						<div class="form-group">
-							<label>Identificación</label>
-							<input type="text" class="form-control" id="identificacion" name="identificacion" placeholder="Introduce la identificacion">
-						</div>
-
-						<div class="form-group">
-							<label>Nodo</label>
-							<input type="text" class="form-control" id="nodo" name="nodo" placeholder="Introduce el nodo">
-						</div>
-
-						<div class="form-group">
-							<label>Fecha de adquisición</label>
-							<input type="date" class="form-control" id="fechaAdqui" name="fechaAdqui" placeholder="Introduce la fecha de aquisición">
-						</div>
-
-						<div class="form-group">
-							<label>Dictamen de Adquisición</label>
-							<input type="text" class="form-control" id="DTadqui" name="DTadqui" placeholder="Introduce el Dictamen de aquisición">
-						</div>
-
-						<div class="form-group">
-							<label>Dictamen de Baja</label>
-							<input type="text" class="form-control" id="DTB" name="DTB" placeholder="Introduce el diactamen de baja">
-						</div>
-
-						<div class="form-group">
-							<label>Tipo de hardware</label>
-							<input type="text" class="form-control" id="Tipo_HW" name="Tipo_HW" placeholder="introduce el tipo de hw ">
-						</div>
-
-						<div class="form-group">
-							<label>Folio resguardo</label>
-							<input type="text" class="form-control" id="folioResguardo" name="folioResguardo" placeholder="Introduce el Folio de Resguarda">
-						</div>
-						<div class="form-group">
-							<label>Obsevaciones</label>
-							<div class="col-sm-10">
-								<textarea class="form-control" rows=5 id="Obsrvaciones" name="observaciones" placeholder="Observaciones"></textarea>
+							<div class="form-group">
+								<label>Numero de serie del monitor</label>
+								<select class="form-control col-sm-10" id="id_Monitor" name="id_Monitor">
+									<?php echo $combobitmont ?>
+								</select>
 							</div>
-						</div>
 
-						<div class="form-group">
-							<label>Fin de garantia</label>
-							<input type="date" class="form-control" id="finGarantia" name="finGarantia" placeholder="Introduce el fin de la garantia">
-						</div>
+							<div class="form-group">
+								<label>Numero de serie del mouse</label>
+								<select class="form-control col-sm-10" id="id_Mouse" name="id_Mouse">
+									<?php echo $combobitmouse ?>
+								</select>
+							</div>
 
-						<fieldset class="form-group">
-							<div class="row">
-								<legend class="col-form-label col-sm-3 pt-0">Candado</legend>
-								<div class="col-sm-9">
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="candado" id="candado" value="SI" checked>
-										<label class="form-check-label" for="gridRadios1">
-											SI
-										</label>
+							<div class="form-group">
+								<label>Numero de serie del Teclado</label>
+								<select class="form-control col-sm-10" id="id_Teclado" name="id_Teclado">
+									<?php echo $combobittec ?>
+								</select>
+							</div>
+
+
+
+							<button type="submit" class="btn btn-primary">Guardar</button>
+						</form>
+
+
+
+						<!-- Modal Datos CPU-->
+						<div class="modal fade" id="datosCPU" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+						 aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Datos CPU</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
 									</div>
-									<div class="form-check">
-										<input class="form-check-input" type="radio" name="candado" id="candado" value="NO">
-										<label class="form-check-label" for="gridRadios2">
-											NO
-										</label>
+									<div class="modal-body">
+
+										<form>
+
+											<a href="vistaCPU.php" class="btn btn-success">Ver lista de CPU registrados</a>
+
+											<br>
+											<br>
+
+											<div class="form-group">
+												<label>No_Serie</label>
+												<input type="text" class="form-control" id="serie" name="Seriepc" placeholder="Introduce el no. de serie">
+											</div>
+
+											<div class="form-group">
+												<label>No. de inventario</label>
+												<input type="number" class="form-control" id="inventariopc" name="inventariopc" placeholder="Introduce el no. de inventario">
+											</div>
+
+											<div class="form-group">
+												<label>Marca</label>
+												<select class="form-control" id="marca" name="id_Marcapc">
+													<?php echo $combobitmarca; ?>
+												</select>
+											</div>
+
+											<div class="form-group">
+												<label>Modelo</label>
+
+												<select class="form-control" id="modelo" name="id_Modelopc">
+													<?php echo $combobit; ?>
+												</select>
+											</div>
+
+											<div class="form-group">
+												<label>Procesador</label>
+												<select class="form-control" id="id_procesador" name="id_procesador">
+													<?php echo $combobitpro; ?>
+												</select>
+											</div>
+											<div class="form-group">
+												<label>MemoriaRam</label>
+												<select class="form-control" id="idMemoriaRam" name="idMemoriaRam">
+													<?php echo $combobitram; ?>
+												</select>
+											</div>
+											<div class="form-group">
+												<label>Disco Duro</label>
+												<select class="form-control" id="id_DD" name="id_DD">
+													<?php echo $combobitDD; ?>
+												</select>
+											</div>
+											<div class="form-group">
+												<label>Velocidad</label>
+												<select class="form-control" id="id_velocidad" name="id_velocidad">
+													<?php echo $combobitvel; ?>
+												</select>
+											</div>
+
+											<div class="form-group">
+												<label>Tipo de adquisición</label>
+												<select class="form-control" id="adquipc" name="adquipc">
+													<option value="Compra">Compra</option>
+													<option value="Transferencia">Transferencia</option>
+													<option value="Comodato">Comodato</option>
+													<option value="Arrendamiento">Arrendamiento</option>
+													<option value="Prestamo">Prestamo</option>
+													<option value="Otro">Otro</option>
+												</select>
+											</div>
+
+
+											<fieldset class="form-group">
+												<div class="row">
+													<legend class="col-form-label col-sm-3 pt-0">Unidad Optica</legend>
+													<div class="col-sm-9">
+														<div class="form-check">
+															<input class="form-check-input" type="radio" name="unidadOptica" id="unidadOptica" value="SI" checked>
+															<label class="form-check-label" for="gridRadios1">
+																SI
+															</label>
+														</div>
+														<div class="form-check">
+															<input class="form-check-input" type="radio" name="unidadOptica" id="unidadOptica" value="NO">
+															<label class="form-check-label" for="gridRadios2">
+																NO
+															</label>
+														</div>
+
+													</div>
+												</div>
+											</fieldset>
+											<fieldset class="form-group">
+												<div class="row">
+													<legend class="col-form-label col-sm-3 pt-0">Bocinas</legend>
+													<div class="col-sm-9">
+														<div class="form-check">
+															<input class="form-check-input" type="radio" name="bocinas" id="bocinas" value="SI" checked>
+															<label class="form-check-label" for="gridRadios1">
+																SI
+															</label>
+														</div>
+
+														<div class="form-check">
+															<input class="form-check-input" type="radio" name="bocinas" id="bocinas" value="NO">
+															<label class="form-check-label" for="gridRadios2">
+																NO
+															</label>
+														</div>
+
+
+													</div>
+												</div>
+											</fieldset>
+											<fieldset class="form-group">
+												<div class="row">
+													<legend class="col-form-label col-sm-3 pt-0">Puerto serial</legend>
+													<div class="col-sm-9">
+														<div class="form-check">
+															<input class="form-check-input" type="radio" name="P_serial" id="P_serial" value="SI" checked>
+															<label class="form-check-label" for="gridRadios1">
+																SI
+															</label>
+														</div>
+														<div class="form-check">
+															<input class="form-check-input" type="radio" name="P_serial" id="P_serial" value="NO">
+															<label class="form-check-label" for="gridRadios2">
+																NO
+															</label>
+														</div>
+
+													</div>
+												</div>
+											</fieldset>
+											<fieldset class="form-group">
+												<div class="row">
+													<legend class="col-form-label col-sm-3 pt-0">Puertos Paralelos</legend>
+													<div class="col-sm-9">
+														<div class="form-check">
+															<input class="form-check-input" type="radio" name="P_paralelo" id="P_paralelo" value="SI" checked>
+															<label class="form-check-label" for="gridRadios1">
+																SI
+															</label>
+														</div>
+														<div class="form-check">
+															<input class="form-check-input" type="radio" name="P_paralelo" id="P_paralelo" value="NO">
+															<label class="form-check-label" for="gridRadios2">
+																NO
+															</label>
+														</div>
+
+													</div>
+												</div>
+											</fieldset>
+
+											<div class="form-group">
+												<label>Puertos USB</label>
+												<select class="custom-select mr-sm-2" id="P_usb" name="P_usb">
+
+													<option>1</option>
+													<option>2</option>
+													<option>3</option>
+													<option>4</option>
+													<option>5</option>
+													<option>6</option>
+													<option>7</option>
+													<option>8</option>
+													<option>9</option>
+													<option>10</option>
+													<option>11</option>
+													<option>12</option>
+													<option>13</option>
+													<option>14</option>
+													<option>15</option>
+													<option>16</option>
+													<option>17</option>
+													<option>18</option>
+													<option>19</option>
+													<option>20</option>
+												</select>
+											</div>
+											<div class="form-group">
+												<label>Tipo de red</label>
+												<input type="text" class="form-control" id="red_tipo" name="red_tipo" placeholder="Introduce el tipo de red">
+											</div>
+											<div class="form-group">
+												<label>IP</label>
+												<input type="text" class="form-control" id="ip" name="ip" placeholder="Introduce la ip">
+											</div>
+											<div class="form-group">
+												<label>Mac Ethernet</label>
+												<input type="text" class="form-control" id="MacEth" name="MacEth" placeholder="Introduce la mac ethernet">
+											</div>
+											<div class="form-group">
+												<label>Mac Wifi</label>
+												<input type="text" class="form-control" id="MacWifi" name="MacWifi" placeholder="Introduce la mac wifi">
+											</div>
+											<div class="form-group">
+												<label>Dominio</label>
+												<input type="text" class="form-control" id="Dominio" name="Dominio" placeholder="Introduce el dominio">
+											</div>
+
+											<fieldset class="form-group">
+												<div class="row">
+													<legend class="col-form-label col-sm-3 pt-0">Antivirus</legend>
+													<div class="col-sm-9">
+														<div class="form-check">
+															<input class="form-check-input" type="radio" name="Antivirus" id="Antivirus" value="SI" checked>
+															<label class="form-check-label" for="gridRadios1">
+																SI
+															</label>
+														</div>
+														<div class="form-check">
+															<input class="form-check-input" type="radio" name="Antivirus" id="Antivirus" value="NO">
+															<label class="form-check-label" for="gridRadios2">
+																NO
+															</label>
+														</div>
+
+													</div>
+												</div>
+											</fieldset>
+											<div class="form-group">
+												<label>ADAPTADOR CA</label>
+												<input type="text" class="form-control" id="CA" name="CA" placeholder="Introduce el ADAPTADOR CA">
+											</div>
+											<div class="form-group">
+												<label>PS2</label>
+												<select class="custom-select mr-sm-2" id="PS2" name="PS2">
+
+													<option>1</option>
+													<option>2</option>
+													<option>3</option>
+													<option>4</option>
+													<option>5</option>
+													<option>6</option>
+
+												</select>
+											</div>
+
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+											<button type="submit" class="btn btn-primary">Guardar</button>
+
+
+										</form>
 									</div>
 
+
+
 								</div>
 							</div>
-						</fieldset>
-
-						<div class="form-group">
-							<label>Valor</label>
-							$
-							<input type="number" class="form-control" id="valor" name="valor" placeholder="introduce el valor del equipo">
 						</div>
 
-						<div class="form-group">
-							<label>Estatus</label>
-							<select class="form-control" id="estatus" name="estatus">
-								<option value="Bueno">Bueno</option>
-								<option value="Regular">Regular</option>
-								<option value="Malo">Malo</option>
-								<option value="Otro">Otro</option>
-							</select>
+						<!-- Modal Datos Software de CPU-->
+						<div class="modal fade" id="DatosSoft" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+						 aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Añadir Software al equipo</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<form>
 
-						</div>
-
-						<div class="form-group">
-							<label>Ubicación</label>
-							<input type="text" class="form-control" id="ubicacion" name="ubicacion" placeholder="Introduce la ubicación del equipo ">
-						</div>
-
-						<div class="form-group">
-							<label>Fecha de llenado: </label>
-
-							<input type="date" class="form-control" id="fechaLlenado" name="fechaLlenado" value="<?php echo date("
-							 Y-m-d "); ?>">
-						</div>
-
-						<div class="form-group">
-							<label>Oficio Mexico</label>
-							<input type="text" class="form-control" id="oficioMexico" name="oficioMexico" placeholder="">
-						</div>
-
-						<div class="form-group">
-							<label>Contraseña Administrador</label>
-							<input type="text" class="form-control" id="contraAdmin" name="contraAdmin" placeholder="Introduce la contraseña de administrador">
-						</div>
-
-						<div class="form-group">
-							<label>Numero de serie del CPU</label>
-							<select class="form-control col-sm-10" id="id_CPU" name="id_CPU">
-								<?php echo $combobitpc ?>
-							</select>
-						</div>
-
-						<div class="form-group">
-							<label>Numero de serie del monitor</label>
-							<select class="form-control col-sm-10" id="id_Monitor" name="id_Monitor">
-								<?php echo $combobitmont ?>
-							</select>
-						</div>
-
-						<div class="form-group">
-							<label>Numero de serie del mouse</label>
-							<select class="form-control col-sm-10" id="id_Mouse" name="id_Mouse">
-								<?php echo $combobitmouse ?>
-							</select>
-						</div>
-
-						<div class="form-group">
-							<label>Numero de serie del Teclado</label>
-							<select class="form-control col-sm-10" id="id_Teclado" name="id_Teclado">
-								<?php echo $combobittec ?>
-							</select>
-						</div>
-
-
-						
-						<button type="submit" class="btn btn-primary">Guardar</button>
-					</form>
-
-
-
-					<!-- Modal Datos CPU-->
-					<div class="modal fade" id="datosCPU" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-					 aria-hidden="true">
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Datos CPU</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-
-									<form>
-
-										<a href="vistaCPU.php" class="btn btn-success">Ver lista de CPU registrados</a>
-
-										<br><br>
-
-										<div class="form-group">
-											<label>No_Serie</label>
-											<input type="text" class="form-control" id="serie" name="Seriepc" placeholder="Introduce el no. de serie">
-										</div>
-
-										<div class="form-group">
-											<label>No. de inventario</label>
-											<input type="number" class="form-control" id="inventariopc" name="inventariopc" placeholder="Introduce el no. de inventario">
-										</div>
-
-										<div class="form-group">
-											<label>Marca</label>
-											<select class="form-control" id="marca" name="id_Marcapc">
-												<?php echo $combobitmarca; ?>
-											</select>
-										</div>
-
-										<div class="form-group">
-											<label>Modelo</label>
-
-											<select class="form-control" id="modelo" name="id_Modelopc">
-												<?php echo $combobit; ?>
-											</select>
-										</div>
-
-										<div class="form-group">
-											<label>Procesador</label>
-											<select class="form-control" id="id_procesador" name="id_procesador">
-												<?php echo $combobitpro; ?>
-											</select>
-										</div>
-										<div class="form-group">
-											<label>MemoriaRam</label>
-											<select class="form-control" id="idMemoriaRam" name="idMemoriaRam">
-												<?php echo $combobitram; ?>
-											</select>
-										</div>
-										<div class="form-group">
-											<label>Disco Duro</label>
-											<select class="form-control" id="id_DD" name="id_DD">
-												<?php echo $combobitDD; ?>
-											</select>
-										</div>
-										<div class="form-group">
-											<label>Velocidad</label>
-											<select class="form-control" id="id_velocidad" name="id_velocidad">
-												<?php echo $combobitvel; ?>
-											</select>
-										</div>
-
-										<div class="form-group">
-											<label>Tipo de adquisición</label>
-											<select class="form-control" id="adquipc" name="adquipc">
-												<option value="Compra">Compra</option>
-												<option value="Transferencia">Transferencia</option>
-												<option value="Comodato">Comodato</option>
-												<option value="Arrendamiento">Arrendamiento</option>
-												<option value="Prestamo">Prestamo</option>
-												<option value="Otro">Otro</option>
-											</select>
-										</div>
-
-
-										<fieldset class="form-group">
-											<div class="row">
-												<legend class="col-form-label col-sm-3 pt-0">Unidad Optica</legend>
-												<div class="col-sm-9">
-													<div class="form-check">
-														<input class="form-check-input" type="radio" name="unidadOptica" id="unidadOptica" value="SI" checked>
-														<label class="form-check-label" for="gridRadios1">
-															SI
-														</label>
-													</div>
-													<div class="form-check">
-														<input class="form-check-input" type="radio" name="unidadOptica" id="unidadOptica" value="NO">
-														<label class="form-check-label" for="gridRadios2">
-															NO
-														</label>
-													</div>
-
-												</div>
+											<div class="form-group">
+												<label>Numero de serie del CPU</label>
+												<select class="form-control col-sm-10" id="id_CPU" name="id_pc">
+													<?php echo $combobitpc ?>
+												</select>
 											</div>
-										</fieldset>
-										<fieldset class="form-group">
-											<div class="row">
-												<legend class="col-form-label col-sm-3 pt-0">Bocinas</legend>
-												<div class="col-sm-9">
-													<div class="form-check">
-														<input class="form-check-input" type="radio" name="bocinas" id="bocinas" value="SI" checked>
-														<label class="form-check-label" for="gridRadios1">
-															SI
-														</label>
-													</div>
-
-													<div class="form-check">
-														<input class="form-check-input" type="radio" name="bocinas" id="bocinas" value="NO">
-														<label class="form-check-label" for="gridRadios2">
-															NO
-														</label>
-													</div>
-
-
-												</div>
+											<div class="form-group">
+												<label>Software</label>
+												<select class="form-control col-sm-10" id="Id_soft" name="Id_sof">
+													<?php echo $combobitsoft; ?>
+												</select>
 											</div>
-										</fieldset>
-										<fieldset class="form-group">
-											<div class="row">
-												<legend class="col-form-label col-sm-3 pt-0">Puerto serial</legend>
-												<div class="col-sm-9">
-													<div class="form-check">
-														<input class="form-check-input" type="radio" name="P_serial" id="P_serial" value="SI" checked>
-														<label class="form-check-label" for="gridRadios1">
-															SI
-														</label>
-													</div>
-													<div class="form-check">
-														<input class="form-check-input" type="radio" name="P_serial" id="P_serial" value="NO">
-														<label class="form-check-label" for="gridRadios2">
-															NO
-														</label>
-													</div>
 
-												</div>
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+
+											<button type="submit" class="btn btn-primary">Guardar</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<!-- Modal Datos Auxiliares de CPU-->
+						<div class="modal fade" id="DatosAux" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+						 aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Añadir Software al equipo</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<form>
+
+											<div class="form-group">
+												<label>Numero de serie del CPU</label>
+												<select class="form-control col-sm-10" id="id_CPU" name="Id_cpu">
+													<?php echo $combobitpc ?>
+												</select>
 											</div>
-										</fieldset>
-										<fieldset class="form-group">
-											<div class="row">
-												<legend class="col-form-label col-sm-3 pt-0">Puertos Paralelos</legend>
-												<div class="col-sm-9">
-													<div class="form-check">
-														<input class="form-check-input" type="radio" name="P_paralelo" id="P_paralelo" value="SI" checked>
-														<label class="form-check-label" for="gridRadios1">
-															SI
-														</label>
-													</div>
-													<div class="form-check">
-														<input class="form-check-input" type="radio" name="P_paralelo" id="P_paralelo" value="NO">
-														<label class="form-check-label" for="gridRadios2">
-															NO
-														</label>
-													</div>
-
-												</div>
+											<div class="form-group">
+												<label>Auxiliar</label>
+												<select class="form-control col-sm-10" id="Id_Aux" name="Id_Aux">
+													<?php echo $combobitAux; ?>
+												</select>
 											</div>
-										</fieldset>
 
-										<div class="form-group">
-											<label>Puertos USB</label>
-											<select class="custom-select mr-sm-2" id="P_usb" name="P_usb">
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
-												<option>1</option>
-												<option>2</option>
-												<option>3</option>
-												<option>4</option>
-												<option>5</option>
-												<option>6</option>
-												<option>7</option>
-												<option>8</option>
-												<option>9</option>
-												<option>10</option>
-												<option>11</option>
-												<option>12</option>
-												<option>13</option>
-												<option>14</option>
-												<option>15</option>
-												<option>16</option>
-												<option>17</option>
-												<option>18</option>
-												<option>19</option>
-												<option>20</option>
-											</select>
-										</div>
-										<div class="form-group">
-											<label>Tipo de red</label>
-											<input type="text" class="form-control" id="red_tipo" name="red_tipo" placeholder="Introduce el tipo de red">
-										</div>
-										<div class="form-group">
-											<label>IP</label>
-											<input type="text" class="form-control" id="ip" name="ip" placeholder="Introduce la ip">
-										</div>
-										<div class="form-group">
-											<label>Mac Ethernet</label>
-											<input type="text" class="form-control" id="MacEth" name="MacEth" placeholder="Introduce la mac ethernet">
-										</div>
-										<div class="form-group">
-											<label>Mac Wifi</label>
-											<input type="text" class="form-control" id="MacWifi" name="MacWifi" placeholder="Introduce la mac wifi">
-										</div>
-										<div class="form-group">
-											<label>Dominio</label>
-											<input type="text" class="form-control" id="Dominio" name="Dominio" placeholder="Introduce el dominio">
-										</div>
+											<button type="submit" class="btn btn-primary">Guardar</button>
+										</form>
+									</div>
+								</div>
+							</div>
+						</div>
 
-										<fieldset class="form-group">
-											<div class="row">
-												<legend class="col-form-label col-sm-3 pt-0">Antivirus</legend>
-												<div class="col-sm-9">
-													<div class="form-check">
-														<input class="form-check-input" type="radio" name="Antivirus" id="Antivirus" value="SI" checked>
-														<label class="form-check-label" for="gridRadios1">
-															SI
-														</label>
-													</div>
-													<div class="form-check">
-														<input class="form-check-input" type="radio" name="Antivirus" id="Antivirus" value="NO">
-														<label class="form-check-label" for="gridRadios2">
-															NO
-														</label>
-													</div>
-
-												</div>
+						<!-- Modal Datos Monitor-->
+						<div class="modal fade" id="datosMonitor" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+						 aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Datos Monitor</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<form>
+											<div class="form-group">
+												<label>No. de inventario</label>
+												<input type="number" class="form-control" id="inventario" name="Inventario" placeholder="Introduce el no. de inventario"
+												 require>
 											</div>
-										</fieldset>
-										<div class="form-group">
-											<label>ADAPTADOR CA</label>
-											<input type="text" class="form-control" id="CA" name="CA" placeholder="Introduce el ADAPTADOR CA">
-										</div>
-										<div class="form-group">
-											<label>PS2</label>
-											<select class="custom-select mr-sm-2" id="PS2" name="PS2">
 
-												<option>1</option>
-												<option>2</option>
-												<option>3</option>
-												<option>4</option>
-												<option>5</option>
-												<option>6</option>
-												
-											</select>
-										</div>
-										
-										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											<div class="form-group">
+												<label>Marca</label>
+												<select class="form-control" id="marca" name="id_Marca">
+													<?php echo $combobitmarca; ?>
+												</select>
+											</div>
 
-										<button type="submit" class="btn btn-primary">Guardar</button>
+											<div class="form-group">
+												<label>Modelo</label>
 
+												<select class="form-control" id="modelo" name="id_Modelo">
+													<?php echo $combobit; ?>
+												</select>
 
-									</form>
-								</div>
+											</div>
 
+											<div class="form-group">
+												<label>No_Serie</label>
+												<input type="number" class="form-control" id="serie" name="Serie" placeholder="Introduce el no. de serie">
+											</div>
 
+											<div class="form-group">
+												<label>Descripcion </label>
+												<input type="text" class="form-control" id="descripcion" name="Descripcion" placeholder="Introduce la descripcion" require>
+											</div>
 
-							</div>
-						</div>
-					</div>
+											<div class="form-group">
+												<label>Tipo de adquisición</label>
+												<select class="form-control" id="adquisicion" name="Adquisicion">
+													<option value="Compra">Compra</option>
+													<option value="Transferencia">Transferencia</option>
+													<option value="Comodato">Comodato</option>
+													<option value="Arrendamiento">Arrendamiento</option>
+													<option value="Prestamo">Prestamo</option>
+													<option value="Otro">Otro</option>
+												</select>
 
-					<!-- Modal Datos Software de CPU-->
-					<div class="modal fade" id="DatosSoft" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-					 aria-hidden="true">
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Añadir Software al equipo</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<form>
+											</div>
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											<button type="submit" class="btn btn-primary">Guardar</button>
+										</form>
+									</div>
 
-										<div class="form-group">
-											<label>Numero de serie del CPU</label>
-											<select class="form-control col-sm-10" id="id_CPU" name="id_pc">
-												<?php echo $combobitpc ?>
-											</select>
-										</div>
-										<div class="form-group">
-											<label>Software</label>
-											<select class="form-control col-sm-10" id="Id_soft" name="Id_sof">
-												<?php echo $combobitsoft; ?>
-											</select>
-										</div>
-
-										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-
-										<button type="submit" class="btn btn-primary">Guardar</button>
-									</form>
+									<a href="vistaMonitor.php" class="btn btn-success">Ver lista de Monitores registrados</a>
 								</div>
 							</div>
 						</div>
-					</div>
 
-					<!-- Modal Datos Monitor-->
-					<div class="modal fade" id="datosMonitor" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-					 aria-hidden="true">
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Datos Monitor</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
+						<!-- Modal Datos Teclado-->
+						<div class="modal fade" id="datosTeclado" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+						 aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Datos Teclado</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<form>
+											<div class="form-group">
+												<label>No. de inventario</label>
+												<input type="number" class="form-control" id="inventario" name="InventarioTec" placeholder="Introduce el no. de inventario"
+												 require>
+											</div>
+
+											<div class="form-group">
+												<label>Marca</label>
+												<select class="form-control" id="marca" name="id_MarcaTec">
+													<?php echo $combobitmarca; ?>
+												</select>
+											</div>
+
+											<div class="form-group">
+												<label>Modelo</label>
+
+												<select class="form-control" id="modelo" name="id_ModeloTec">
+													<?php echo $combobit; ?>
+												</select>
+
+											</div>
+
+											<div class="form-group">
+												<label>No_Serie</label>
+												<input type="number" class="form-control" id="serie" name="SerieTec" placeholder="Introduce el no. de serie">
+											</div>
+
+											<div class="form-group">
+												<label>Descripcion </label>
+												<input type="text" class="form-control" id="descripcion" name="DescripcionTec" placeholder="Introduce la descripcion" require>
+											</div>
+
+											<div class="form-group">
+												<label>Tipo de adquisición</label>
+												<select class="form-control" id="adquisicion" name="AdquisicionTec">
+													<option value="Compra">Compra</option>
+													<option value="Transferencia">Transferencia</option>
+													<option value="Comodato">Comodato</option>
+													<option value="Arrendamiento">Arrendamiento</option>
+													<option value="Prestamo">Prestamo</option>
+													<option value="Otro">Otro</option>
+												</select>
+
+											</div>
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											<button type="submit" class="btn btn-primary">Guardar</button>
+										</form>
+									</div>
+
+									<a href="vistaTeclado.php" class="btn btn-success">Ver lista de Teclados registrados</a>
 								</div>
-								<div class="modal-body">
-									<form>
-										<div class="form-group">
-											<label>No. de inventario</label>
-											<input type="number" class="form-control" id="inventario" name="Inventario" placeholder="Introduce el no. de inventario"
-											 require>
-										</div>
-
-										<div class="form-group">
-											<label>Marca</label>
-											<select class="form-control" id="marca" name="id_Marca">
-												<?php echo $combobitmarca; ?>
-											</select>
-										</div>
-
-										<div class="form-group">
-											<label>Modelo</label>
-
-											<select class="form-control" id="modelo" name="id_Modelo">
-												<?php echo $combobit; ?>
-											</select>
-
-										</div>
-
-										<div class="form-group">
-											<label>No_Serie</label>
-											<input type="number" class="form-control" id="serie" name="Serie" placeholder="Introduce el no. de serie">
-										</div>
-
-										<div class="form-group">
-											<label>Descripcion </label>
-											<input type="text" class="form-control" id="descripcion" name="Descripcion" placeholder="Introduce la descripcion" require>
-										</div>
-
-										<div class="form-group">
-											<label>Tipo de adquisición</label>
-											<select class="form-control" id="adquisicion" name="Adquisicion">
-												<option value="Compra">Compra</option>
-												<option value="Transferencia">Transferencia</option>
-												<option value="Comodato">Comodato</option>
-												<option value="Arrendamiento">Arrendamiento</option>
-												<option value="Prestamo">Prestamo</option>
-												<option value="Otro">Otro</option>
-											</select>
-
-										</div>
-										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-										<button type="submit" class="btn btn-primary">Guardar</button>
-									</form>
-								</div>
-
-								<a href="vistaMonitor.php" class="btn btn-success">Ver lista de Monitores registrados</a>
 							</div>
 						</div>
-					</div>
 
-					<!-- Modal Datos Teclado-->
-					<div class="modal fade" id="datosTeclado" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-					 aria-hidden="true">
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Datos Teclado</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
+						<!-- Modal Datos Mouse-->
+						<div class="modal fade" id="datosMouse" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+						 aria-hidden="true">
+							<div class="modal-dialog" role="document">
+								<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title" id="exampleModalLabel">Datos Mouse</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<form>
+											<div class="form-group">
+												<label>No. de inventario</label>
+												<input type="number" class="form-control" id="inventario" name="InventarioMou" placeholder="Introduce el no. de inventario"
+												 require>
+											</div>
+
+											<div class="form-group">
+												<label>Marca</label>
+												<select class="form-control" id="marca" name="id_MarcaMou">
+													<?php echo $combobitmarca; ?>
+												</select>
+											</div>
+
+											<div class="form-group">
+												<label>Modelo</label>
+
+												<select class="form-control" id="modelo" name="id_ModeloMou">
+													<?php echo $combobit; ?>
+												</select>
+
+											</div>
+
+											<div class="form-group">
+												<label>No_Serie</label>
+												<input type="number" class="form-control" id="serie" name="SerieMou" placeholder="Introduce el no. de serie">
+											</div>
+
+											<div class="form-group">
+												<label>Descripcion </label>
+												<input type="text" class="form-control" id="descripcion" name="DescripcionMou" placeholder="Introduce la descripcion" require>
+											</div>
+
+											<div class="form-group">
+												<label>Tipo de adquisición</label>
+												<select class="form-control" id="adquisicion" name="AdquisicionMou">
+													<option value="Compra">Compra</option>
+													<option value="Transferencia">Transferencia</option>
+													<option value="Comodato">Comodato</option>
+													<option value="Arrendamiento">Arrendamiento</option>
+													<option value="Prestamo">Prestamo</option>
+													<option value="Otro">Otro</option>
+												</select>
+
+											</div>
+											<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+											<button type="submit" class="btn btn-primary">Guardar</button>
+										</form>
+									</div>
+
+									<a href="vistaMouse.php" class="btn btn-success">Ver lista de Mouse registrados</a>
 								</div>
-								<div class="modal-body">
-									<form>
-										<div class="form-group">
-											<label>No. de inventario</label>
-											<input type="number" class="form-control" id="inventario" name="InventarioTec" placeholder="Introduce el no. de inventario"
-											 require>
-										</div>
-
-										<div class="form-group">
-											<label>Marca</label>
-											<select class="form-control" id="marca" name="id_MarcaTec">
-												<?php echo $combobitmarca; ?>
-											</select>
-										</div>
-
-										<div class="form-group">
-											<label>Modelo</label>
-
-											<select class="form-control" id="modelo" name="id_ModeloTec">
-												<?php echo $combobit; ?>
-											</select>
-
-										</div>
-
-										<div class="form-group">
-											<label>No_Serie</label>
-											<input type="number" class="form-control" id="serie" name="SerieTec" placeholder="Introduce el no. de serie">
-										</div>
-
-										<div class="form-group">
-											<label>Descripcion </label>
-											<input type="text" class="form-control" id="descripcion" name="DescripcionTec" placeholder="Introduce la descripcion" require>
-										</div>
-
-										<div class="form-group">
-											<label>Tipo de adquisición</label>
-											<select class="form-control" id="adquisicion" name="AdquisicionTec">
-												<option value="Compra">Compra</option>
-												<option value="Transferencia">Transferencia</option>
-												<option value="Comodato">Comodato</option>
-												<option value="Arrendamiento">Arrendamiento</option>
-												<option value="Prestamo">Prestamo</option>
-												<option value="Otro">Otro</option>
-											</select>
-
-										</div>
-										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-										<button type="submit" class="btn btn-primary">Guardar</button>
-									</form>
-								</div>
-
-								<a href="vistaTeclado.php" class="btn btn-success">Ver lista de Teclados registrados</a>
 							</div>
 						</div>
+
+
 					</div>
-
-					<!-- Modal Datos Mouse-->
-					<div class="modal fade" id="datosMouse" data-backdrop="static" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-					 aria-hidden="true">
-						<div class="modal-dialog" role="document">
-							<div class="modal-content">
-								<div class="modal-header">
-									<h5 class="modal-title" id="exampleModalLabel">Datos Mouse</h5>
-									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
-									</button>
-								</div>
-								<div class="modal-body">
-									<form>
-										<div class="form-group">
-											<label>No. de inventario</label>
-											<input type="number" class="form-control" id="inventario" name="InventarioMou" placeholder="Introduce el no. de inventario"
-											 require>
-										</div>
-
-										<div class="form-group">
-											<label>Marca</label>
-											<select class="form-control" id="marca" name="id_MarcaMou">
-												<?php echo $combobitmarca; ?>
-											</select>
-										</div>
-
-										<div class="form-group">
-											<label>Modelo</label>
-
-											<select class="form-control" id="modelo" name="id_ModeloMou">
-												<?php echo $combobit; ?>
-											</select>
-
-										</div>
-
-										<div class="form-group">
-											<label>No_Serie</label>
-											<input type="number" class="form-control" id="serie" name="SerieMou" placeholder="Introduce el no. de serie">
-										</div>
-
-										<div class="form-group">
-											<label>Descripcion </label>
-											<input type="text" class="form-control" id="descripcion" name="DescripcionMou" placeholder="Introduce la descripcion" require>
-										</div>
-
-										<div class="form-group">
-											<label>Tipo de adquisición</label>
-											<select class="form-control" id="adquisicion" name="AdquisicionMou">
-												<option value="Compra">Compra</option>
-												<option value="Transferencia">Transferencia</option>
-												<option value="Comodato">Comodato</option>
-												<option value="Arrendamiento">Arrendamiento</option>
-												<option value="Prestamo">Prestamo</option>
-												<option value="Otro">Otro</option>
-											</select>
-
-										</div>
-										<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-										<button type="submit" class="btn btn-primary">Guardar</button>
-									</form>
-								</div>
-
-								<a href="vistaMouse.php" class="btn btn-success">Ver lista de Mouse registrados</a>
-							</div>
-						</div>
-					</div>
-
-
 				</div>
 			</div>
 

@@ -216,7 +216,7 @@ else
 		<div class="card">
 			<div class="card-header bg-info">
 				<div class="row">
-					<h3 style="text-align:center">NUEVO REGISTRO</h3>
+					<h3 style="text-align:center">ACTUALIZAR REGISTRO</h3>
 				</div>
 			</div>
 			<div class="card-body">

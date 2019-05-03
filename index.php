@@ -33,10 +33,14 @@ session_start();
         <!-- PASSWORD INPUT -->
         <label for="password">Contraseña</label>
         <input type="password" placeholder="Ingrese contraseña" name="pass">
-
         <input type="submit" value="Iniciar sesión">
+
+<!-- 
+        
         <a href="#">¿Olvidaste tu contraseña?</a><br>
         <a href="#">Registrarse</a>
+
+-->        
       </form>
     </div>
 

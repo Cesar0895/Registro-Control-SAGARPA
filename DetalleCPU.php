@@ -35,6 +35,14 @@ session_start();
 		$resultadoElimina = $mysqli->query($sql2);
 		$resultadoAsigna = $mysqli->query($sqlAsigna);
 
+		$IdAux = $_GET['Id_Aux'];
+		$IdPC = $_GET['Id_CPU'];
+		$sql3 = "DELETE FROM cpu_aux WHERE Id_Aux='$IdAux' and Id_CPU='$IdPC'";
+		$sqlAsignaAux="UPDATE `auxiliares` SET Asignado='NO' WHERE IdAux='$IdAux'";
+		
+		$resultadoEliminaAux = $mysqli->query($sql3);
+		$resultadoAsignaAux = $mysqli->query($sqlAsignaAux);
+
 		$id_CPU = $_GET['Id_CPU'];        
             
 			$sql = "SELECT `Id_CPU`, marca.Marca, modelo.Modelo, procesador.Procesador, memoria_ram.Memoria_RAM, disco_duro.Almacenamiento, velocidad.Velocidad, `Serie`, `Invetario`, `Adquisicion`, `UnidadOptica`, `Bosinas`, `P_USB`, `P_Serial`, `P_Paralelo`, `RedTipo`, `IP`, `MacEth`, `Mac_wifi`, `Dominio`, `Antivirus` FROM `cpu` INNER JOIN marca on cpu.Id_Marca=marca.id_Marca INNER JOIN modelo on cpu.Id_Modelo=modelo.id_Modelo INNER JOIN procesador on cpu.Id_Procesador=procesador.id_Procesador INNER JOIN memoria_ram on cpu.Id_MemoriaRam=memoria_ram.Id_Memoria INNER JOIN disco_duro on cpu.Id_DD=disco_duro.id_DD INNER JOIN velocidad on cpu.Id_Velocidad=velocidad.Id_velocidad WHERE Id_CPU = '$id_CPU'";
@@ -50,6 +58,14 @@ session_start();
 		WHERE cpu.Serie='$serie' GROUP by software.Nombre" ;
 		$resultadoSoft=$mysqli->query($sqlSoft);
 		$row2 = $resultado->fetch_array(MYSQLI_ASSOC);
+
+		$sqlAux="SELECT auxiliares.IdAux,auxiliares.Id_zona,auxiliares.Inventario, auxiliares.serie as serieAux, cpu.Serie as serieCPU FROM `cpu_aux`
+		INNER JOIN cpu on cpu_aux.Id_CPU=cpu.Id_CPU
+		INNER JOIN auxiliares on cpu_aux.Id_Aux=auxiliares.IdAux 
+		WHERE cpu.Serie='$serie' 
+		ORDER BY `auxiliares`.`IdAux` ASC";
+		$resultadoAux=$mysqli->query($sqlAux);
+		$row3 = $resultado->fetch_array(MYSQLI_ASSOC);
 
 		
 ?>
@@ -413,6 +429,57 @@ session_start();
 						</tbody>
 					</table>
 					<a href="AñadeSoft.php?Serie=<?php echo $row['Serie']; ?>" class="btn btn-primary">Añadir Software</a>
+				</div>
+
+				<br>
+				<div class="col-5">
+					<p class="h4">Auxiliares: </p>
+				</div>
+				<div class="row table-responsive mx-auto">
+					<table class="table table-hover table-secondary">
+						<thead>
+							<tr>
+								<th>Folio</th>
+								<th>Zona</th>
+								<th>No. Inventario</th>
+								<th>SerieAux</th>
+								<th>SerieCPU</th>
+								
+								<th></th>
+							</tr>
+						</thead>
+
+						<tbody>
+							<?php while($rowAux = $resultadoAux->fetch_array(MYSQLI_ASSOC)) { ?>
+							<tr>
+								<td>
+									<?php echo $rowAux['IdAux']; ?>
+								</td>
+								<td>
+									<?php echo $rowAux['Id_zona']; ?>
+								</td>
+								<td>
+									<?php echo $rowAux['Inventario']; ?>
+								</td>
+								<td>
+									<?php echo $rowAux['serieAux']; ?>
+								</td>
+
+								<td>
+									<?php echo $rowAux['serieCPU']; ?>
+								</td>
+								
+								<td>
+									<a  href="DetalleCPU.php" data-href="DetalleCPU.php?Id_Aux=<?php echo $rowAux['IdAux'];?>&amp;Id_CPU=<?php echo $row['Id_CPU'];?>"
+									 data-toggle="modal" data-target="#confirm-delete">
+										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
+					<a href="AñadeAux.php?Serie=<?php echo $row['Serie']; ?>" class="btn btn-primary">Añadir Auxiliar</a>
 				</div>
 
 

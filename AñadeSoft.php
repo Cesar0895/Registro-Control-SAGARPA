@@ -3,37 +3,20 @@
         error_reporting(E_ERROR | E_PARSE);
         require 'conexion.php';
 
-		$id_pc=$_GET['id_pc'];
-		$Id_soft=$_GET['Id_sof'];
-        if ($id_pc!=null) {
-			$sqlpc_Soft= "INSERT INTO `cpu_soft`(`id_Software`, `Id_CPU`) VALUES ('$Id_soft','$id_pc')";
-			$sqlAsigna="UPDATE `software` SET Asignado='SI' WHERE id_Software='$Id_soft'";
-			
-			$mysqli->query($sqlAsigna);
-            $mysqli->query($sqlpc_Soft);
-
-            if ($id_pc=1) {
-                echo'<script type="text/javascript">
-						alert("Registro guardado");
-						</script>';
-			}
-            
-		}
-
-		$sql = "SELECT * FROM `software` WHERE (Licencia='OEM' and Asignado='NO') or (Licencia='Corporativa') ORDER BY `Nombre` ASC";
-		$resultsoft = $mysqli->query($sql);
-		if ($resultsoft->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
+		$whereSoft = "";
+	
+		if(!empty($_POST))
 		{
-			$combobitsoft="";
-			while ($row = $resultsoft->fetch_array(MYSQLI_ASSOC)) 
-			{
-				$combobitsoft .="<option value='".$row['id_Software']."'>".$row['Nombre']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+			$valor2 = $_POST['campo'];
+		
+			if(!empty($valor2)){
+				$whereSoft = "and (Licencia like '$valor2%' or Nombre like '$valor2%')";
 			}
 		}
-		else
-		{
-			echo "No hubo resultados";
-		}
+
+		$sqlmostrarsoft = "SELECT * FROM `software` WHERE ((Licencia='OEM' and Asignado='No') or Licencia='Corporativa') $whereSoft";
+		$resultadoTablasoft = $mysqli->query($sqlmostrarsoft);
+
 
 		$sql = "SELECT * FROM `cpu` ORDER BY `Id_CPU` DESC";
 		$resultpc = $mysqli->query($sql);
@@ -152,26 +135,88 @@
 
 	<div class="container">
 		<div class="card">
-			<form>
+			<h4>Añadir Software</h4>
+			<div class="row ml-3">
+
+				<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+					<b>Buscador: </b>
+					<input title="Escribe el folio del dispositivo" type="text" id="campo" name="campo" />
+					<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
+				</form>
+			</div>
+			<form action="Proceso_Soft.php" method="post">
+
 				<div class="form-group">
 					<label>Numero de serie del CPU</label>
-					<select class="form-control col-sm-5" id="id_CPU" name="id_pc">
-						<option >Selecciona la serie del CPU</option>
+					<select class="form-control col-sm-10" id="id_CPU" name="Id_cpu">
 						<?php echo $combobitpc ?>
 					</select>
 				</div>
-				<div class="form-group">
-					<label>Software</label>
-					<select class="form-control col-sm-5" id="Id_soft" name="Id_sof">
-						<?php echo $combobitsoft; ?>
-					</select>
+
+				<div class="row table-responsive mx-auto">
+					<table class="table table-hover table-secondary">
+						<thead>
+							<tr>
+
+								<th></th>
+
+								<th>Nombre</th>
+								<th>Version</th>
+								<th>Licencia</th>
+								<th>Key</th>
+								<th>Plataforma</th>
+								<th>Fabricante</th>
+								<th>Adquisición</th>
+								<th>ProducKey</th>
+
+
+
+							</tr>
+						</thead>
+
+						<tbody>
+							<?php while($row = $resultadoTablasoft->fetch_array(MYSQLI_ASSOC)) { ?>
+							<tr>
+
+								<td>
+									<input type="checkbox" id="<?php echo $row['id_Software']; ?>" name="Id_sof[]"
+									 value="<?php echo $row['id_Software']; ?>" />
+								</td>
+
+								<td>
+									<?php echo $row['Nombre']; ?>
+								</td>
+								<td>
+									<?php echo $row['Version']; ?>
+								</td>
+								<td>
+									<?php echo $row['Licencia']; ?>
+								</td>
+								<td>
+									<?php echo $row['Key_soft']; ?>
+								</td>
+								<td>
+									<?php echo $row['Plataforma']; ?>
+								</td>
+								<td>
+									<?php echo $row['Fabricante']; ?>
+								</td>
+								<td>
+									<?php echo $row['Adquisicion']; ?>
+								</td>
+								<td>
+									<?php echo $row['ProducKey']; ?>
+								</td>
+
+							</tr>
+							<?php } ?>
+						</tbody>
+					</table>
 				</div>
-
-				<button type="button" class="btn btn-secondary">Regresar</button>
-
 				<button type="submit" class="btn btn-primary">Guardar</button>
 			</form>
-			
+
+
 
 		</div>
 

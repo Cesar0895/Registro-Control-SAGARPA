@@ -1,29 +1,53 @@
 <?php
-	error_reporting(E_ALL & ~E_NOTICE);
-	error_reporting(E_ERROR | E_PARSE);
-	require 'conexion.php';
+        error_reporting(E_ALL & ~E_NOTICE);
+        error_reporting(E_ERROR | E_PARSE);
+        require 'conexion.php';
 
+		$where = "";
 	
-	$id_CPU = $_GET['Id_CPU'];
-	$sql2 = "DELETE FROM cpu WHERE Id_CPU = '$id_CPU'";
-	$resultado = $mysqli->query($sql2);
+		if(!empty($_POST))
+		{
+			$valor = $_POST['campo'];
 		
-	$where = "";
-	
-	if(!empty($_POST))
-	{
-		$valor = $_POST['campo'];
-		
-		if(!empty($valor)){
-			$where = "WHERE Marca LIKE '$valor%' or Modelo LIKE '$valor%' or Invetario LIKE '$valor%' or Serie LIKE '$valor%'";
+			if(!empty($valor)){
+				$where = "and (IdAux LIKE '$valor%' or Nomb_Dispositivo like '$valor%')";
+			}
 		}
-	}
 
-	$sqlmostrar = "SELECT `Id_CPU`, marca.Marca, modelo.Modelo, procesador.Procesador, memoria_ram.Memoria_RAM, disco_duro.Almacenamiento, velocidad.Velocidad, `Serie`, `Invetario`, `Adquisicion`, `UnidadOptica`, `Bosinas`, `P_USB`, `P_Serial`, `P_Paralelo`, `RedTipo`, `IP`, `MacEth`, `Mac_wifi`, `Dominio`, `Antivirus` FROM `cpu` INNER JOIN marca on cpu.Id_Marca=marca.id_Marca INNER JOIN modelo on cpu.Id_Modelo=modelo.id_Modelo INNER JOIN procesador on cpu.Id_Procesador=procesador.id_Procesador INNER JOIN memoria_ram on cpu.Id_MemoriaRam=memoria_ram.Id_Memoria INNER JOIN disco_duro on cpu.Id_DD=disco_duro.id_DD INNER JOIN velocidad on cpu.Id_Velocidad=velocidad.Id_velocidad $where";
-	$resultadoTabla = $mysqli->query($sqlmostrar);
+		$sql = "SELECT auxiliares.IdAux, zona.Sigla, auxiliares.Presupuesto, dispositivos.Nomb_Dispositivo, auxiliares.Inventario, marca.Marca, modelo.Modelo, auxiliares.serie, dispositivos.Tipo, auxiliares.Adquisicion, auxiliares.Fecha_adquisicion, auxiliares.Fin_Garantia, auxiliares.DT, auxiliares.Observaciones, auxiliares.Direccion_ip, auxiliares.Mac_Eth, auxiliares.Mac_wifi, auxiliares.estatus,auxiliares.Documento, auxiliares.RFC, auxiliares.Valor, auxiliares.Asignado FROM auxiliares inner join modelo on auxiliares.id_Modelo=modelo.id_Modelo inner join marca on auxiliares.id_Marca=marca.id_Marca inner join dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo inner join zona on auxiliares.Id_zona=zona.id_Zona where Asignado='NO' $where  ORDER BY `auxiliares`.`IdAux` ASC" ;
+		$resultadoTabla = $mysqli->query($sql);
 
+
+
+		$sql = "SELECT * FROM `cpu` ORDER BY `Id_CPU` DESC";
+		$resultpc = $mysqli->query($sql);
+		if ($resultpc->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
+		{
+			$combobitpc="";
+			while ($row = $resultpc->fetch_array(MYSQLI_ASSOC)) 
+			{
+				$combobitpc .="<option value='".$row['Id_CPU']."'>".$row['Serie']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+			}
+		}
+		else
+		{
+			echo "No hubo resultados";
+		}
+		
+		/*
+		$Serie=$_GET['Serie'];
+
+		$sqlcpu = "SELECT CPU.Serie,software.Nombre
+		FROM `cpu_soft`
+		INNER JOIN CPU ON cpu_soft.Id_CPU = CPU.Id_CPU
+		INNER JOIN software ON cpu_soft.id_Software = software.id_Software
+		WHERE CPU.Serie = '$Serie'";
+		$resultpc = $mysqli->query($sqlcpu);
+		$row = $resultpc->fetch_array(MYSQLI_ASSOC);
+			
+
+		*/
 ?>
-
 <!doctype html>
 <html lang="en">
 
@@ -36,16 +60,13 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
 
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-	 crossorigin="anonymous">
-
 	<link rel="stylesheet" href="./css/estilo.css">
-
 	<title>Control de dispositivos</title>
 
 </head>
 
 <body>
+
 
 	<div class="allNavbar">
 
@@ -112,45 +133,45 @@
 
 	</div>
 	<br>
-	<main role="main" class="container">
+
+	<div class="container">
 		<div class="card">
-			<div class="card-header bg-info">
-				<div class="row ml-3">
-					<h2 style="text-align:center">CPU</h2>
-				</div>
+			<h4>Añadir Auxiliares</h4>
+
+			<div class="row ml-3">
+
+				<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+					<b>Buscador: </b>
+					<input title="Escribe el folio del dispositivo" type="text" id="campo" name="campo" />
+					<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
+				</form>
 			</div>
 
-			<div class="card-body">
-
-				<a href="registroEquipoComputo.php" class="btn btn-primary float-right">Nuevo Registro</a>
-
-				<div class="row">
-
-
-					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-						<b>Buscador: </b>
-						<input type="text" id="campo" name="campo" />
-						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
-					</form>
+			<form action="Proceso_Aux.php" method="post">
+				<div class="form-group">
+					<label>Numero de serie del CPU</label>
+					<select class="form-control col-sm-10" id="id_CPU" name="Id_cpu">
+						<?php echo $combobitpc ?>
+					</select>
 				</div>
 
 
-				<br>
 
-				<div class="row table-responsive">
+				<div class="row table-responsive mx-auto">
 					<table class="table table-hover table-secondary">
 						<thead>
 							<tr>
+								<th></th>
+								<th></th>
 
-								<th>Serie</th>
+								<th>Folio</th>
+								<th>Zona</th>
+								<th>Nombre del dispositivo</th>
+								<th>No. de inventario</th>
 								<th>Marca</th>
 								<th>Modelo</th>
-								<th>No. de inventario</th>
-
-								<th>Adquisicion</th>
-								<th></th>
-								<th></th>
-								<th></th>
+								<th>Serie</th>
+								<th>Tipo de dispositivo</th>
 
 							</tr>
 						</thead>
@@ -160,7 +181,25 @@
 							<tr>
 
 								<td>
-									<?php echo $row['Serie']; ?>
+									<a href="DetalleAux.php?IdAux=<?php echo $row['IdAux']; ?>">
+										<span class="fas fa-eye"></span>
+									</a>
+								</td>
+								<td>
+									<input type="checkbox" id="<?php echo $row['IdAux']; ?>" name="Id_Aux[]" value="<?php echo $row['IdAux']; ?>"
+									/>
+								</td>
+								<td>
+									<?php echo $row['IdAux']; ?>
+								</td>
+								<td>
+									<?php echo $row['Sigla']; ?>
+								</td>
+								<td>
+									<?php echo $row['Nomb_Dispositivo']; ?>
+								</td>
+								<td>
+									<?php echo $row['Inventario']; ?>
 								</td>
 								<td>
 									<?php echo $row['Marca']; ?>
@@ -169,41 +208,26 @@
 									<?php echo $row['Modelo']; ?>
 								</td>
 								<td>
-									<?php echo $row['Invetario']; ?>
+									<?php echo $row['serie']; ?>
+								</td>
+								<td>
+									<?php echo $row['Tipo']; ?>
 								</td>
 
-								<td>
-									<?php echo $row['Adquisicion']; ?>
-								</td>
-
-								<td>
-									<a href="DetalleCPU.php?Id_CPU=<?php echo $row['Id_CPU']; ?>">
-										<span class="fas fa-eye"></span>
-									</a>
-								</td>
-
-								<td>
-									<a href="ModificaCPU.php?Id_CPU=<?php echo $row['Id_CPU']; ?>">
-										<span class="far fa-edit"></span>
-									</a>
-								</td>
-								<td>
-									<a href="vistaCPU.php" data-href="vistaCPU.php?Id_CPU=<?php echo $row['Id_CPU']; ?>"
-									 data-toggle="modal" data-target="#confirm-delete">
-										<span class="far fa-trash-alt"></span>
-									</a>
-								</td>
 							</tr>
 							<?php } ?>
 						</tbody>
 					</table>
 				</div>
-			</div>
+				<button type="submit" class="btn btn-primary">Guardar</button>
+			</form>
+
+
+
 		</div>
 
 
-
-	</main>
+	</div>
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -212,36 +236,6 @@
 	 crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	 crossorigin="anonymous"></script>
-
-	<!-- Modal -->
-	<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Eliminar Registro</h4>
-				</div>
-
-				<div class="modal-body">
-					¿Desea eliminar este registro?
-				</div>
-
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-					<a class="btn btn-danger btn-ok">Delete</a>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<script>
-		$('#confirm-delete').on('show.bs.modal', function(e) {
-			$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-
-			$('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
-		});
-	</script>
 </body>
 
 </html>
