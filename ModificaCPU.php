@@ -183,17 +183,16 @@ require 'conexion.php';
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
 					<li class="nav-item">
-						<a class="nav-link" href="inicio.php">Inicio</a>
+						<a class="nav-link mask flex-center rgba-red-strong" href="inicio.php">Inicio</a>
 					</li>
 
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="registroEquipoComputo.php">Equipo de computo</a>
-							<a class="dropdown-item" href="registroAuxiliares.php">Auxiliares</a>
-							<a class="dropdown-item" href="#">Telefonia</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Separated link</a>
+							<a class="dropdown-item" href="Auxiliares.php">Auxiliares</a>
+							<a class="dropdown-item" href="Telefonia.php">Telefonia</a>
+
 						</div>
 					</li>
 					<li class="nav-item">
@@ -213,18 +212,28 @@ require 'conexion.php';
 							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
 							<a class="dropdown-item" href="Procesador.php">Procesador</a>
 							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
+							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
+							<a class="dropdown-item" href="Areas.php">Áreas</a>
+							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link mask flex-center rgba-red-strong" href="Reportes.php">Reportes</a>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav">
 					<li>
-						<a href="#">
-							<span class="fas fa-user nav-link"></span> Sign Up</a>
+
+						<span class="fas fa-user nav-link"> Bienvenido (a):
+							<?php echo $nombr; ?>
+						</span>
 					</li>
 					<li>
-						<a href="#">
-							<span class="fas fa-sign-in-alt nav-link"></span> Salir</a>
+						<a href="cerrar_session.php">
+							<span class="fas fa-sign-in-alt nav-link"></span> (Cerrar sesion)</a>
+
 					</li>
 				</ul>
 			</div>
@@ -265,7 +274,9 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Marca:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="marca" name="id_Marcapc">
-							<option value='<?php echo $row2['Id_Marca']?>'><?php echo $row2['Marca']?></option>
+								<option value='<?php echo $row2[' Id_Marca ']?>'>
+									<?php echo $row2['Marca']?>
+								</option>
 								<?php echo $combobitmarca; ?>
 							</select>
 						</div>
@@ -274,7 +285,9 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Modelo:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="marca" name="id_Modelopc">
-							<option value='<?php echo $row2['Id_Modelo']?>'><?php echo $row2['Modelo']?></option>
+								<option value='<?php echo $row2[' Id_Modelo ']?>'>
+									<?php echo $row2['Modelo']?>
+								</option>
 								<?php echo $combobit; ?>
 							</select>
 						</div>
@@ -283,7 +296,9 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Procesador:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="procesador" name="id_procesador">
-							<option value='<?php echo $row2['Id_Procesador']?>'><?php echo $row2['Procesador']?></option>
+								<option value='<?php echo $row2[' Id_Procesador ']?>'>
+									<?php echo $row2['Procesador']?>
+								</option>
 								<?php echo $combobitpro; ?>
 							</select>
 						</div>
@@ -292,7 +307,9 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Memoria RAM:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="procesador" name="idMemoriaRam">
-							<option value='<?php echo $row2['Id_MemoriaRam']?>'><?php echo $row2['Memoria_RAM']?></option>
+								<option value='<?php echo $row2[' Id_MemoriaRam ']?>'>
+									<?php echo $row2['Memoria_RAM']?>
+								</option>
 								<?php echo $combobitram; ?>
 							</select>
 						</div>
@@ -301,7 +318,9 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Disco Duro:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="DD" name="id_DD">
-							<option value='<?php echo $row2['Id_DD']?>'><?php echo $row2['Almacenamiento']?></option>
+								<option value='<?php echo $row2[' Id_DD ']?>'>
+									<?php echo $row2['Almacenamiento']?>
+								</option>
 								<?php echo $combobitDD; ?>
 							</select>
 						</div>
@@ -310,7 +329,9 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Velocidad:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="Velocidad" name="id_velocidad">
-							<option value='<?php echo $row2['Id_Velocidad']?>'><?php echo $row2['Velocidad']?></option>
+								<option value='<?php echo $row2[' Id_Velocidad ']?>'>
+									<?php echo $row2['Velocidad']?>
+								</option>
 								<?php echo $combobitvel; ?>
 							</select>
 						</div>
@@ -320,9 +341,11 @@ require 'conexion.php';
 						<div class="col-sm-4">
 							<select class="form-control" id="Adqui" name="adquipc">
 								<option value="Compra" <?php if( $row2[ 'Adquisicion']=='Compra' ) echo 'Selected'; ?>>Compra</option>
-								<option value="Transferencia" <?php if( $row2[ 'Adquisicion']=='Transferencia' ) echo 'Selected'; ?>>Transferencia</option>
+								<option value="Transferencia" <?php if( $row2[ 'Adquisicion']=='Transferencia' ) echo 'Selected';
+								 ?>>Transferencia</option>
 								<option value="Comodato" <?php if( $row2[ 'Adquisicion']=='Comodato' ) echo 'Selected'; ?>>Comodato</option>
-								<option value="Arrendamiento" <?php if( $row2[ 'Adquisicion']=='Arrendamiento' ) echo 'Selected'; ?>>Arrendamiento</option>
+								<option value="Arrendamiento" <?php if( $row2[ 'Adquisicion']=='Arrendamiento' ) echo 'Selected';
+								 ?>>Arrendamiento</option>
 								<option value="Prestamo" <?php if( $row2[ 'Adquisicion']=='Prestamo' ) echo 'Selected'; ?>>Prestamo</option>
 								<option value="Otro" <?php if( $row2[ 'Adquisicion']=='Otro' ) echo 'Selected'; ?>>Otro</option>
 							</select>
@@ -369,7 +392,9 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Puertos USB:</label>
 						<div class="col-sm-1">
 							<select class="form-control" id="p_usb" name="P_usb">
-								<option value='<?php echo $row2['P_USB']?>'><?php echo $row2['P_USB']?></option>
+								<option value='<?php echo $row2[' P_USB ']?>'>
+									<?php echo $row2['P_USB']?>
+								</option>
 								<option value="1">1</option>
 								<option value="2">2</option>
 								<option value="3">3</option>
@@ -439,8 +464,8 @@ require 'conexion.php';
 						</div>
 					</div>
 
-					
-					
+
+
 
 					<div class="form-group">
 						<div class="col-sm-offset-2 col-sm-10">

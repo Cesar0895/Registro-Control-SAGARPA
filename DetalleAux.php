@@ -24,7 +24,9 @@ session_start();
 		}
 		
 
-			$idAux = $_GET['IdAux'];        
+			$idAux = $_GET['IdAux'];  
+			
+			//Consulta para visualizar los datos.
             
 			$sql = "SELECT auxiliares.IdAux, zona.Nombre, auxiliares.Presupuesto, dispositivos.Nomb_Dispositivo, auxiliares.Inventario, marca.Marca, modelo.Modelo, auxiliares.serie, dispositivos.Tipo, auxiliares.Adquisicion, auxiliares.Fecha_adquisicion, auxiliares.Fin_Garantia, auxiliares.DT, auxiliares.Observaciones, auxiliares.Direccion_ip, auxiliares.Mac_Eth, auxiliares.Mac_wifi, auxiliares.estatus, auxiliares.RFC, auxiliares.Valor FROM auxiliares inner join modelo on auxiliares.id_Modelo=modelo.id_Modelo inner join marca on auxiliares.id_Marca=marca.id_Marca inner join dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo inner join zona on auxiliares.Id_zona=zona.id_Zona WHERE IdAux = '$idAux'";
             $resultado = $mysqli->query($sql);
@@ -100,6 +102,10 @@ session_start();
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
 							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link mask flex-center rgba-red-strong" href="Reportes.php">Reportes</a>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav">
@@ -336,9 +342,7 @@ session_start();
 
 
 				<a href="personal.php" class="btn btn-primary">Regresar</a>
-				<a href="ReporteAux.php?RFC=<?php echo $row['RFC']; ?>">
-					Reporte
-				</a>
+				
 			</div>
 
 		</div>

@@ -23,9 +23,13 @@ require 'conexion.php';
 		$documento = $_GET['Documento'];
 		$RFC = $_GET['RFC'];
 		$valor = $_GET['Valor'];
+
+		
 			
 
 if ($idAux!=null && $id_Zona!=null) {
+	
+	//Consulta para actualizar los registros
     $sql2= "UPDATE auxiliares SET Id_zona='$id_Zona',Presupuesto='$presupuesto', Id_dispositivo='$id_Dispositivo',Inventario='$invetario',id_Marca='$id_Marca',id_modelo='$id_Modelo',serie='$serie',Adquisicion='$adquisicion',Fecha_adquisicion='$fecha_Adquisicion',Fin_Garantia='$fin_Garantia',DT='$DT', Observaciones='$obsevaciones',Direccion_ip='$direccion_ip',Mac_Eth='$mac_Eth',Mac_wifi='$mac_wifi',estatus='$estatus',Documento='$documento',RFC='$RFC',Valor='$valor' Where IdAux='$idAux'";
 	$mysqli->query($sql2);
 	
@@ -42,7 +46,7 @@ if ($idAux!=null && $id_Zona!=null) {
 
 $idAux=$_GET['IdAux'];       
             
-$sqlaux = "SELECT * FROM auxiliares WHERE IdAux = '$idAux'";
+$sqlaux = "SELECT `IdAux`, auxiliares.Id_zona, zona.Nombre, `Presupuesto`, auxiliares.Id_dispositivo, concat(dispositivos.Nomb_Dispositivo,' | ', dispositivos.Tipo) as disp, `Inventario`, auxiliares.id_Marca, marca.Marca, modelo.id_Modelo, modelo.Modelo, `serie`, `Adquisicion`, `Fecha_adquisicion`, `Fin_Garantia`, `DT`, `Observaciones`, `Direccion_ip`, `Mac_Eth`, `Mac_wifi`, `estatus`, `Documento`, `RFC`, `Valor`, `Asignado` FROM `auxiliares` INNER JOIN zona on auxiliares.Id_zona=zona.id_Zona INNER JOIN dispositivos on auxiliares.Id_dispositivo=dispositivos.Id_Dispositivo INNER JOIN marca on auxiliares.id_Marca=marca.id_Marca INNER JOIN modelo on auxiliares.id_modelo=modelo.id_Modelo WHERE IdAux = '$idAux'";
 $resultado = $mysqli->query($sqlaux);
 $row = $resultado->fetch_array(MYSQLI_ASSOC);
 
@@ -137,7 +141,7 @@ else
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
 
-	 <link rel="stylesheet" href="./css/estilo.css">
+	<link rel="stylesheet" href="./css/estilo.css">
 
 
 	<title>Control de dispositivos</title>
@@ -162,17 +166,16 @@ else
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
 					<li class="nav-item">
-						<a class="nav-link" href="inicio.php">Inicio</a>
+						<a class="nav-link mask flex-center rgba-red-strong" href="inicio.php">Inicio</a>
 					</li>
 
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="registroEquipoComputo.php">Equipo de computo</a>
-							<a class="dropdown-item" href="registroAuxiliares.php">Auxiliares</a>
-							<a class="dropdown-item" href="#">Telefonia</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Separated link</a>
+							<a class="dropdown-item" href="Auxiliares.php">Auxiliares</a>
+							<a class="dropdown-item" href="Telefonia.php">Telefonia</a>
+
 						</div>
 					</li>
 					<li class="nav-item">
@@ -192,18 +195,28 @@ else
 							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
 							<a class="dropdown-item" href="Procesador.php">Procesador</a>
 							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
+							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
+							<a class="dropdown-item" href="Areas.php">Áreas</a>
+							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link mask flex-center rgba-red-strong" href="Reportes.php">Reportes</a>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav">
 					<li>
-						<a href="#">
-							<span class="fas fa-user nav-link"></span> Sign Up</a>
+
+						<span class="fas fa-user nav-link"> Bienvenido (a):
+							<?php echo $nombr; ?>
+						</span>
 					</li>
 					<li>
-						<a href="#">
-							<span class="fas fa-sign-in-alt nav-link"></span> Salir</a>
+						<a href="cerrar_session.php">
+							<span class="fas fa-sign-in-alt nav-link"></span> (Cerrar sesion)</a>
+
 					</li>
 				</ul>
 			</div>
@@ -223,23 +236,26 @@ else
 				<form>
 
 					<div class="form-group">
-						
+
 						<div class="col-sm-10">
-							<input type="hidden" class="form-control" id="idAux" name="IdAux"  value="<?php echo $row['IdAux']; ?>">
+							<input type="hidden" class="form-control" id="idAux" name="IdAux" value="<?php echo $row['IdAux']; ?>">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Folio</label>
 						<div class="col-sm-10">
-							<input type="number" class="form-control" placeholder="Folio" value="<?php echo $row['IdAux']; ?>" disabled>
+							<input type="number" class="form-control" placeholder="Folio" value="<?php echo $row['IdAux']; ?>"
+							 disabled>
 						</div>
 					</div>
 
-						<div class="form-group">
+					<div class="form-group">
 						<label>Zona</label>
 						<select class="form-control col-sm-10" id="id_zona" name="Id_zona">
-							<option><?php echo $row['Id_zona']; ?> </option>
+							<option value="<?php echo $row['Id_zona']; ?>">
+								<?php echo $row['Nombre']; ?>
+							</option>
 							<?php echo $combobitzona; ?>
 						</select>
 					</div>
@@ -247,14 +263,17 @@ else
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Presupuesto</label>
 						<div class="col-sm-4">
-							<input type="number" class="form-control" id="presupuesto" name="Presupuesto" placeholder="Presupuesto ($)" value="<?php echo $row['Presupuesto']; ?>" required>
+							<input type="number" class="form-control" id="presupuesto" name="Presupuesto" placeholder="Presupuesto ($)" value="<?php echo $row['Presupuesto']; ?>"
+							 required>
 						</div>
 					</div>
 
 					<div class="form-group ">
 						<label>Dispositivo</label>
 						<select class="form-control col-sm-10" id="id_Dispositivo" name="Id_dispositivo">
-							<option><?php echo $row['Id_dispositivo']; ?> </option>
+							<option value="<?php echo $row['Id_dispositivo']; ?>">
+								<?php echo $row['disp']; ?>
+							</option>
 							<?php echo $combobitdisp; ?>
 						</select>
 					</div>
@@ -262,14 +281,17 @@ else
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Inventario</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="inventario" name="Inventario" placeholder="Inventario" value="<?php echo $row['Inventario']; ?>" required>
+							<input type="text" class="form-control" id="inventario" name="Inventario" placeholder="Inventario" value="<?php echo $row['Inventario']; ?>"
+							 required>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label>Marca</label>
 						<select class="form-control col-sm-10" id="id_Marca" name="id_Marca">
-							<option><?php echo $row['id_Marca']; ?> </option>
+							<option value="<?php echo $row['id_Marca']; ?>">
+								<?php echo $row['Marca']; ?>
+							</option>
 							<?php echo $combobitmarca; ?>
 						</select>
 					</div>
@@ -277,7 +299,9 @@ else
 					<div class="form-group">
 						<label>Modelo</label>
 						<select class="form-control col-sm-10" id="id_modelo" name="id_modelo">
-							<option><?php echo $row['id_modelo']; ?> </option>
+							<option value=<?php echo $row['id_Modelo']; ?>>
+								<?php echo $row['Modelo']; ?>
+							</option>
 							<?php echo $combobit; ?>
 						</select>
 					</div>
@@ -285,14 +309,15 @@ else
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Serie</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="serie" name="serie" placeholder="Serie" value="<?php echo $row['serie']; ?>" required>
+							<input type="text" class="form-control" id="serie" name="serie" placeholder="Serie" value="<?php echo $row['serie']; ?>"
+							 required>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Tipo de adquisición</label>
 						<select class="form-control col-sm-10" id="adquisicion" name="Adquisicion">
-						<option value="Compra" <?php if( $row[ 'Adquisicion']=='Compra' ) echo 'Selected'; ?>>Compra</option>
+							<option value="Compra" <?php if( $row[ 'Adquisicion']=='Compra' ) echo 'Selected'; ?>>Compra</option>
 							<option value="Transferencia" <?php if( $row[ 'Adquisicion']=='Transferencia' ) echo 'Selected';
 							 ?>>Transferencia</option>
 							<option value="Comodato" <?php if( $row[ 'Adquisicion']=='Comodato' ) echo 'Selected'; ?>>Comodato</option>
@@ -306,21 +331,24 @@ else
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Fecha de adquisicion</label>
 						<div class="col-sm-10">
-							<input type="date" class="form-control" id="Fecha_adquisicion" name="Fecha_adquisicion" value="<?php echo $row['Fecha_adquisicion']; ?>" placeholder="Fecha de Adquisicion">
+							<input type="date" class="form-control" id="Fecha_adquisicion" name="Fecha_adquisicion" value="<?php echo $row['Fecha_adquisicion']; ?>"
+							 placeholder="Fecha de Adquisicion">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Fecha de la garantia</label>
 						<div class="col-sm-10">
-							<input type="date" class="form-control" id="Fin_Garantia" name="Fin_Garantia" value="<?php echo $row['Fin_Garantia']; ?>" placeholder="Fin de la garantia">
+							<input type="date" class="form-control" id="Fin_Garantia" name="Fin_Garantia" value="<?php echo $row['Fin_Garantia']; ?>"
+							 placeholder="Fin de la garantia">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Dictamen</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="DT" name="DT" value="<?php echo $row['DT']; ?>"placeholder="DT">
+							<input type="text" class="form-control" id="DT" name="DT" value="<?php echo $row['DT']; ?>"
+							 placeholder="DT">
 						</div>
 					</div>
 
@@ -334,21 +362,24 @@ else
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Direccion IP</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="Direccion_ip" name="Direccion_ip" value="<?php echo $row['Direccion_ip']; ?>" placeholder="Direccion IP">
+							<input type="text" class="form-control" id="Direccion_ip" name="Direccion_ip" value="<?php echo $row['Direccion_ip']; ?>"
+							 placeholder="Direccion IP">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Mac Ethernet</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="Mac_Eth" name="Mac_Eth" value="<?php echo $row['Mac_Eth']; ?>" placeholder="Mac Ethernet">
+							<input type="text" class="form-control" id="Mac_Eth" name="Mac_Eth" value="<?php echo $row['Mac_Eth']; ?>"
+							 placeholder="Mac Ethernet">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Mac Wifi</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="Mac_wifi" name="Mac_wifi" value="<?php echo $row['Mac_wifi']; ?>" placeholder="Mac wifi">
+							<input type="text" class="form-control" id="Mac_wifi" name="Mac_wifi" value="<?php echo $row['Mac_wifi']; ?>"
+							 placeholder="Mac wifi">
 						</div>
 					</div>
 
@@ -365,7 +396,8 @@ else
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Documento</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="Documento" name="Documento" value="<?php echo $row['Documento']; ?>" placeholder="Documento">
+							<input type="text" class="form-control" id="Documento" name="Documento" value="<?php echo $row['Documento']; ?>"
+							 placeholder="Documento">
 						</div>
 					</div>
 
@@ -379,7 +411,8 @@ else
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Valor</label>
 						<div class="col-sm-4">
-							<input type="number" class="form-control" id="Valor" name="Valor" placeholder="Valor ($)" value="<?php echo $row['Valor']; ?>" required>
+							<input type="number" class="form-control" id="Valor" name="Valor" placeholder="Valor ($)" value="<?php echo $row['Valor']; ?>"
+							 required>
 						</div>
 					</div>
 

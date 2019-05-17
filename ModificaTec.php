@@ -107,17 +107,16 @@ require 'conexion.php';
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
 					<li class="nav-item">
-						<a class="nav-link" href="inicio.php">Inicio</a>
+						<a class="nav-link mask flex-center rgba-red-strong" href="inicio.php">Inicio</a>
 					</li>
 
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="registroEquipoComputo.php">Equipo de computo</a>
-							<a class="dropdown-item" href="registroAuxiliares.php">Auxiliares</a>
-							<a class="dropdown-item" href="#">Telefonia</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Separated link</a>
+							<a class="dropdown-item" href="Auxiliares.php">Auxiliares</a>
+							<a class="dropdown-item" href="Telefonia.php">Telefonia</a>
+
 						</div>
 					</li>
 					<li class="nav-item">
@@ -137,18 +136,28 @@ require 'conexion.php';
 							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
 							<a class="dropdown-item" href="Procesador.php">Procesador</a>
 							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
+							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
+							<a class="dropdown-item" href="Areas.php">Áreas</a>
+							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link mask flex-center rgba-red-strong" href="Reportes.php">Reportes</a>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav">
 					<li>
-						<a href="#">
-							<span class="fas fa-user nav-link"></span> Sign Up</a>
+
+						<span class="fas fa-user nav-link"> Bienvenido (a):
+							<?php echo $nombr; ?>
+						</span>
 					</li>
 					<li>
-						<a href="#">
-							<span class="fas fa-sign-in-alt nav-link"></span> Salir</a>
+						<a href="cerrar_session.php">
+							<span class="fas fa-sign-in-alt nav-link"></span> (Cerrar sesion)</a>
+
 					</li>
 				</ul>
 			</div>
@@ -189,7 +198,7 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Marca:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="id_MarcaTec" name="id_MarcaTec">
-								<option value='<?php echo $row2['id_Marca']?>'>
+								<option value='<?php echo $row2[' id_Marca ']?>'>
 									<?php echo $row2['Marca']?>
 								</option>
 								<?php echo $combobitmarca; ?>
@@ -200,7 +209,7 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Modelo:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="id_ModeloTec" name="id_ModeloTec">
-								<option value='<?php echo $row2['id_Modelo']?>'>
+								<option value='<?php echo $row2[' id_Modelo ']?>'>
 									<?php echo $row2['Modelo']?>
 								</option>
 								<?php echo $combobit; ?>

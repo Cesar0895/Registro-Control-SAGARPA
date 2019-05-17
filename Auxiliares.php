@@ -119,6 +119,10 @@ error_reporting(E_ERROR | E_PARSE);
 							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
+
+					<li class="nav-item">
+						<a class="nav-link mask flex-center rgba-red-strong" href="Reportes.php">Reportes</a>
+					</li>
 				</ul>
 				<ul class="nav navbar-nav">
 					<li>
@@ -194,7 +198,7 @@ error_reporting(E_ERROR | E_PARSE);
 								<td>
 									<?php echo $row['Sigla']; ?>
 								</td>
-								
+
 								<td>
 									<?php echo $row['Nomb_Dispositivo']; ?>
 								</td>
@@ -213,12 +217,13 @@ error_reporting(E_ERROR | E_PARSE);
 								<td>
 									<?php echo $row['Tipo']; ?>
 								</td>
-								
+
 								<td>
 									<?php echo $row['RFC']; ?>
 								</td>
 								<td>
-									$<?php echo $row['Valor']; ?>.00
+									$
+									<?php echo $row['Valor']; ?>.00
 								</td>
 								<td>
 									<?php if ($row['Asignado']=='SI') { 

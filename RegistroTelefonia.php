@@ -130,17 +130,16 @@
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
 					<li class="nav-item">
-						<a class="nav-link" href="inicio.php">Inicio</a>
+						<a class="nav-link mask flex-center rgba-red-strong" href="inicio.php">Inicio</a>
 					</li>
 
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="registroEquipoComputo.php">Equipo de computo</a>
-							<a class="dropdown-item" href="registroAuxiliares.php">Auxiliares</a>
-							<a class="dropdown-item" href="#">Telefonia</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Separated link</a>
+							<a class="dropdown-item" href="Auxiliares.php">Auxiliares</a>
+							<a class="dropdown-item" href="Telefonia.php">Telefonia</a>
+
 						</div>
 					</li>
 					<li class="nav-item">
@@ -160,18 +159,28 @@
 							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
 							<a class="dropdown-item" href="Procesador.php">Procesador</a>
 							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
+							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
+							<a class="dropdown-item" href="Areas.php">Áreas</a>
+							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link mask flex-center rgba-red-strong" href="Reportes.php">Reportes</a>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav">
 					<li>
-						<a href="#">
-							<span class="fas fa-user nav-link"></span> Sign Up</a>
+
+						<span class="fas fa-user nav-link"> Bienvenido (a):
+							<?php echo $nombr; ?>
+						</span>
 					</li>
 					<li>
-						<a href="#">
-							<span class="fas fa-sign-in-alt nav-link"></span> Salir</a>
+						<a href="cerrar_session.php">
+							<span class="fas fa-sign-in-alt nav-link"></span> (Cerrar sesion)</a>
+
 					</li>
 				</ul>
 			</div>
@@ -192,14 +201,14 @@
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Extención</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="extencion" name="Extencion" placeholder="Extención" required>
+							<input type="number" class="form-control" id="extencion" name="Extencion" placeholder="Extención" required>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Display</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="display" name="Display" value="B-8" placeholder="Display" required>
+							<input type="text" class="form-control" id="display" name="Display" placeholder="Display" required>
 						</div>
 					</div>
 
@@ -213,21 +222,21 @@
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Inmueble</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="inmueble" value="no" name="Inmueble" placeholder="Inmueble" required>
+							<input type="text" class="form-control" id="inmueble" name="Inmueble" placeholder="Inmueble" required>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Sitio</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="sitio" name="Sitio" value="ahi" placeholder="Sitio" required>
+							<input type="text" class="form-control" id="sitio" name="Sitio"  placeholder="Sitio" required>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Serie</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="Serie" name="Serie" value="12345" placeholder="Serie" required>
+							<input type="text" class="form-control" id="Serie" name="Serie"  placeholder="Serie" required>
 						</div>
 					</div>
 
@@ -250,103 +259,103 @@
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Mac</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="mac" name="Mac" value="11345" placeholder="Mac" required>
+							<input type="text" class="form-control" id="mac" name="Mac"  placeholder="Mac" required>
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Nodo De Red</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="nodoRed" name="NodoRed" value="43" placeholder="Nodo Red">
+							<input type="text" class="form-control" id="nodoRed" name="NodoRed"  placeholder="Nodo Red">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Grupo de captura</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="gpoCaptura" value="B-8" name="GpoCaptura" placeholder="Grupo de captura">
+							<input type="text" class="form-control" id="gpoCaptura"  name="GpoCaptura" placeholder="Grupo de captura">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Nivel_Cor</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="nivel_cor" value="B-8" name="Nivel_Cor" placeholder="Nivel_Cor">
+							<input type="text" class="form-control" id="nivel_cor"  name="Nivel_Cor" placeholder="Nivel_Cor">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Nivel_Aut</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="nivel_Aut" value="B-8" name="Nivel_Aut" placeholder="Nivel_Aut">
+							<input type="text" class="form-control" id="nivel_Aut"  name="Nivel_Aut" placeholder="Nivel_Aut">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Codigo_Aut</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="Codigo_Aut" value="B-8" name="Codigo_Aut" placeholder="Codigo_Aut">
+							<input type="text" class="form-control" id="Codigo_Aut"  name="Codigo_Aut" placeholder="Codigo_Aut">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Función</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="funcion" value="B-8" name="Funcion" placeholder="Función">
+							<input type="text" class="form-control" id="funcion"  name="Funcion" placeholder="Función">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">DID</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="did" name="DID" value="B-8" placeholder="DID">
+							<input type="text" class="form-control" id="did" name="DID"  placeholder="DID">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Correo de correoVoz</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="correoVoz" name="CorreoVoz" value="B-8" placeholder="Correo de Voz">
+							<input type="text" class="form-control" id="correoVoz" name="CorreoVoz" placeholder="Correo de Voz">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Puerto</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="puerto" name="Puerto" value="B-8" placeholder="Puerto">
+							<input type="text" class="form-control" id="puerto" name="Puerto"  placeholder="Puerto">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Dirección IP</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="dir_ip" name="Dir_IP" value="132.14.24.2" placeholder="Direccion IP">
+							<input type="text" class="form-control" id="dir_ip" name="Dir_IP"  placeholder="Direccion IP">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Mask</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="mask" name="Mask" value="255.255.255.0" placeholder="Mask">
+							<input type="text" class="form-control" id="mask" name="Mask"  placeholder="Mask">
 						</div>
 					</div>
 
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Gateway</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="gateway" name="Gateway" value="123456" placeholder="Gateway">
+							<input type="text" class="form-control" id="gateway" name="Gateway"  placeholder="Gateway">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">VLAN</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="vlan" name="VLAN" value="124346" placeholder="VLAN">
+							<input type="text" class="form-control" id="vlan" name="VLAN"  placeholder="VLAN">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Notas</label>
 						<div class="col-sm-10">
-							<textarea class="form-control" rows=5 id="notas" name="Notas" value="No hay notas" placeholder="Notas"></textarea>
+							<textarea class="form-control" rows=5 id="notas" name="Notas"  placeholder="Notas"></textarea>
 						</div>
 					</div>
 					<div class="form-group">
@@ -364,13 +373,13 @@
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Eliminador</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="eliminador" value="yes" name="Eliminador" placeholder="Eliminador">
+							<input type="text" class="form-control" id="eliminador"  name="Eliminador" placeholder="Eliminador">
 						</div>
 					</div>
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">F_Resguardo</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="f_resguardo" value="nose" name="F_Resguardo" placeholder="F_Resguardo">
+							<input type="text" class="form-control" id="f_resguardo"  name="F_Resguardo" placeholder="F_Resguardo">
 						</div>
 					</div>
 					<div class="form-group">
@@ -382,7 +391,7 @@
 					<div class="form-group">
 						<label class="col-sm-2 controllabel">Obsevaciones</label>
 						<div class="col-sm-10">
-							<textarea class="form-control" rows=5 id="Obsrvaciones" value="no hay" name="Observaciones" placeholder="Observaciones"></textarea>
+							<textarea class="form-control" rows=5 id="Obsrvaciones"  name="Observaciones" placeholder="Observaciones"></textarea>
 						</div>
 					</div>
 					<div class="form-group">

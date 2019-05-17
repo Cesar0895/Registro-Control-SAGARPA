@@ -1,30 +1,11 @@
 <?php
-session_start();
-
-		error_reporting(E_ALL & ~E_NOTICE);
-        error_reporting(E_ERROR | E_PARSE);
+error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(E_ERROR | E_PARSE);
 	
-	$varsesion=$_SESSION['user'];
-	//$contrasesion=$_SESSION['pass'];
+
 	
     require 'conexion.php';
-    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Denominacion`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion'";
-    //'or '1'='1
-    $resultado = $mysqli->query($consulta);
-    $row = $resultado->fetch_array(MYSQLI_ASSOC);
-
-		$puesto=$row['Puesto'];
-		$nombr=$row['nombComple'];
-	
-		if ($varsesion==null || $varsesion='' ) {
-			header('location:index.php');
-			die();
-		}
-		
-		if ($puesto!='encargado') {
-			header('location:Resguardante/inicioRes.php');
-			die();
-		}
+    
 		
 
 
@@ -144,6 +125,10 @@ session_start();
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
 							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link mask flex-center rgba-red-strong" href="Reportes.php">Reportes</a>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav">

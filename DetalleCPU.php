@@ -1,29 +1,10 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 error_reporting(E_ERROR | E_PARSE);
-session_start();
-	
-	$varsesion=$_SESSION['user'];
-	//$contrasesion=$_SESSION['pass'];
+
 	
     require 'conexion.php';
-    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion'";
-    //'or '1'='1
-    $resultado = $mysqli->query($consulta);
-    $row = $resultado->fetch_array(MYSQLI_ASSOC);
-
-		$puesto=$row['Puesto'];
-		$nombr=$row['nombComple'];
-	
-		if ($varsesion==null || $varsesion='' ) {
-			header('location:index.php');
-			die();
-		}
-		
-		if ($puesto!='encargado') {
-			header('location:Resguardante/inicioRes.php');
-			die();
-		}
+   
 		
 
 		
@@ -144,6 +125,10 @@ session_start();
 							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
+
+					<li class="nav-item">
+						<a class="nav-link mask flex-center rgba-red-strong" href="Reportes.php">Reportes</a>
+					</li>
 				</ul>
 				<ul class="nav navbar-nav">
 					<li>
@@ -230,7 +215,7 @@ session_start();
 					</div>
 					<div class="col-5">
 						<p class="h6">
-							<?php echo $row['Memoria_RAM']; ?> GB
+							<?php echo $row['Memoria_RAM']; ?>GB
 						</p>
 					</div>
 				</div>
@@ -419,7 +404,7 @@ session_start();
 									<?php echo $rowSoft['Adquisicion']; ?>
 								</td>
 								<td>
-									<a  href="DetalleCPU.php" data-href="DetalleCPU.php?id_Software=<?php echo $rowSoft['id_Software'];?>&amp;Id_CPU=<?php echo $row['Id_CPU'];?>"
+									<a href="DetalleCPU.php" data-href="DetalleCPU.php?id_Software=<?php echo $rowSoft['id_Software'];?>&amp;Id_CPU=<?php echo $row['Id_CPU'];?>"
 									 data-toggle="modal" data-target="#confirm-delete">
 										<span class="far fa-trash-alt"></span>
 									</a>
@@ -444,7 +429,7 @@ session_start();
 								<th>No. Inventario</th>
 								<th>SerieAux</th>
 								<th>SerieCPU</th>
-								
+
 								<th></th>
 							</tr>
 						</thead>
@@ -468,9 +453,9 @@ session_start();
 								<td>
 									<?php echo $rowAux['serieCPU']; ?>
 								</td>
-								
+
 								<td>
-									<a  href="DetalleCPU.php" data-href="DetalleCPU.php?Id_Aux=<?php echo $rowAux['IdAux'];?>&amp;Id_CPU=<?php echo $row['Id_CPU'];?>"
+									<a href="DetalleCPU.php" data-href="DetalleCPU.php?Id_Aux=<?php echo $rowAux['IdAux'];?>&amp;Id_CPU=<?php echo $row['Id_CPU'];?>"
 									 data-toggle="modal" data-target="#confirm-delete">
 										<span class="far fa-trash-alt"></span>
 									</a>
@@ -485,7 +470,7 @@ session_start();
 
 				<br>
 				<a href="vistaCPU.php" class="btn btn-primary">Regresar</a>
-				
+
 
 			</div>
 
@@ -502,7 +487,7 @@ session_start();
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	 crossorigin="anonymous"></script>
 
-	 <!-- Modal -->
+	<!-- Modal -->
 	<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">

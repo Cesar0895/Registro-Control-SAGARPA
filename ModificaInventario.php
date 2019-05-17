@@ -4,42 +4,53 @@
 			error_reporting(E_ERROR | E_PARSE);
 			require 'conexion.php';
 
-			$id_CPU=$_GET['Id_CPU'];
-			$id_Marcapc = $_GET['id_Marcapc'];
-			$id_Modelopc = $_GET['id_Modelopc'];
-			$id_procesador = $_GET['id_procesador'];
-			$idMemoriaRam = $_GET['idMemoriaRam'];		
-			$id_DD = $_GET['id_DD'];
-			$id_velocidad = $_GET['id_velocidad'];
-			$seriepc = $_GET['Seriepc'];
-			$inventariopc = $_GET['inventariopc'];
-			$adquipc = $_GET['adquipc'];
-			$unidadOptica = $_GET['unidadOptica'];
-			$bocinas = $_GET['bocinas'];
-			$P_usb = $_GET['P_usb'];
-			$P_serial = $_GET['P_serial'];
-			$P_paralelo = $_GET['P_paralelo'];
-			$Red_tipo = $_GET['red_tipo'];
-			$ip = $_GET['ip'];
-			$MacEth = $_GET['MacEth'];
-			$MacWifi = $_GET['MacWifi'];
-			$Dominio = $_GET['Dominio'];
-			$Antivirus = $_GET['Antivirus'];            
+			$Folio = $_GET['folio'];
+			$idZona=$_GET['idZona'];
+			$RFC=$_GET['RFC'];
+			$Filtrado=$_GET['filtrado'];
+			$Identificacion=$_GET['identificacion'];
+			$RFCusuario=$_GET['RFCusuario'];
+			$Nodo=$_GET['nodo'];
+			$FechaAdqui=$_GET['fechaAdqui'];
+			$DTadqui=$_GET['DTadqui'];
+			$DTB=$_GET['DTB'];
+			$tipo_HW=$_GET['Tipo_HW'];
+			$FolioResguardo=$_GET['folioResguardo'];
+			$Observaciones=$_GET['observaciones'];
+			$FinGarantia=$_GET['finGarantia'];
+			$Candado=$_GET['candado'];
+			$Valor=$_GET['valor'];
+			$Estatus=$_GET['estatus'];
+			$Ubicacion=$_GET['Ubicacion'];
+			$FechaLlenado=$_GET['fechaLlenado'];
+			$OficioMexico=$_GET['oficioMexico'];
+			$ContraAdmin=$_GET['contraAdmin'];
+			$id_CPU=$_GET['id_CPU'];
+			$id_Monitor=$_GET['id_Monitor'];
+			$id_Mouse=$_GET['id_Mouse'];
+			$id_Teclado=$_GET['id_Teclado'];
+			
         
 
-            if ($seriepc!=null) {
-				$sql2= "UPDATE `cpu` SET `Id_Marca`='$id_Marcapc', `Id_Modelo`='$id_Modelopc', `Serie`='$seriepc',`Invetario`='$inventariopc',`Id_Procesador`='$id_procesador', `Id_MemoriaRam`='$idMemoriaRam',`Id_DD`='$id_DD',`Id_Velocidad`='$id_velocidad',`Adquisicion`='$adquipc',UnidadOptica='$unidadOptica',Bosinas='$bocinas', `P_Serial`='$P_serial',`P_Paralelo`='$P_paralelo',P_USB=$P_usb,RedTipo='$Red_tipo',IP='$ip',MacEth='$MacEth',Mac_wifi='$MacWifi',Dominio='$Dominio',Antivirus='$Antivirus' WHERE Id_CPU='$id_CPU'";
+            if ($Folio!=null) {
+				//echo "UPDATE `equipos` SET Id_Zona='$idZona',RFC='$RFC', Filtrado='$Filtrado',Observaciones='$Observaciones',Fin_Garantia='$FinGarantia',Candado='$Candado',Estatus='$Estatus', Valor='$Valor'  WHERE Folio='$Folio'";
+
+
+				$sql2= "UPDATE `equipos` SET Id_Zona='$idZona',RFC='$RFC',RFC_Usuario='$RFCusuario', Filtrado='$Filtrado',Identificacion='$Identificacion',Nodo='$Nodo',Fecha_Adquisicion='$FechaAdqui',DT_adquisicion='$DTadqui',DTB='$DTB',Tipo_HW='$tipo_HW',Folio_Resduardo='$FolioResguardo',Observaciones='$Observaciones',Fin_Garantia='$FinGarantia',Candado='$Candado',Estatus='$Estatus', Ubicacion='$Ubicacion', Valor='$Valor', Oficio_Mexico='$OficioMexico',Contra_Admin='$ContraAdmin' WHERE Folio='$Folio'";
+
+				//,`Nodo`='$Nodo',`Fecha_Adquisicion`='$FechaAdqui',	`DT_adquisicion`='$DTadqui',`DTB`=$DTB,`Tipo_HW`='$tipo_HW',`Folio_Resduardo`='$FolioResguardo',`Observaciones`='$Observaciones',`Fin_Garantia`='$FinGarantia',`Candado`='$Candado',`Valor`='$Valor',`Estatus`='$Estatus',`Ubicacion`='$Ubicacion',`Fecha_Llenado`='$FechaLlenado',`Oficio_Mexico`='$OficioMexico',`Contra_Admin`='$ContraAdmin'
 				
-				///SET `Id_Marca`='$id_Marcapc',`Id_Modelo`='$id_Modelopc',`Id_Procesador`='$id_procesador',`Id_MemoriaRam`='$idMemoriaRam',`Id_DD`='$id_DD',`Id_Velocidad`='$id_velocidad',`Serie`='$seriepc',`Invetario`='$inventariopc',`Adquisicion`='$adquipc',`UnidadOptica`='$unidadOptica',`Bosinas`='$bocinas',`P_USB`='$P_usb',`P_Serial`='$P_serial',`P_Paralelo`='$P_paralelo',`RedTipo`='$Red_tipo',`IP`='$ip',`MacEth`='$MacEth',`Mac_wifi`=$MacWifi,`Dominio`='$Dominio',`Antivirus`='$Antivirus' WHERE Id_CPU='$id_CPU'
                 $mysqli->query($sql2);
-    
-				if ($id_CPU=1) {
+				
+				if ($Folio=1) {
 					echo'<script type="text/javascript">
-			alert("Registro actualizado!");
-			window.location.href="vistaCPU.php"	;
-			</script>';
+					alert("Registro actualizado!");
+					window.location.href="vistaEquipoComputo.php"	;
+					</script>';
                 
-                }
+				}
+				
+				
 			}
 			
 ?>
@@ -47,31 +58,19 @@
 require 'conexion.php';
 $folio = $_GET['Folio'];        
             
-$sql = "SELECT `Folio`, zona.Nombre, concat(persona.Nombre,' ',persona.ApePaterno,' ',persona.ApeMaterno) as nombResp, persona.RFC, Filtrado,`Identificacion`, concat(p.Nombre,' ',p.ApePaterno,' ',p.ApeMaterno) as nombUser,p.RFC as RFCUser, `Nodo`, `Fecha_Adquisicion`, `DT_adquisicion`, `DTB`, `Tipo_HW`, `Folio_Resduardo`, `Observaciones`, `Fin_Garantia`, `Candado`, `Valor`,equipos.Estatus, `Ubicacion`, `Fecha_Llenado`, `Oficio_Mexico`, `Contra_Admin`, 
-cpu.Serie as serieCPU, marCPU.Marca as marcaCPU, modCPU.Modelo as modCPU, cpu.Invetario as InvCPU, 
-monitor.Serie as serieMon, marMoni.Marca as marcaMoni, modMoni.Modelo as modMoni, monitor.Inventario as InvMoni,
-mouse.Serie as serieMou, marMou.Marca as marcaMou, modMou.Modelo as modMou, mouse.Inventario as InvMou,
-teclado.Serie as serieTec, marTec.Marca as marcaTec, modTec.Modelo as modTec, teclado.Inventario as InvTec
+$sql = "SELECT `Folio`, zona.Nombre, zona.id_Zona, concat(persona.Nombre,' ',persona.ApePaterno,' ',persona.ApeMaterno) as nombResp, persona.RFC, Filtrado,`Identificacion`, concat(p.Nombre,' ',p.ApePaterno,' ',p.ApeMaterno) as nombUser,p.RFC as RFCUser, `Nodo`, `Fecha_Adquisicion`, `DT_adquisicion`, `DTB`, `Tipo_HW`, `Folio_Resduardo`, `Observaciones`, `Fin_Garantia`, `Candado`, `Valor`,equipos.Estatus, `Ubicacion`, `Fecha_Llenado`, `Oficio_Mexico`, `Contra_Admin`, 
+cpu.Serie as serieCPU, 
+monitor.Serie as serieMon, 
+mouse.Serie as serieMou, 
+teclado.Serie as serieTec
 FROM `equipos`
 INNER JOIN zona on equipos.Id_Zona=zona.id_Zona 
 INNER JOIN persona on equipos.RFC=persona.RFC 
 INNER JOIN persona p on equipos.RFC_Usuario=p.RFC 
-INNER JOIN (cpu 
-			INNER JOIN marca marCPU on cpu.Id_Marca=marCPU.id_Marca
-			INNER JOIN modelo modCPU on cpu.Id_Modelo=modCPU.id_Modelo) 
-			on equipos.Id_CPU=cpu.Id_CPU 
-INNER JOIN (monitor 
-			INNER JOIN marca marMoni on monitor.id_Marca=marMoni.id_Marca 
-			INNER JOIN modelo modMoni on monitor.id_Modelo=modMoni.id_Modelo)
-			on equipos.id_Monitor=monitor.id_Monitor
-INNER JOIN (mouse 
-			INNER JOIN marca marMou on mouse.Id_Marca=marMou.id_Marca 
-			INNER JOIN modelo modMou on mouse.Id_Modelo=modMou.id_Modelo) 
-			ON equipos.Id_mouse=mouse.Id_mouse 
-INNER JOIN (teclado 
-			INNER JOIN marca marTec on teclado.Id_Marca=marTec.id_Marca 
-			INNER JOIN modelo modTec on teclado.IdModelo=modTec.id_Modelo) 
-			on equipos.Id_Teclado=teclado.Id_Teclado WHERE Folio = '$folio'";
+INNER JOIN cpu on equipos.Id_CPU=cpu.Id_CPU 
+INNER JOIN monitor on equipos.id_Monitor=monitor.id_Monitor
+INNER JOIN mouse ON equipos.Id_mouse=mouse.Id_mouse 
+INNER JOIN teclado on equipos.Id_Teclado=teclado.Id_Teclado WHERE Folio = '$folio'";
             $resultado = $mysqli->query($sql);
 			$row2 = $resultado->fetch_array(MYSQLI_ASSOC);
 			
@@ -194,6 +193,9 @@ INNER JOIN (teclado
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
 
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+	 crossorigin="anonymous">
+
 	<link rel="stylesheet" href="./css/estilo.css">
 
 	<title>Control de dispositivos</title>
@@ -218,17 +220,16 @@ INNER JOIN (teclado
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
 					<li class="nav-item">
-						<a class="nav-link" href="inicio.php">Inicio</a>
+						<a class="nav-link mask flex-center rgba-red-strong" href="inicio.php">Inicio</a>
 					</li>
 
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="registroEquipoComputo.php">Equipo de computo</a>
-							<a class="dropdown-item" href="registroAuxiliares.php">Auxiliares</a>
-							<a class="dropdown-item" href="#">Telefonia</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Separated link</a>
+							<a class="dropdown-item" href="Auxiliares.php">Auxiliares</a>
+							<a class="dropdown-item" href="Telefonia.php">Telefonia</a>
+
 						</div>
 					</li>
 					<li class="nav-item">
@@ -248,18 +249,28 @@ INNER JOIN (teclado
 							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
 							<a class="dropdown-item" href="Procesador.php">Procesador</a>
 							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
+							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
+							<a class="dropdown-item" href="Areas.php">Áreas</a>
+							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link mask flex-center rgba-red-strong" href="Reportes.php">Reportes</a>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav">
 					<li>
-						<a href="#">
-							<span class="fas fa-user nav-link"></span> Sign Up</a>
+
+						<span class="fas fa-user nav-link"> Bienvenido (a):
+							<?php echo $nombr; ?>
+						</span>
 					</li>
 					<li>
-						<a href="#">
-							<span class="fas fa-sign-in-alt nav-link"></span> Salir</a>
+						<a href="cerrar_session.php">
+							<span class="fas fa-sign-in-alt nav-link"></span> (Cerrar sesion)</a>
+
 					</li>
 				</ul>
 			</div>
@@ -276,12 +287,12 @@ INNER JOIN (teclado
 			</div>
 			<div class="card-body">
 				<form>
-					<h4 style="color:red">Primer selecciona un responsable y usuario </h4>
+					<h4 style="color:red">Selecciona un responsable y usuario </h4>
 					<div class="form-inline">
 						<div class="form-group mb-2	">
 							<label>Responsable: </label>
 							<select class="form-control" id="rfc" name="RFC">
-								<option value="<?php echo $row['RFC'];?>">
+								<option value="<?php echo $row2['RFC'];?>">
 									<?php echo $row2['nombResp'];?>
 								</option>
 								<?php echo $combobitrfc; ?>
@@ -301,14 +312,13 @@ INNER JOIN (teclado
 
 					<div class="form-group">
 						<label>Folio</label>
-						<input type="number" class="form-control" id="grupo" name='folio' value="<?php echo $row2[Folio]; ?>"
-						 disabled>
+						<input type="number" class="form-control" id="grupo" name='folio' value="<?php echo $row2['Folio']; ?>">
 					</div>
 
 					<div class="form-group">
 						<label>Zona</label>
 						<select class="form-control col-sm-10" id="id_zona" name="idZona">
-							<option value="<?php echo $row2['Nombre'];?>">
+							<option value="<?php echo $row2['id_Zona'];?>">
 								<?php echo $row2['Nombre'];?>
 							</option>
 							<?php echo $combobitzona; ?>
@@ -321,12 +331,13 @@ INNER JOIN (teclado
 
 					<div class="form-group">
 						<label>Fecha de filtrado</label>
-						<input type="date" class="form-control" id="filtrado" name="filtrado" placeholder="Introduce la fecha de filtrado" value="<?php echo $row2['Filtrado'];?>">
+						<input type="date" class="form-control" id="filtrado" name="filtrado" value="<?php echo $row2['Filtrado'];?>">
 					</div>
 
 					<div class="form-group">
 						<label>Identificación</label>
-						<input type="text" class="form-control" id="identificacion" name="identificacion" placeholder="Introduce la identificacion" value="<?php echo $row2['Identificacion']; ?>">
+						<input type="text" class="form-control" id="identificacion" name="identificacion" placeholder="Introduce la identificacion"
+						 value="<?php echo $row2['Identificacion']; ?>">
 					</div>
 
 					<div class="form-group">
@@ -336,7 +347,8 @@ INNER JOIN (teclado
 
 					<div class="form-group">
 						<label>Fecha de adquisición</label>
-						<input type="date" class="form-control" id="fechaAdqui" name="fechaAdqui" placeholder="Introduce la fecha de aquisición" value="<?php echo $row2['Fecha_Adquisicion'];?>">
+						<input type="date" class="form-control" id="fechaAdqui" name="fechaAdqui" placeholder="Introduce la fecha de aquisición"
+						 value="<?php echo $row2['Fecha_Adquisicion'];?>">
 					</div>
 
 					<div class="form-group">
@@ -357,7 +369,7 @@ INNER JOIN (teclado
 					<div class="form-group">
 						<label>Folio resguardo</label>
 						<input type="text" class="form-control" id="folioResguardo" name="folioResguardo" placeholder="Introduce el Folio de Resguarda"
-						value="<?php echo $row2['Folio_Resduardo']; ?>">
+						 value="<?php echo $row2['Folio_Resduardo']; ?>">
 					</div>
 					<div class="form-group">
 						<label>Obsevaciones</label>
@@ -368,15 +380,16 @@ INNER JOIN (teclado
 
 					<div class="form-group">
 						<label>Fin de garantia</label>
-						<input type="date" class="form-control" id="finGarantia" name="finGarantia" placeholder="Introduce el fin de la garantia" value="<?php echo $row2['Fin_Garantia']; ?>">
+						<input type="date" class="form-control" id="finGarantia" name="finGarantia" placeholder="Introduce el fin de la garantia"
+						 value="<?php echo $row2['Fin_Garantia']; ?>">
 					</div>
 
 					<div class="form-group">
-						<label for="estatus" class="col-sm-2 controllabel">Candado</label>
+						<label for="candado" class="col-sm-2 controllabel">Candado</label>
 						<div class="col-sm-3">
 							<select class="form-control" id="candado" name="candado">
-								<option value="SI" <?php if( $row[ 'candado']=='SI' ) echo 'Selected'; ?>>SI</option>
-								<option value="NO" <?php if( $row[ 'candado']=='NO' ) echo 'Selected'; ?>>NO</option>
+								<option value="SI" <?php if( $row2[ 'Candado']=='SI' ) echo 'Selected'; ?>>SI</option>
+								<option value="NO" <?php if( $row2[ 'Candado']=='NO' ) echo 'Selected'; ?>>NO</option>
 							</select>
 						</div>
 					</div>
@@ -390,23 +403,25 @@ INNER JOIN (teclado
 					<div class="form-group">
 						<label for="estatus" class="col-sm-2 controllabel">Status</label>
 						<div class="col-sm-10">
-							<select class="form-control" id="estatus" name="Estatus">
-								<option value="Bueno" <?php if( $row[ 'Estatus']=='Bueno' ) echo 'Selected'; ?>>Bueno</option>
-								<option value="Regular" <?php if( $row[ 'Estatus']=='Regular' ) echo 'Selected'; ?>>Regular</option>
-								<option value="Malo" <?php if( $row[ 'Estatus']=='Otro' ) echo 'Selected'; ?>>Malo</option>
-								<option value="Otro" <?php if( $row[ 'Estatus']=='Otro' ) echo 'Selected'; ?>>Otro</option>
+							<select class="form-control" id="estatus" name="estatus">
+								<option value="Bueno" <?php if( $row2[ 'Estatus']=='Bueno' ) echo 'Selected'; ?>>Bueno</option>
+								<option value="Regular" <?php if( $row2[ 'Estatus']=='Regular' ) echo 'Selected'; ?>>Regular</option>
+								<option value="Malo" <?php if( $row2[ 'Estatus']=='Malo' ) echo 'Selected'; ?>>Malo</option>
+								<option value="Otro" <?php if( $row2[ 'Estatus']=='Otro' ) echo 'Selected'; ?>>Otro</option>
 							</select>
 						</div>
 					</div>
 					<div class="form-group">
 						<label>Ubicación</label>
-						<input type="text" class="form-control" id="ubicacion" name="Ubicacion" placeholder="Introduce la ubicación del equipo " value="<?php echo $row2['Ubicacion']; ?>">
+						<input type="text" class="form-control" id="ubicacion" name="Ubicacion" placeholder="Introduce la ubicación del equipo "
+						 value="<?php echo $row2['Ubicacion']; ?>">
 					</div>
 
 					<div class="form-group">
 						<label>Fecha de llenado: </label>
 
-						<input type="date" class="form-control" id="fechaLlenado" name="fechaLlenado" value="<?php echo $row2['Fecha_Llenado']; ?>" disabled>
+						<input type="date" class="form-control" id="fechaLlenado" name="fechaLlenado" value="<?php echo $row2['Fecha_Llenado']; ?>"
+						 disabled>
 					</div>
 
 					<div class="form-group">
@@ -416,35 +431,32 @@ INNER JOIN (teclado
 
 					<div class="form-group">
 						<label>Contraseña Administrador</label>
-						<input type="text" class="form-control" id="contraAdmin" name="contraAdmin" placeholder="Introduce la contraseña de administrador" value="<?php echo $row2['Contra_Admin']; ?>">
+						<input type="text" class="form-control" id="contraAdmin" name="contraAdmin" value="<?php echo $row2['Contra_Admin']; ?>">
 					</div>
+
 
 					<div class="form-group">
 						<label>Numero de serie del CPU</label>
-						<select class="form-control col-sm-10" id="id_CPU" name="id_CPU">
-							<?php echo $combobitpc ?>
-						</select>
+						<input type="text" class="form-control" id="contraAdmin" name="contraAdmin" value="<?php echo $row2['serieCPU']; ?>"
+						 disabled>
 					</div>
 
 					<div class="form-group">
 						<label>Numero de serie del monitor</label>
-						<select class="form-control col-sm-10" id="id_Monitor" name="id_Monitor">
-							<?php echo $combobitmont ?>
-						</select>
+						<input type="text" class="form-control" id="contraAdmin" name="contraAdmin" value="<?php echo $row2['serieMon']; ?>"
+						 disabled>
 					</div>
 
 					<div class="form-group">
 						<label>Numero de serie del mouse</label>
-						<select class="form-control col-sm-10" id="id_Mouse" name="id_Mouse">
-							<?php echo $combobitmouse ?>
-						</select>
+						<input type="text" class="form-control" id="contraAdmin" name="contraAdmin" value="<?php echo $row2['serieMou']; ?>"
+						 disabled>
 					</div>
 
 					<div class="form-group">
 						<label>Numero de serie del Teclado</label>
-						<select class="form-control col-sm-10" id="id_Teclado" name="id_Teclado">
-							<?php echo $combobittec ?>
-						</select>
+						<input type="text" class="form-control" id="contraAdmin" name="contraAdmin" value="<?php echo $row2['serieTec'];?>"
+						 disabled>
 					</div>
 
 

@@ -138,6 +138,10 @@ session_start();
 							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
+
+					<li class="nav-item">
+						<a class="nav-link mask flex-center rgba-red-strong" href="Reportes.php">Reportes</a>
+					</li>
 				</ul>
 				<ul class="nav navbar-nav">
 					<li>
@@ -518,7 +522,7 @@ session_start();
 								<th>No. de inventario</th>
 								<th>Descripcion</th>
 								<th>Adquisicion</th>
-								
+
 
 							</tr>
 						</thead>
@@ -546,7 +550,7 @@ session_start();
 									<?php echo $rowTec['Adquisicion']; ?>
 								</td>
 
-								
+
 							</tr>
 							<?php } ?>
 						</tbody>
