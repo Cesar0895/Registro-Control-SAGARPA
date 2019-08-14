@@ -1,7 +1,33 @@
 <?php
-        error_reporting(E_ALL & ~E_NOTICE);
-        error_reporting(E_ERROR | E_PARSE);
-        require 'conexion.php';
+
+session_start();
+
+error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(E_ERROR | E_PARSE);
+
+	
+	$varsesion=$_SESSION['user'];
+	//$contrasesion=$_SESSION['pass'];
+	
+    require 'conexion.php';
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    //'or '1'='1
+    $resultado = $mysqli->query($consulta);
+    $row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+		$RFC=$row['RFC'];
+		$nombr=$row['nombComple'];
+	
+		if ($varsesion==null || $varsesion='' ) {
+			header('location:index.php');
+			die();
+		}
+		
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+			header('location:Resguardante/inicioRes.php');
+			die();
+		}
+      
 
 		$where = "";
 	
@@ -33,6 +59,12 @@
 		{
 			echo "No hubo resultados";
 		}
+
+		$Serie=$_GET['Serie'];
+
+		$sqlCPU = "SELECT * FROM `cpu` WHERE Serie='$Serie' ORDER BY `Id_CPU` DESC";
+		$resultpcSerie = $mysqli->query($sqlCPU);
+		$rowSerie = $resultpcSerie->fetch_array(MYSQLI_ASSOC);
 		
 		/*
 		$Serie=$_GET['Serie'];
@@ -58,6 +90,9 @@
 
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous">
+
+	 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
 	 crossorigin="anonymous">
 
 	<link rel="stylesheet" href="./css/estilo.css">
@@ -116,7 +151,6 @@
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -127,9 +161,9 @@
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -160,7 +194,11 @@
 				<div class="form-group">
 					<label>Numero de serie del CPU</label>
 					<select class="form-control col-sm-10" id="id_CPU" name="Id_cpu">
-						<?php echo $combobitpc ?>
+					<?php echo $combobitpc ?>
+					<option value="<?php echo $rowSerie['Id_CPU']; ?>" <?php if( $row2[ 'Id_CPU']!='' ) echo 'Selected'; ?>><?php echo $rowSerie['Serie']; ?></option>
+
+					
+						
 					</select>
 				</div>
 

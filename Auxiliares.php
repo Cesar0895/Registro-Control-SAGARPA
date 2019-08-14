@@ -1,29 +1,30 @@
 <?php
-session_start();
 	
 error_reporting(E_ALL & ~E_NOTICE);
 error_reporting(E_ERROR | E_PARSE);
-	$varsesion=$_SESSION['user'];
-	//$contrasesion=$_SESSION['pass'];
+session_start();
 	
-    require 'conexion.php';
-    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion'";
-    //'or '1'='1
-    $resultado = $mysqli->query($consulta);
-    $row = $resultado->fetch_array(MYSQLI_ASSOC);
+$varsesion=$_SESSION['user'];
+//$contrasesion=$_SESSION['pass'];
 
-		$puesto=$row['Puesto'];
-		$nombr=$row['nombComple'];
+require 'conexion.php';
+$consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+//'or '1'='1
+$resultado = $mysqli->query($consulta);
+$row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+	$RFC=$row['RFC'];
+	$nombr=$row['nombComple'];
+
+	if ($varsesion==null || $varsesion='' ) {
+		header('location:index.php');
+		die();
+	}
 	
-		if ($varsesion==null || $varsesion='' ) {
-			header('location:index.php');
-			die();
-		}
-		
-		if ($puesto!='encargado' && $puesto!='jefe') {
-			header('location:Resguardante/inicioRes.php');
-			die();
-		}
+	if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+		header('location:Resguardante/inicioRes.php');
+		die();
+	}
 		
 
 	$idAux = $_GET['IdAux'];
@@ -116,7 +117,6 @@ error_reporting(E_ERROR | E_PARSE);
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -127,9 +127,9 @@ error_reporting(E_ERROR | E_PARSE);
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -171,6 +171,9 @@ error_reporting(E_ERROR | E_PARSE);
 					<table class="table table-hover table-secondary">
 						<thead>
 							<tr>
+								<th></th>
+								<th></th>
+								<th></th>
 								<th>Folio</th>
 								<th>Zona</th>
 								<th>Nombre del dispositivo</th>
@@ -179,19 +182,34 @@ error_reporting(E_ERROR | E_PARSE);
 								<th>Modelo</th>
 								<th>Serie</th>
 								<th>Tipo de dispositivo</th>
-								<th>RFC</th>
+							
 								<th>Valor</th>
 								<th>Asignado</th>
 
-								<th></th>
-								<th></th>
-								<th></th>
+								
 							</tr>
 						</thead>
 
 						<tbody>
 							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
 							<tr>
+							<td>
+									<a href="DetalleAux.php?IdAux=<?php echo $row['IdAux']; ?>">
+										<span class="fas fa-eye"></span>
+									</a>
+								</td>
+
+								<td>
+									<a href="ModificaAux.php?IdAux=<?php echo $row['IdAux']; ?>">
+										<span class="far fa-edit"></span>
+									</a>
+								</td>
+								<td>
+									<a href="Auxiliares.php" data-href="Auxiliares.php?IdAux=<?php echo $row['IdAux']; ?>"
+									 data-toggle="modal" data-target="#confirm-delete">
+										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
 								<td>
 									<?php echo $row['IdAux']; ?>
 								</td>
@@ -219,9 +237,6 @@ error_reporting(E_ERROR | E_PARSE);
 								</td>
 
 								<td>
-									<?php echo $row['RFC']; ?>
-								</td>
-								<td>
 									$
 									<?php echo $row['Valor']; ?>.00
 								</td>
@@ -234,23 +249,7 @@ error_reporting(E_ERROR | E_PARSE);
 
 								</td>
 
-								<td>
-									<a href="DetalleAux.php?IdAux=<?php echo $row['IdAux']; ?>">
-										<span class="fas fa-eye"></span>
-									</a>
-								</td>
-
-								<td>
-									<a href="ModificaAux.php?IdAux=<?php echo $row['IdAux']; ?>">
-										<span class="far fa-edit"></span>
-									</a>
-								</td>
-								<td>
-									<a href="Auxiliares.php" data-href="Auxiliares.php?IdAux=<?php echo $row['IdAux']; ?>"
-									 data-toggle="modal" data-target="#confirm-delete">
-										<span class="far fa-trash-alt"></span>
-									</a>
-								</td>
+								
 							</tr>
 							<?php } ?>
 						</tbody>

@@ -1,22 +1,27 @@
 <?php
 session_start();
 	
-	$varsesion=$_SESSION['user'];
-	//$contrasesion=$_SESSION['pass'];
-	
-    require 'conexion.php';
-    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion'";
-    //'or '1'='1
-    $resultado = $mysqli->query($consulta);
-    $row = $resultado->fetch_array(MYSQLI_ASSOC);
+$varsesion=$_SESSION['user'];
+//$contrasesion=$_SESSION['pass'];
 
-		$puesto=$row['Puesto'];
-		$nombr=$row['nombComple'];
+require 'conexion.php';
+$consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+//'or '1'='1
+$resultado = $mysqli->query($consulta);
+$row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+	$RFC=$row['RFC'];
+	$nombr=$row['nombComple'];
+
+	if ($varsesion==null || $varsesion='' ) {
+		header('location:index.php');
+		die();
+	}
 	
-		if ($varsesion==null || $varsesion='' ) {
-			header('location:index.php');
-			die();
-		}
+	if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+		header('location:Resguardante/inicioRes.php');
+		die();
+	}
 		
 		
 		
@@ -25,46 +30,45 @@ session_start();
             
 			$sql = "SELECT `Folio`, zona.Nombre, concat(persona.Nombre,' ',persona.ApePaterno,' ',persona.ApeMaterno) as nombResp, persona.RFC, Filtrado,`Identificacion`, concat(p.Nombre,' ',p.ApePaterno,' ',p.ApeMaterno) as nombUser,p.RFC as RFCUser, `Nodo`, `Fecha_Adquisicion`, `DT_adquisicion`, `DTB`, `Tipo_HW`, `Folio_Resduardo`, `Observaciones`, `Fin_Garantia`, `Candado`, `Valor`,equipos.Estatus, `Ubicacion`, `Fecha_Llenado`, `Oficio_Mexico`, `Contra_Admin`, 
 			cpu.Serie as serieCPU, marCPU.Marca as marcaCPU, modCPU.Modelo as modCPU, cpu.Invetario as InvCPU, 
-			monitor.Serie as serieMon, marMoni.Marca as marcaMoni, modMoni.Modelo as modMoni, monitor.Inventario as InvMoni,
-			mouse.Serie as serieMou, marMou.Marca as marcaMou, modMou.Modelo as modMou, mouse.Inventario as InvMou,
-			teclado.Serie as serieTec, marTec.Marca as marcaTec, modTec.Modelo as modTec, teclado.Inventario as InvTec
+
+			monitor.id_Monitor,monitor.Serie as serieMon, marMoni.Marca as marcaMoni, monitor.Modelo as modMoni, monitor.Inventario as InvMoni,
+
+			mouse.Id_mouse, mouse.Serie as serieMou, marMou.Marca as marcaMou, mouse.Modelo as modMou, mouse.Inventario as InvMou,
+
+			teclado.Id_Teclado, teclado.Serie as serieTec, marTec.Marca as marcaTec, teclado.Modelo as modTec, teclado.Inventario as InvTec
 			FROM `equipos`
-			INNER JOIN zona on equipos.Id_Zona=zona.id_Zona 
-			INNER JOIN persona on equipos.RFC=persona.RFC 
-			INNER JOIN persona p on equipos.RFC_Usuario=p.RFC 
-			INNER JOIN (cpu 
-						INNER JOIN marca marCPU on cpu.Id_Marca=marCPU.id_Marca
-						INNER JOIN modelo modCPU on cpu.Id_Modelo=modCPU.id_Modelo) 
+			LEFT JOIN zona on equipos.Id_Zona=zona.id_Zona 
+			LEFT JOIN persona on equipos.RFC=persona.RFC 
+			LEFT JOIN persona p on equipos.RFC_Usuario=p.RFC  
+			LEFT JOIN (cpu 
+						LEFT JOIN marca marCPU on cpu.Id_Marca=marCPU.id_Marca
+						LEFT JOIN modelo modCPU on cpu.Id_Modelo=modCPU.id_Modelo) 
 						on equipos.Id_CPU=cpu.Id_CPU 
-			INNER JOIN (monitor 
-						INNER JOIN marca marMoni on monitor.id_Marca=marMoni.id_Marca 
-						INNER JOIN modelo modMoni on monitor.id_Modelo=modMoni.id_Modelo)
+			LEFT JOIN (monitor 
+						LEFT JOIN marca marMoni on monitor.id_Marca=marMoni.id_Marca)
 						on equipos.id_Monitor=monitor.id_Monitor
-			INNER JOIN (mouse 
-						INNER JOIN marca marMou on mouse.Id_Marca=marMou.id_Marca 
-						INNER JOIN modelo modMou on mouse.Id_Modelo=modMou.id_Modelo) 
+			LEFT JOIN (mouse 
+						LEFT JOIN marca marMou on mouse.Id_Marca=marMou.id_Marca) 
 						ON equipos.Id_mouse=mouse.Id_mouse 
-			INNER JOIN (teclado 
-						INNER JOIN marca marTec on teclado.Id_Marca=marTec.id_Marca 
-						INNER JOIN modelo modTec on teclado.IdModelo=modTec.id_Modelo) 
+			LEFT JOIN (teclado 
+						LEFT JOIN marca marTec on teclado.Id_Marca=marTec.id_Marca) 
 						on equipos.Id_Teclado=teclado.Id_Teclado WHERE Folio = '$folio'";
             $resultado = $mysqli->query($sql);
 			$row = $resultado->fetch_array(MYSQLI_ASSOC);
 
-			$serieMou= $row['serieMou'];
-			$serieMon= $row['serieMon'];
-			$serieTec= $row['serieTec'];
+			$serieMou= $row['Id_mouse'];
+			$serieMon= $row['id_Monitor'];
+			$serieTec= $row['Id_Teclado'];
+	
 			
-			
-			$sqlmou = "SELECT m.Id_mouse, m.Serie, m.Inventario, m.Descripcion, m.Adquisicion, marca.Marca, modelo.Modelo FROM mouse m INNER JOIN marca ON m.Id_Marca=marca.id_Marca INNER JOIN modelo on m.Id_Modelo=modelo.id_Modelo where Serie= '$serieMou'";
+			$sqlmou = "SELECT m.Id_mouse, m.Serie, m.Inventario, m.Descripcion, m.Adquisicion, marca.Marca, Modelo FROM mouse m Left JOIN marca ON m.Id_Marca=marca.id_Marca  where m.Id_mouse= '$serieMou'";
 			$resultadoTabla = $mysqli->query($sqlmou);
 
-			$sqlmon = "SELECT monitor.id_Monitor, monitor.Serie, marca.Marca, modelo.Modelo, monitor.Inventario, monitor.Descripcion, monitor.Adquisicion FROM monitor 
-			inner join modelo on monitor.id_Modelo=modelo.id_Modelo
-			inner join marca on monitor.id_Marca=marca.id_Marca where Serie='$serieMon'";
+			$sqlmon = "SELECT monitor.id_Monitor, monitor.Serie, marca.Marca, monitor.Modelo, monitor.Inventario, monitor.Descripcion, monitor.Adquisicion FROM monitor 
+			left join marca on monitor.id_Marca=marca.id_Marca where monitor.id_Monitor='$serieMon'";
 			$resultadoMon = $mysqli->query($sqlmon);
 
-			$sqltec = "SELECT t.Id_Teclado, t.Serie, t.Inventario, t.Descripcion, t.Adquisicion, marca.Marca, modelo.Modelo FROM teclado t INNER JOIN marca ON t.Id_Marca=marca.id_Marca INNER JOIN modelo on t.IdModelo=modelo.id_Modelo where Serie='$serieTec'";
+			$sqltec = "SELECT t.Id_Teclado, t.Serie, t.Inventario, t.Descripcion, t.Adquisicion, marca.Marca, t.Modelo FROM teclado t left JOIN marca ON t.Id_Marca=marca.id_Marca  where Id_Teclado='$serieTec'";
 			$resultadoTec = $mysqli->query($sqltec);
 ?>
 <!doctype html>
@@ -77,6 +81,8 @@ session_start();
 
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous">
+	 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
 	 crossorigin="anonymous">
 	<link rel="stylesheet" href="./css/estilo.css">
 
@@ -135,7 +141,6 @@ session_start();
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 

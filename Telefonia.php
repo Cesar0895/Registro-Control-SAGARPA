@@ -1,7 +1,29 @@
 <?php
 	error_reporting(E_ALL & ~E_NOTICE);
 	error_reporting(E_ERROR | E_PARSE);
-	require 'conexion.php';
+	session_start();
+	
+	$varsesion=$_SESSION['user'];
+	//$contrasesion=$_SESSION['pass'];
+	
+    require 'conexion.php';
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    //'or '1'='1
+    $resultado = $mysqli->query($consulta);
+    $row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+		$RFC=$row['RFC'];
+		$nombr=$row['nombComple'];
+	
+		if ($varsesion==null || $varsesion='' ) {
+			header('location:index.php');
+			die();
+		}
+		
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+			header('location:Resguardante/inicioRes.php');
+			die();
+		}
 
 	$extencion = $_GET['Extencion'];
 	
@@ -93,7 +115,6 @@
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -104,9 +125,9 @@
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -131,6 +152,9 @@
 
 				<a href="RegistroTelefonia.php" class="btn btn-primary float-right mr-3">Nuevo Registro</a>
 
+				<a href="ReporteExcelTel.php" class="btn btn-primary float-right mr-3">Reporte (Excel)</a>
+
+
 				<div class="row ml-3">
 
 
@@ -148,6 +172,9 @@
 					<table class="table table-hover table-secondary">
 						<thead>
 							<tr>
+								<th></th>
+								<th></th>
+								<th></th>
 								<th>Extención</th>
 								<th>Display</th>
 								<th>RFC del responsable</th>
@@ -158,34 +185,32 @@
 								<th>Modelo</th>
 								<th>Mac</th>
 								<th>Nodo de Red</th>
-								<th>Grupo de captura</th>
-								<th>Nivel Cor</th>
-								<th>Nivel Aut</th>
-								<th>Codigo Aut</th>
-								<th>Funcion</th>
-								<th>DID</th>
-								<th>Correo de voz</th>
-								<th>Puerto</th>
-								<th>Diriccion IP</th>
-								<th>Mask</th>
-								<th>Gateway</th>
-								<th>VLAN</th>
-								<th>Notas</th>
-								<th>Adquisicion</th>
-								<th>Eliminador</th>
-								<th>F_Resguardo</th>
-								<th>Fecha Resguardo</th>
-								<th>Observaciones</th>
-								<th>Estatus</th>
+								
 
-								<th></th>
-								<th></th>
+
 							</tr>
 						</thead>
 
 						<tbody>
 							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
 							<tr>
+								<td>
+									<a href="Telefonia.php" data-href="Telefonia.php?Extencion=<?php echo $row['Extencion']; ?>"
+									 data-toggle="modal" data-target="#confirm-delete">
+										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
+								<td>
+									<a href="ModificaTelefonia.php?Extencion=<?php echo $row['Extencion']; ?>">
+										<span class="far fa-edit"></span>
+									</a>
+								</td>
+
+								<td>
+									<a href="DetalleTel.php?Extencion=<?php echo $row['Extencion']; ?>">
+										<span class="fas fa-eye"></span>
+									</a>
+								</td>
 								<td>
 									<?php echo $row['Extencion']; ?>
 								</td>
@@ -216,80 +241,7 @@
 								<td>
 									<?php echo $row['NodoRed']; ?>
 								</td>
-								<td>
-									<?php echo $row['GpoCaptura']; ?>
-								</td>
-								<td>
-									<?php echo $row['Nivel_Cor']; ?>
-								</td>
-								<td>
-									<?php echo $row['Nivel_Aut']; ?>
-								</td>
-								<td>
-									<?php echo $row['Codigo_Aut']; ?>
-								</td>
-								<td>
-									<?php echo $row['Funcion']; ?>
-								</td>
-								<td>
-									<?php echo $row['DID']; ?>
-								</td>
-								<td>
-									<?php echo $row['CorreoVoz']; ?>
-								</td>
-								<td>
-									<?php echo $row['Puerto']; ?>
-								</td>
-								<td>
-									<?php echo $row['Dir_IP']; ?>
-								</td>
-								<td>
-									<?php echo $row['Mask']; ?>
-								</td>
-								<td>
-									<?php echo $row['Gateway']; ?>
-								</td>
-								<td>
-									<?php echo $row['VLAN']; ?>
-								</td>
-								<td>
-									<?php echo $row['Notas']; ?>
-								</td>
-								<td>
-									<?php echo $row['Adquisicion']; ?>
-								</td>
-								<td>
-									<?php echo $row['Eliminador']; ?>
-								</td>
-								<td>
-									<?php echo $row['F_Resguardo']; ?>
-								</td>
-								<td>
-									<?php echo $row['Fecha_Resguardo']; ?>
-								</td>
-								<td>
-									<?php echo $row['Observaciones']; ?>
-								</td>
-								<td>
-									<?php echo $row['Estatus']; ?>
-								</td>
-								<td>
-									<a href="DetalleTel.php?Extencion=<?php echo $row['Extencion']; ?>">
-										<span class="fas fa-eye"></span>
-									</a>
-								</td>
 
-								<td>
-									<a href="ModificaTelefonia.php?Extencion=<?php echo $row['Extencion']; ?>">
-										<span class="far fa-edit"></span>
-									</a>
-								</td>
-								<td>
-									<a href="Telefonia.php" data-href="Telefonia.php?Extencion=<?php echo $row['Extencion']; ?>"
-									 data-toggle="modal" data-target="#confirm-delete">
-										<span class="far fa-trash-alt"></span>
-									</a>
-								</td>
 							</tr>
 							<?php } ?>
 						</tbody>

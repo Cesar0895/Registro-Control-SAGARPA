@@ -1,6 +1,27 @@
 <?php
-require 'conexion.php';
+session_start();
+	
+$varsesion=$_SESSION['user'];
+//$contrasesion=$_SESSION['pass'];
 
+require 'conexion.php';
+$consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+//'or '1'='1
+$resultado = $mysqli->query($consulta);
+$row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+    $RFC=$row['RFC'];
+    $nombr=$row['nombComple'];
+
+    if ($varsesion==null || $varsesion='' ) {
+        header('location:index.php');
+        die();
+    }
+    
+    if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+        header('location:Resguardante/inicioRes.php');
+        die();
+    }
 $pc=$_POST['Id_cpu'];
 
 $Auxiliares = $_POST['Id_Aux'];

@@ -1,7 +1,29 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 error_reporting(E_ERROR | E_PARSE);
-require 'conexion.php';
+session_start();
+	
+	$varsesion=$_SESSION['user'];
+	//$contrasesion=$_SESSION['pass'];
+	
+    require 'conexion.php';
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    //'or '1'='1
+    $resultado = $mysqli->query($consulta);
+    $row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+		$RFC=$row['RFC'];
+		$nombr=$row['nombComple'];
+	
+		if ($varsesion==null || $varsesion='' ) {
+			header('location:index.php');
+			die();
+		}
+		
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+			header('location:Resguardante/inicioRes.php');
+			die();
+		}
 $z = $_GET['Extencion'];
 $display = $_GET['Display'];
 $RFC = $_GET['RFC'];
@@ -115,6 +137,8 @@ if ($display!=null && $RFC!=null) {
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
+	 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+	 crossorigin="anonymous">
 
 	<link rel="stylesheet" href="./css/estilo.css">
 
@@ -172,7 +196,6 @@ if ($display!=null && $RFC!=null) {
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -183,9 +206,9 @@ if ($display!=null && $RFC!=null) {
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">

@@ -2,7 +2,29 @@
 			
 			error_reporting(E_ALL & ~E_NOTICE);
 			error_reporting(E_ERROR | E_PARSE);
-			require 'conexion.php';
+			session_start();
+	
+	$varsesion=$_SESSION['user'];
+	//$contrasesion=$_SESSION['pass'];
+	
+    require 'conexion.php';
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    //'or '1'='1
+    $resultado = $mysqli->query($consulta);
+    $row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+		$RFC=$row['RFC'];
+		$nombr=$row['nombComple'];
+	
+		if ($varsesion==null || $varsesion='' ) {
+			header('location:index.php');
+			die();
+		}
+		
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+			header('location:Resguardante/inicioRes.php');
+			die();
+		}
 
 			$idTec=$_GET['Id_Teclado'];
 			$serieTec = $_GET['SerieTec'];
@@ -14,7 +36,7 @@
         
 
             if ($serieTec!=null) {
-				$sql2= "UPDATE teclado SET Serie='$serieTec',Id_Marca='$id_MarcaTec',IdModelo='$id_ModeloTec', Descripcion='$descripcionTec', Inventario='$inventarioTec', Adquisicion='$adquiTec' WHERE Id_Teclado='$idTec'";
+				$sql2= "UPDATE teclado SET Serie='$serieTec',Id_Marca='$id_MarcaTec',Modelo='$id_ModeloTec', Descripcion='$descripcionTec', Inventario='$inventarioTec', Adquisicion='$adquiTec' WHERE Id_Teclado='$idTec'";
 				
                 $mysqli->query($sql2);
     
@@ -33,9 +55,9 @@ require 'conexion.php';
 
 			$idTec=$_GET['Id_Teclado'];       
             
-			$sql = "SELECT t.Id_Teclado, t.Serie, t.Inventario, t.Descripcion, t.Adquisicion, marca.Marca, marca.id_Marca, modelo.Modelo, modelo.id_Modelo FROM teclado t 
+			$sql = "SELECT t.Id_Teclado, t.Serie, t.Inventario, t.Descripcion, t.Adquisicion, marca.Marca, marca.id_Marca, t.Modelo FROM teclado t 
 			INNER JOIN marca ON t.Id_Marca=marca.id_Marca 
-			INNER JOIN modelo on t.IdModelo=modelo.id_Modelo where Id_Teclado='$idTec'";
+			 where Id_Teclado='$idTec'";
             $resultado = $mysqli->query($sql);
 			$row2 = $resultado->fetch_array(MYSQLI_ASSOC);
 			
@@ -46,7 +68,7 @@ require 'conexion.php';
 				$combobit="";
 				while ($row = $result->fetch_array(MYSQLI_ASSOC)) 
 				{
-					$combobit .="<option value='".$row['id_Modelo']."'>".$row['Modelo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+					$combobit .="<option value='".$row['Modelo']."'>".$row['Modelo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
 				}
 			}
 			else
@@ -81,6 +103,8 @@ require 'conexion.php';
 
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous">
+	 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
 	 crossorigin="anonymous">
 
 	<link rel="stylesheet" href="./css/estilo.css">
@@ -139,7 +163,6 @@ require 'conexion.php';
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -150,9 +173,9 @@ require 'conexion.php';
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -198,7 +221,7 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Marca:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="id_MarcaTec" name="id_MarcaTec">
-								<option value='<?php echo $row2[' id_Marca ']?>'>
+								<option value='<?php echo $row2['id_Marca']?>'>
 									<?php echo $row2['Marca']?>
 								</option>
 								<?php echo $combobitmarca; ?>
@@ -209,7 +232,7 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Modelo:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="id_ModeloTec" name="id_ModeloTec">
-								<option value='<?php echo $row2[' id_Modelo ']?>'>
+								<option value='<?php echo $row2['Modelo']?>'>
 									<?php echo $row2['Modelo']?>
 								</option>
 								<?php echo $combobit; ?>

@@ -1,18 +1,18 @@
 <?php
         error_reporting(E_ALL & ~E_NOTICE);
 		error_reporting(E_ERROR | E_PARSE);
-		session_start();
+	session_start();
 	
 	$varsesion=$_SESSION['user'];
 	//$contrasesion=$_SESSION['pass'];
 	
     require 'conexion.php';
-    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
     //'or '1'='1
     $resultado = $mysqli->query($consulta);
     $row = $resultado->fetch_array(MYSQLI_ASSOC);
 
-		$puesto=$row['Puesto'];
+		$RFC=$row['RFC'];
 		$nombr=$row['nombComple'];
 	
 		if ($varsesion==null || $varsesion='' ) {
@@ -20,11 +20,10 @@
 			die();
 		}
 		
-		if ($puesto!='encargado' && $puesto!='jefe') {
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
 			header('location:Resguardante/inicioRes.php');
 			die();
 		}
-		require 'conexion.php';
 		
 		$serie = $_GET['Serie'];
 		$id_Marca = $_GET['id_Marca'];
@@ -62,6 +61,7 @@
 		$P_serial = $_GET['P_serial'];
 		$P_paralelo = $_GET['P_paralelo'];
 		$Red_tipo = $_GET['red_tipo'];
+		$T_Red = $_GET['T_red'];
 		$ip = $_GET['ip'];
 		$MacEth = $_GET['MacEth'];
 		$MacWifi = $_GET['MacWifi'];
@@ -104,7 +104,7 @@
 
 
 		if ($seriepc!=null) {
-            $sqlpc= "INSERT INTO cpu (Id_Marca, `Id_Modelo`, `Id_Procesador`, `Id_MemoriaRam`, `Id_DD`, `Id_Velocidad`, `Serie`, `Invetario`, `Adquisicion`, `UnidadOptica`, `Bosinas`, `P_USB`, `P_Serial`, `P_Paralelo`, `RedTipo`, `IP`, `MacEth`, `Mac_wifi`, `Dominio`, `Antivirus`,CA, PS2) VALUES ('$id_Marcapc','$id_Modelopc','$id_procesador','$idMemoriaRam','$id_DD','$id_velocidad','$seriepc','$inventariopc','$adquipc','$unidadOptica','$bocinas','$P_usb','$P_serial','$P_paralelo','$Red_tipo','$ip','$MacEth','$MacWifi','$Dominio','$Antivirus','$CA','$PS2')";
+            $sqlpc= "INSERT INTO cpu (Id_Marca, `Id_Modelo`, `Id_Procesador`, `Id_MemoriaRam`, `Id_DD`, `Id_Velocidad`, `Serie`, `Invetario`, `Adquisicion`, `UnidadOptica`, `Bosinas`, `P_USB`, `P_Serial`, `P_Paralelo`, `RedTipo`, `IP`, `MacEth`, `Mac_wifi`, `Dominio`, `Antivirus`,CA, PS2,T_Red) VALUES ('$id_Marcapc','$id_Modelopc','$id_procesador','$idMemoriaRam','$id_DD','$id_velocidad','$seriepc','$inventariopc','$adquipc','$unidadOptica','$bocinas','$P_usb','$P_serial','$P_paralelo','$Red_tipo','$ip','$MacEth','$MacWifi','$Dominio','$Antivirus','$CA','$PS2','$T_Red')";
             $mysqli->query($sqlpc);
 
             
@@ -186,7 +186,14 @@
 		$resultadoTabla = $mysqli->query($sql);
 
 		if ($Folio!=null) {
-            $sqlgral= "INSERT INTO `equipos`(`Folio`, `Id_Zona`, `RFC`,`Filtrado`, `Identificacion`, `RFC_Usuario`,`Nodo`, `Fecha_Adquisicion`, `DT_adquisicion`, `DTB`, `Tipo_HW`, `Folio_Resduardo`, `Observaciones`, `Fin_Garantia`, `Candado`, `Valor`, `Estatus`, `Ubicacion`, `Fecha_Llenado`, `Oficio_Mexico`, `Contra_Admin`, `Id_CPU`, `id_Monitor`, `Id_mouse`, `Id_Teclado`) VALUES ('$Folio','$idZona','$RFC','$Filtrado','$Identificacion','$RFCusuario','$Nodo','$FechaAdqui','$DTadqui','$DTB','$tipo_HW','$FolioResguardo','$Observaciones','$FinGarantia','$Candado','$Valor','$Estatus','$Ubicacion','$FechaLlenado','$OficioMexico','$ContraAdmin','$id_CPU','$id_Monitor','$id_Mouse','$id_Teclado')";
+			$sqlgral= "INSERT INTO `equipos`(`Folio`, `Id_Zona`, `RFC`,`Filtrado`, `Identificacion`, `RFC_Usuario`,`Nodo`, `Fecha_Adquisicion`, `DT_adquisicion`, `DTB`, `Tipo_HW`, `Folio_Resduardo`, `Observaciones`, `Fin_Garantia`, `Candado`, `Valor`, `Estatus`, `Ubicacion`, `Fecha_Llenado`, `Oficio_Mexico`, `Contra_Admin`, `Id_CPU`, `id_Monitor`, `Id_mouse`, `Id_Teclado`)";
+			if ($RFCusuario=="0") {
+				$sqlgral .= "VALUES ('$Folio','$idZona','$RFC','$Filtrado','$Identificacion',NULL,'$Nodo','$FechaAdqui','$DTadqui','$DTB','$tipo_HW','$FolioResguardo','$Observaciones','$FinGarantia','$Candado','$Valor','$Estatus','$Ubicacion','$FechaLlenado','$OficioMexico','$ContraAdmin','$id_CPU','$id_Monitor','$id_Mouse','$id_Teclado')";
+			} else {
+				$sqlgral .= "VALUES ('$Folio','$idZona','$RFC','$Filtrado','$Identificacion','$RFCusuario','$Nodo','$FechaAdqui','$DTadqui','$DTB','$tipo_HW','$FolioResguardo','$Observaciones','$FinGarantia','$Candado','$Valor','$Estatus','$Ubicacion','$FechaLlenado','$OficioMexico','$ContraAdmin','$id_CPU','$id_Monitor','$id_Mouse','$id_Teclado')";
+			}
+			
+			
 			$mysqli->query($sqlgral);
 			
 			
@@ -199,7 +206,7 @@
 		}
 
         if ($serie!=null) {
-            $sqlmonitor= "INSERT INTO monitor (Serie, id_Marca, id_Modelo, Inventario, Descripcion, Adquisicion) VALUES ('$serie','$id_Marca','$id_Modelo', '$inventario', '$descripcion', '$adqui')";
+            $sqlmonitor= "INSERT INTO monitor (Serie, id_Marca, Modelo, Inventario, Descripcion, Adquisicion) VALUES ('$serie','$id_Marca','$id_Modelo', '$inventario', '$descripcion', '$adqui')";
             $mysqli->query($sqlmonitor);
 
             if ($serie=1) {
@@ -213,7 +220,7 @@
 		
 
 		if ($serieTec!=null) {
-            $sqlteclado= "INSERT INTO teclado (Serie, Id_Marca, IdModelo, Inventario, Descripcion, Adquisicion) VALUES ('$serieTec','$id_MarcaTec','$id_ModeloTec', '$inventarioTec', '$descripcionTec', '$adquiTec')";
+            $sqlteclado= "INSERT INTO teclado (Serie, Id_Marca, Modelo, Inventario, Descripcion, Adquisicion) VALUES ('$serieTec','$id_MarcaTec','$id_ModeloTec', '$inventarioTec', '$descripcionTec', '$adquiTec')";
             $mysqli->query($sqlteclado);
 
             if ($serieTec=1) {
@@ -226,7 +233,7 @@
 
 		
 		if ($serieMou!=null) {
-            $sqlmouse= "INSERT INTO mouse (Serie, id_Marca, id_Modelo, Inventario, Descripcion, Adquisicion) VALUES ('$serieMou','$id_MarcaMou','$id_ModeloMou', '$inventarioMou', '$descripcionMou', '$adquiMou')";
+            $sqlmouse= "INSERT INTO mouse (Serie, id_Marca, Modelo, Inventario, Descripcion, Adquisicion) VALUES ('$serieMou','$id_MarcaMou','$id_ModeloMou', '$inventarioMou', '$descripcionMou', '$adquiMou')";
             $mysqli->query($sqlmouse);
 
             if ($serieMou=1) {
@@ -257,6 +264,21 @@ if ($result->num_rows > 0) //si la variable tiene al menos 1 fila entonces segui
     while ($row = $result->fetch_array(MYSQLI_ASSOC)) 
     {
         $combobit .="<option value='".$row['id_Modelo']."'>".$row['Modelo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+    }
+}
+else
+{
+    echo "No hubo resultados";
+}
+
+$sql = "SELECT * FROM modelo";
+$result = $mysqli->query($sql);
+if ($result->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
+{
+    $combobitSinID="";
+    while ($row = $result->fetch_array(MYSQLI_ASSOC)) 
+    {
+        $combobitSinID .="<option value='".$row['Modelo']."'>".$row['Modelo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
     }
 }
 else
@@ -369,7 +391,7 @@ else
     $combobitAux ="<option>No hay Auxiliares disponibles</option>";
 }
 
-$sql = "SELECT RFC, concat(Nombre,' ',ApePaterno,' ',ApeMaterno) as NombCompleto FROM `persona`";
+$sql = "SELECT RFC, concat(ApePaterno,' ',ApeMaterno,' ',Nombre) as NombCompleto FROM `persona` ORDER BY `NombCompleto` ASC";
 $resultrfc = $mysqli->query($sql);
 if ($resultrfc->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
 {
@@ -384,7 +406,7 @@ else
 	echo "No hubo resultados";
 }
 
-$sql = "SELECT RFC, concat(Nombre,' ',ApePaterno,' ',ApeMaterno) as NombCompleto FROM `persona`";
+$sql = "SELECT RFC, concat(ApePaterno,' ',ApeMaterno,' ',Nombre) as NombCompleto FROM `persona` ORDER BY `NombCompleto` ASC";
 $resultrfcUser = $mysqli->query($sql);
 if ($resultrfcUser->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
 {
@@ -546,7 +568,6 @@ else
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -557,9 +578,9 @@ else
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -642,6 +663,7 @@ else
 								<div class="form-group mb-2	">
 									<label>Responsable: </label>
 									<select class="form-control" id="rfc" name="RFC">
+									<option value="0">Selecciones un Responsable</option>
 										<?php echo $combobitrfc; ?>
 									</select>
 								</div>
@@ -649,6 +671,7 @@ else
 								<div class="form-group mx-sm-3 mb-2">
 									<label>Usuario: </label>
 									<select class="form-control" id="RFCusuario" name="RFCusuario">
+										<option value="0">Selecciones un usuario</option>
 										<?php echo $combobitrfcUser; ?>
 									</select>
 								</div>
@@ -767,8 +790,7 @@ else
 							<div class="form-group">
 								<label>Fecha de llenado: </label>
 
-								<input type="date" class="form-control" id="fechaLlenado" name="fechaLlenado" value="<?php echo date("
-								 Y-m-d "); ?>">
+								<input type="date" class="form-control" id="fechaLlenado" name="fechaLlenado" value="<?php echo date("Y-m-d"); ?>">
 							</div>
 
 							<div class="form-group">
@@ -901,20 +923,14 @@ else
 
 											<fieldset class="form-group">
 												<div class="row">
-													<legend class="col-form-label col-sm-3 pt-0">Unidad Optica</legend>
-													<div class="col-sm-9">
-														<div class="form-check">
-															<input class="form-check-input" type="radio" name="unidadOptica" id="unidadOptica" value="SI" checked>
-															<label class="form-check-label" for="gridRadios1">
-																SI
-															</label>
-														</div>
-														<div class="form-check">
-															<input class="form-check-input" type="radio" name="unidadOptica" id="unidadOptica" value="NO">
-															<label class="form-check-label" for="gridRadios2">
-																NO
-															</label>
-														</div>
+													<legend class="col-form-label col-sm-4 pt-0">Unidad Optica</legend>
+													<div class="col-sm-8">
+														<select  class="form-control" name="unidadOptica" id="unidadOptica">
+															<option value="0">Seleccione una opcion</option>
+															<option value="DVD">DVD</option>
+															<option value="DVD-RW">DVD-RW</option>
+															<option value="DVD-RW">CD-RW</option>
+														</select>
 
 													</div>
 												</div>
@@ -1009,6 +1025,10 @@ else
 												</select>
 											</div>
 											<div class="form-group">
+												<label>Tarjeta de red</label>
+												<input type="text" class="form-control" id="T_Red" name="T_Red" placeholder="Introduce el tipo de tarjeta red">
+											</div>
+											<div class="form-group">
 												<label>Tipo de red</label>
 												<input type="text" class="form-control" id="red_tipo" name="red_tipo" placeholder="Introduce el tipo de red">
 											</div>
@@ -1032,21 +1052,9 @@ else
 											<fieldset class="form-group">
 												<div class="row">
 													<legend class="col-form-label col-sm-3 pt-0">Antivirus</legend>
-													<div class="col-sm-9">
-														<div class="form-check">
-															<input class="form-check-input" type="radio" name="Antivirus" id="Antivirus" value="SI" checked>
-															<label class="form-check-label" for="gridRadios1">
-																SI
-															</label>
-														</div>
-														<div class="form-check">
-															<input class="form-check-input" type="radio" name="Antivirus" id="Antivirus" value="NO">
-															<label class="form-check-label" for="gridRadios2">
-																NO
-															</label>
-														</div>
+													
+														<input type="text" class="form-control" id="Antivirus" name="Antivirus" placeholder="Nombre y version de antivirus">
 
-													</div>
 												</div>
 											</fieldset>
 											<div class="form-group">
@@ -1183,7 +1191,7 @@ else
 												<label>Modelo</label>
 
 												<select class="form-control" id="modelo" name="id_Modelo">
-													<?php echo $combobit; ?>
+													<?php echo $combobitSinID; ?>
 												</select>
 
 											</div>
@@ -1250,7 +1258,7 @@ else
 												<label>Modelo</label>
 
 												<select class="form-control" id="modelo" name="id_ModeloTec">
-													<?php echo $combobit; ?>
+													<?php echo $combobitSinID; ?>
 												</select>
 
 											</div>
@@ -1317,7 +1325,7 @@ else
 												<label>Modelo</label>
 
 												<select class="form-control" id="modelo" name="id_ModeloMou">
-													<?php echo $combobit; ?>
+													<?php echo $combobitSinID; ?>
 												</select>
 
 											</div>

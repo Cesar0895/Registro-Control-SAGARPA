@@ -5,12 +5,12 @@ session_start();
 	//$contrasesion=$_SESSION['pass'];
 	
     require 'conexion.php';
-    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
     //'or '1'='1
     $resultado = $mysqli->query($consulta);
     $row = $resultado->fetch_array(MYSQLI_ASSOC);
 
-		$puesto=$row['Puesto'];
+		$RFC=$row['RFC'];
 		$nombr=$row['nombComple'];
 	
 		if ($varsesion==null || $varsesion='' ) {
@@ -18,7 +18,7 @@ session_start();
 			die();
 		}
 		
-		if ($puesto!='encargado' && $puesto!='jefe') {
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
 			header('location:Resguardante/inicioRes.php');
 			die();
 		}
@@ -94,7 +94,7 @@ session_start();
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
+							
 						</div>
 					</li>
 
@@ -104,8 +104,9 @@ session_start();
 				</ul>
 				<ul class="nav navbar-nav">
 					<li>
-
-						<span class="fas fa-user nav-link"> Bienvenido (a): <?php echo $nombr; ?> </span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">

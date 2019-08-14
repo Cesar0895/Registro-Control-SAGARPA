@@ -24,7 +24,6 @@
             ///////////////////////////////// DATOS PERSONAS
             ->setCellValue('E1', 'TELEFONO')
             ->setCellValue('F1', 'DOMICILIO')
-            ->setCellValue('G1', 'ADSCRIPCION')
             ->setCellValue('H1', 'AREA')
             ->setCellValue('I1', 'SUBAREA')
             ->setCellValue('J1', 'PUESTO')
@@ -104,18 +103,20 @@
     
     $objPHPExcel->getActiveSheet()->getStyle('A1:BV1')->applyFromArray($boldArray);
 
-    $sqlmostrar = "SELECT `Folio`, zona.Nombre, zona.Sigla, concat(persona.Nombre,' ',persona.ApePaterno,' ',persona.ApeMaterno) as nombResp, persona.RFC,persona.Telefono,persona.Domicilio,persona.Adscripcion,persona.Area,persona.Subarea,persona.Puesto,persona.Extension,persona.Correo,persona.GFC,persona.Acceso_correo,persona.Estatus, Filtrado,`Identificacion`, concat(p.Nombre,' ',p.ApePaterno,' ',p.ApeMaterno) as nombUser,p.RFC as RFCUser, `Nodo`, `Fecha_Adquisicion`, `DT_adquisicion`, `DTB`, `Tipo_HW`, `Folio_Resduardo`, `Observaciones`, `Fin_Garantia`, `Candado`, `Valor`,equipos.Estatus as estatus_Equi, `Ubicacion`, `Fecha_Llenado`, `Oficio_Mexico`, `Contra_Admin`, 
+    $sqlmostrar = "SELECT `Folio`, zona.Sigla, concat(persona.Nombre,' ',persona.ApePaterno,' ',persona.ApeMaterno) as nombResp, persona.RFC,persona.Telefono,persona.Domicilio,zonaPer.Sigla as zonaPer ,persona.Subarea,persona.Puesto,persona.Extension,persona.Correo,persona.GFC,persona.Acceso_correo,persona.Estatus, Filtrado,`Identificacion`, concat(p.Nombre,' ',p.ApePaterno,' ',p.ApeMaterno) as nombUser,p.RFC as RFCUser, `Nodo`, `Fecha_Adquisicion`, `DT_adquisicion`, `DTB`, `Tipo_HW`, `Folio_Resduardo`, `Observaciones`, `Fin_Garantia`, `Candado`, `Valor`,equipos.Estatus as estatus_Equi, `Ubicacion`, `Fecha_Llenado`, `Oficio_Mexico`, `Contra_Admin`, 
 			
     cpu.Serie as serieCPU, marCPU.Marca as marcaCPU, modCPU.Modelo as modCPU, cpu.Invetario as InvCPU, proCPU.Procesador,ram.Memoria_RAM, DD.Almacenamiento, vel.Velocidad, cpu.IP,cpu.MacEth,cpu.Mac_wifi,cpu.Dominio, cpu.RedTipo, cpu.Adquisicion,CPU.Bosinas, CPU.P_USB, CPU.P_Serial, CPU.P_Paralelo, cpu.Antivirus, cpu.CA, cpu.PS2,cpu.UnidadOptica,
     
-    monitor.Serie as serieMon, marMoni.Marca as marcaMoni, modMoni.Modelo as modMoni, monitor.Inventario as InvMoni, monitor.Descripcion as desMoni ,monitor.Adquisicion as adquiMoni,
+    monitor.Serie as serieMon, marMoni.Marca as marcaMoni, monitor.Modelo as modMoni, monitor.Inventario as InvMoni, monitor.Descripcion as desMoni ,monitor.Adquisicion as adquiMoni,
     
-    mouse.Serie as serieMou, marMou.Marca as marcaMou, modMou.Modelo as modMou, mouse.Inventario as InvMou, mouse.Descripcion as desMou, mouse.Adquisicion as adquiMou,
+    mouse.Serie as serieMou, marMou.Marca as marcaMou, mouse.Modelo as modMou, mouse.Inventario as InvMou, mouse.Descripcion as desMou, mouse.Adquisicion as adquiMou,
     
-    teclado.Serie as serieTec, marTec.Marca as marcaTec, modTec.Modelo as modTec, teclado.Inventario as InvTec, teclado.Descripcion as desTec, teclado.Adquisicion adquiTec
+    teclado.Serie as serieTec, marTec.Marca as marcaTec, teclado.Modelo as modTec, teclado.Inventario as InvTec, teclado.Descripcion as desTec, teclado.Adquisicion adquiTec
     FROM `equipos`
     INNER JOIN zona on equipos.Id_Zona=zona.id_Zona 
-    INNER JOIN persona on equipos.RFC=persona.RFC 
+     INNER JOIN (persona 
+    			INNER JOIN zona zonaPer on persona.Area=zonaPer.id_Zona)
+    			on equipos.RFC=persona.RFC 
     INNER JOIN persona p on equipos.RFC_Usuario=p.RFC 
     INNER JOIN (cpu 
                 INNER JOIN marca marCPU on cpu.Id_Marca=marCPU.id_Marca
@@ -126,16 +127,13 @@
                 INNER JOIN velocidad vel on cpu.Id_Velocidad=vel.Id_velocidad) 
                 on equipos.Id_CPU=cpu.Id_CPU 
     INNER JOIN (monitor 
-                INNER JOIN marca marMoni on monitor.id_Marca=marMoni.id_Marca 
-                INNER JOIN modelo modMoni on monitor.id_Modelo=modMoni.id_Modelo)
+                INNER JOIN marca marMoni on monitor.id_Marca=marMoni.id_Marca )
                 on equipos.id_Monitor=monitor.id_Monitor
     INNER JOIN (mouse 
-                INNER JOIN marca marMou on mouse.Id_Marca=marMou.id_Marca 
-                INNER JOIN modelo modMou on mouse.Id_Modelo=modMou.id_Modelo) 
-                ON equipos.Id_mouse=mouse.Id_mouse 
-    INNER JOIN (teclado 
-                INNER JOIN marca marTec on teclado.Id_Marca=marTec.id_Marca 
-                INNER JOIN modelo modTec on teclado.IdModelo=modTec.id_Modelo) 
+                INNER JOIN marca marMou on mouse.Id_Marca=marMou.id_Marca) 
+                ON equipos.Id_mouse=mouse.Id_mouse
+	INNER JOIN (teclado 
+                INNER JOIN marca marTec on teclado.Id_Marca=marTec.id_Marca) 
                 on equipos.Id_Teclado=teclado.Id_Teclado";
     $resultado = $mysqli->query($sqlmostrar);
     
@@ -154,8 +152,7 @@
         ->setCellValue("D".$cel, strtoupper($row['nombResp']))
         ->setCellValue("E".$cel, strtoupper($row['Telefono']))
         ->setCellValue("F".$cel, strtoupper($row['Domicilio']))
-        ->setCellValue("G".$cel, strtoupper($row['Adscripcion']))
-        ->setCellValue("H".$cel, strtoupper($row['Area']))
+        ->setCellValue("H".$cel, strtoupper($row['zonaPer']))
         ->setCellValue("I".$cel, strtoupper($row['Subarea']))
         ->setCellValue("J".$cel, strtoupper($row['Puesto']))
         ->setCellValue("K".$cel, strtoupper($row['Extension']))
@@ -237,10 +234,9 @@
     'borders'=>array('allborders'=>array('style'=> PHPExcel_Style_Border::BORDER_THIN,'color'=>array('argb' => 'FFF'))));
    //$objPHPExcel->getActiveSheet()->getStyle($rango)->applyFromArray($styleArray);
 
-    header('Content-Type: application/vnd.ms-excel');
-    header('Content-Disposition: attachment;filename="REPORTE.xls"');
-    header('Cache-Control: max-age=0');
-            
-    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-    $objWriter->save('php://output');
+header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+header('Content-Disposition: attachment;filename="Reporte.xlsx"');
+header('Cache-Control: max-age=0');
+$objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+$objWriter->save('php://output');
 ?>

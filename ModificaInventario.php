@@ -2,7 +2,29 @@
 			
 			error_reporting(E_ALL & ~E_NOTICE);
 			error_reporting(E_ERROR | E_PARSE);
-			require 'conexion.php';
+			session_start();
+	
+	$varsesion=$_SESSION['user'];
+	//$contrasesion=$_SESSION['pass'];
+	
+    require 'conexion.php';
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    //'or '1'='1
+    $resultado = $mysqli->query($consulta);
+    $row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+		$RFC=$row['RFC'];
+		$nombr=$row['nombComple'];
+	
+		if ($varsesion==null || $varsesion='' ) {
+			header('location:index.php');
+			die();
+		}
+		
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+			header('location:Resguardante/inicioRes.php');
+			die();
+		}
 
 			$Folio = $_GET['folio'];
 			$idZona=$_GET['idZona'];
@@ -33,16 +55,18 @@
         
 
             if ($Folio!=null) {
-				//echo "UPDATE `equipos` SET Id_Zona='$idZona',RFC='$RFC', Filtrado='$Filtrado',Observaciones='$Observaciones',Fin_Garantia='$FinGarantia',Candado='$Candado',Estatus='$Estatus', Valor='$Valor'  WHERE Folio='$Folio'";
 
+				$sql2= "UPDATE `equipos`"; 
+				if ($RFCusuario=="0") {
+					$sql2 .= "SET Id_Zona='$idZona',RFC='$RFC', Filtrado='$Filtrado',Identificacion='$Identificacion',Nodo='$Nodo',Fecha_Adquisicion='$FechaAdqui',DT_adquisicion='$DTadqui',DTB='$DTB',Tipo_HW='$tipo_HW',Folio_Resduardo='$FolioResguardo',Observaciones='$Observaciones',Fin_Garantia='$FinGarantia',Candado='$Candado',Estatus='$Estatus', Ubicacion='$Ubicacion', Valor='$Valor', Oficio_Mexico='$OficioMexico',Contra_Admin='$ContraAdmin' WHERE Folio='$Folio'";
+				} else {
+					$sql2 .= "SET Id_Zona='$idZona',RFC='$RFC',RFC_Usuario='$RFCusuario', Filtrado='$Filtrado',Identificacion='$Identificacion',Nodo='$Nodo',Fecha_Adquisicion='$FechaAdqui',DT_adquisicion='$DTadqui',DTB='$DTB',Tipo_HW='$tipo_HW',Folio_Resduardo='$FolioResguardo',Observaciones='$Observaciones',Fin_Garantia='$FinGarantia',Candado='$Candado',Estatus='$Estatus', Ubicacion='$Ubicacion', Valor='$Valor', Oficio_Mexico='$OficioMexico',Contra_Admin='$ContraAdmin' WHERE Folio='$Folio'";
+				}
 
-				$sql2= "UPDATE `equipos` SET Id_Zona='$idZona',RFC='$RFC',RFC_Usuario='$RFCusuario', Filtrado='$Filtrado',Identificacion='$Identificacion',Nodo='$Nodo',Fecha_Adquisicion='$FechaAdqui',DT_adquisicion='$DTadqui',DTB='$DTB',Tipo_HW='$tipo_HW',Folio_Resduardo='$FolioResguardo',Observaciones='$Observaciones',Fin_Garantia='$FinGarantia',Candado='$Candado',Estatus='$Estatus', Ubicacion='$Ubicacion', Valor='$Valor', Oficio_Mexico='$OficioMexico',Contra_Admin='$ContraAdmin' WHERE Folio='$Folio'";
-
-				//,`Nodo`='$Nodo',`Fecha_Adquisicion`='$FechaAdqui',	`DT_adquisicion`='$DTadqui',`DTB`=$DTB,`Tipo_HW`='$tipo_HW',`Folio_Resduardo`='$FolioResguardo',`Observaciones`='$Observaciones',`Fin_Garantia`='$FinGarantia',`Candado`='$Candado',`Valor`='$Valor',`Estatus`='$Estatus',`Ubicacion`='$Ubicacion',`Fecha_Llenado`='$FechaLlenado',`Oficio_Mexico`='$OficioMexico',`Contra_Admin`='$ContraAdmin'
-				
                 $mysqli->query($sql2);
 				
 				if ($Folio=1) {
+					
 					echo'<script type="text/javascript">
 					alert("Registro actualizado!");
 					window.location.href="vistaEquipoComputo.php"	;
@@ -58,7 +82,7 @@
 require 'conexion.php';
 $folio = $_GET['Folio'];        
             
-$sql = "SELECT `Folio`, zona.Nombre, zona.id_Zona, concat(persona.Nombre,' ',persona.ApePaterno,' ',persona.ApeMaterno) as nombResp, persona.RFC, Filtrado,`Identificacion`, concat(p.Nombre,' ',p.ApePaterno,' ',p.ApeMaterno) as nombUser,p.RFC as RFCUser, `Nodo`, `Fecha_Adquisicion`, `DT_adquisicion`, `DTB`, `Tipo_HW`, `Folio_Resduardo`, `Observaciones`, `Fin_Garantia`, `Candado`, `Valor`,equipos.Estatus, `Ubicacion`, `Fecha_Llenado`, `Oficio_Mexico`, `Contra_Admin`, 
+$sql = "SELECT `Folio`, zona.Nombre, zona.id_Zona, concat(persona.ApePaterno,' ',persona.ApeMaterno,' ', persona.Nombre) as nombResp, persona.RFC, Filtrado,`Identificacion`, concat(p.ApePaterno,' ',p.ApeMaterno,' ',p.Nombre) as nombUser,p.RFC as RFCUser, `Nodo`, `Fecha_Adquisicion`, `DT_adquisicion`, `DTB`, `Tipo_HW`, `Folio_Resduardo`, `Observaciones`, `Fin_Garantia`, `Candado`, `Valor`,equipos.Estatus, `Ubicacion`, `Fecha_Llenado`, `Oficio_Mexico`, `Contra_Admin`, 
 cpu.Serie as serieCPU, 
 monitor.Serie as serieMon, 
 mouse.Serie as serieMou, 
@@ -66,17 +90,19 @@ teclado.Serie as serieTec
 FROM `equipos`
 INNER JOIN zona on equipos.Id_Zona=zona.id_Zona 
 INNER JOIN persona on equipos.RFC=persona.RFC 
-INNER JOIN persona p on equipos.RFC_Usuario=p.RFC 
+LEFT JOIN persona p on equipos.RFC_Usuario=p.RFC 
 INNER JOIN cpu on equipos.Id_CPU=cpu.Id_CPU 
 INNER JOIN monitor on equipos.id_Monitor=monitor.id_Monitor
 INNER JOIN mouse ON equipos.Id_mouse=mouse.Id_mouse 
 INNER JOIN teclado on equipos.Id_Teclado=teclado.Id_Teclado WHERE Folio = '$folio'";
             $resultado = $mysqli->query($sql);
 			$row2 = $resultado->fetch_array(MYSQLI_ASSOC);
+
+
 			
 			
 
-		$sql = "SELECT RFC, concat(Nombre,' ',ApePaterno,' ',ApeMaterno) as NombCompleto FROM `persona`";
+		$sql = "SELECT RFC, concat(ApePaterno,' ',ApeMaterno,' ',Nombre) as NombCompleto FROM `persona` ORDER BY `NombCompleto` ASC";
 		$resultrfc = $mysqli->query($sql);
 		if ($resultrfc->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
 		{
@@ -91,7 +117,7 @@ INNER JOIN teclado on equipos.Id_Teclado=teclado.Id_Teclado WHERE Folio = '$foli
 			echo "No hubo resultados";
 		}
 
-		$sql = "SELECT RFC, concat(Nombre,' ',ApePaterno,' ',ApeMaterno) as NombCompleto FROM `persona`";
+		$sql = "SELECT RFC, concat(ApePaterno,' ',ApeMaterno,' ',Nombre) as NombCompleto FROM `persona` ORDER BY `NombCompleto` ASC";
 		$resultrfcUser = $mysqli->query($sql);
 		if ($resultrfcUser->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
 		{
@@ -252,7 +278,6 @@ INNER JOIN teclado on equipos.Id_Teclado=teclado.Id_Teclado WHERE Folio = '$foli
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -263,9 +288,9 @@ INNER JOIN teclado on equipos.Id_Teclado=teclado.Id_Teclado WHERE Folio = '$foli
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -302,9 +327,10 @@ INNER JOIN teclado on equipos.Id_Teclado=teclado.Id_Teclado WHERE Folio = '$foli
 						<div class="form-group mx-sm-3 mb-2">
 							<label>Usuario: </label>
 							<select class="form-control" id="RFCusuario" name="RFCusuario">
-								<option value="<?php echo $row2['RFCUser'];?>">
-									<?php echo $row2['nombUser'];?>
-								</option>
+								
+								<option value="0" <?php if( $row2[ 'RFCUser']!='' ) echo 'Selected'; ?>>Selecciona un usuario</option>
+								<option value="<?php echo $row2['RFCUser'];?>" <?php if( $row2[ 'RFCUser']!='' ) echo 'Selected'; ?>><?php echo $row2['nombUser'];?></option>
+								
 								<?php echo $combobitrfcUser; ?>
 							</select>
 						</div>

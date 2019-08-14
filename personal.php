@@ -1,8 +1,29 @@
 <?php
 	error_reporting(E_ALL & ~E_NOTICE);
 	error_reporting(E_ERROR | E_PARSE);
-	require 'conexion.php';
+	session_start();
+	
+	$varsesion=$_SESSION['user'];
+	//$contrasesion=$_SESSION['pass'];
+	
+    require 'conexion.php';
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    //'or '1'='1
+    $resultado = $mysqli->query($consulta);
+    $row = $resultado->fetch_array(MYSQLI_ASSOC);
 
+		$RFC=$row['RFC'];
+		$nombr=$row['nombComple'];
+	
+		if ($varsesion==null || $varsesion='' ) {
+			header('location:index.php');
+			die();
+		}
+		
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+			header('location:Resguardante/inicioRes.php');
+			die();
+		}
 	$RFC = $_GET['RFC'];
 	
 	$sql2 = "DELETE FROM persona WHERE RFC = '$RFC'";
@@ -12,13 +33,17 @@
 	
 	if(!empty($_POST))
 	{
-		$valor = $_POST['campo'];
-	
+        $valor = $_POST['campo'];
+		$valor2=$_POST['Valor2'];
+
+		
 		if(!empty($valor)){
-			$where = "WHERE RFC LIKE '$valor%' or Nombre like '$valor%' or ApePaterno like '$valor%' or ApeMaterno like '$valor%' or Area like '$valor%'";
+			$where = "WHERE $valor2 LIKE '$valor%'";
 		}
 	}
-	$sql = "SELECT * FROM persona $where";
+
+	$sql = "SELECT `RFC`, concat(persona.Nombre,' ', `ApePaterno`,' ', `ApeMaterno`) as nomCompleto, zona.id_Zona , zona.Nombre as nomArea, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus` FROM `persona`
+	INNER JOIN zona on zona.id_Zona=persona.Area $where ORDER BY `RFC` ASC";
 	$resultadoTabla = $mysqli->query($sql);
 	
 ?>
@@ -93,7 +118,6 @@
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -104,9 +128,9 @@
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -134,8 +158,16 @@
 
 
 					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-						<b>Nombre: </b>
-						<input type="text" id="campo" name="campo" />
+						<select class="col-sm-3 form-control" id="Valor2" name="Valor2">
+							<option value="0">Elige una opción</option>
+							<option value="RFC">RFC</option>
+							<option value="persona.Nombre">Nombre</option>
+							<option value="ApePaterno">Apellido Paterno</option>
+							<option value="ApeMaterno">Apellido Materno</option>
+							<option value="zona.Nombre">Area</option>
+
+						</select>
+						<input type="text" id="campo" name="campo" placeholder="Buscador" />
 						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
 					</form>
 
@@ -150,10 +182,12 @@
 					<table class="table table-hover table-secondary">
 						<thead>
 							<tr>
+								<th></th>
+								<th></th>
+								<th></th>
 								<th>RFC</th>
 								<th>Nombre</th>
-								<th>Apellido Paterno</th>
-								<th>Apellido Materno</th>
+							
 
 								<th>Area</th>
 								<th>Subarea</th>
@@ -163,45 +197,13 @@
 								<th>Extención</th>
 
 
-								<th></th>
-								<th></th>
-								<th></th>
+
 							</tr>
 						</thead>
 
 						<tbody>
 							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
 							<tr>
-								<td>
-									<?php echo $row['RFC']; ?>
-								</td>
-								<td>
-									<?php echo $row['Nombre']; ?>
-								</td>
-								<td>
-									<?php echo $row['ApePaterno']; ?>
-								</td>
-								<td>
-									<?php echo $row['ApeMaterno']; ?>
-								</td>
-
-								<td>
-									<?php echo $row['Area']; ?>
-								</td>
-								<td>
-									<?php echo $row['Subarea']; ?>
-								</td>
-								<td>
-									<?php echo $row['Puesto']; ?>
-								</td>
-
-								<td>
-									<?php echo $row['Telefono']; ?>
-								</td>
-								<td>
-									<?php echo $row['Extension']; ?>
-								</td>
-
 								<td>
 									<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
 										<span class="fas fa-eye"></span>
@@ -218,14 +220,40 @@
 										<span class="far fa-trash-alt"></span>
 									</a>
 								</td>
+								<td>
+									<?php echo $row['RFC']; ?>
+								</td>
+								<td>
+									<?php echo $row['nomCompleto']; ?>
+								</td>
+							
+
+								<td>
+									<?php echo $row['nomArea']; ?>
+								</td>
+								<td>
+									<?php echo $row['Subarea']; ?>
+								</td>
+								<td>
+									<?php echo $row['Puesto']; ?>
+								</td>
+
+								<td>
+									<?php echo $row['Telefono']; ?>
+								</td>
+								<td>
+									<?php echo $row['Extension']; ?>
+								</td>
+
+
 
 							</tr>
 							<?php } ?>
 						</tbody>
 					</table>
+
 				</div>
 			</div>
-		</div>
 
 
 

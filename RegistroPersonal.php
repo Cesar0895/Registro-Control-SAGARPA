@@ -1,5 +1,27 @@
 <?php
-        include 'conexion.php';
+        session_start();
+	
+		$varsesion=$_SESSION['user'];
+		//$contrasesion=$_SESSION['pass'];
+		
+		require 'conexion.php';
+		$consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+		//'or '1'='1
+		$resultado = $mysqli->query($consulta);
+		$row = $resultado->fetch_array(MYSQLI_ASSOC);
+	
+			$RFC=$row['RFC'];
+			$nombr=$row['nombComple'];
+		
+			if ($varsesion==null || $varsesion='' ) {
+				header('location:index.php');
+				die();
+			}
+			
+			if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+				header('location:Resguardante/inicioRes.php');
+				die();
+			}
         
             $RFC = isset($_GET['RFC']) ? $_GET['RFC'] : null ;
             $nombre = isset($_GET['Nombre']) ? $_GET['Nombre'] : null ;
@@ -19,15 +41,23 @@
 			$estatus = isset($_GET['estatus']) ? $_GET['estatus'] : null ;
 			$usuario = isset($_GET['usuario']) ? $_GET['usuario'] : null ;
 			$contra = isset($_GET['contra']) ? $_GET['contra'] : null ;
+			$Puesto_nivel = isset($_GET['puesto_nivel']) ? $_GET['puesto_nivel'] : null ;
+			$CURP = isset($_GET['CURP']) ? $_GET['CURP'] : null ;
+			$Dominio = isset($_GET['Dominio']) ? $_GET['Dominio'] : null ;			
+
+			
+
+			$query="SELECT id_Zona, Nombre, Sigla FROM ZONA ORDER BY `zona`.`Nombre` ASC";
+			$result=$mysqli->query($query);
         
 
             if ($RFC!=null) {
                 $sql= "INSERT INTO persona (RFC, Nombre, ApePaterno, ApeMaterno, 
-                Adscripcion, Area, Subarea, Puesto, Telefono, Extension, 
-                Domicilio, Correo, GFC, Acceso_correo, Estatus, Usuario, Contra) 
-                VALUES ('".$RFC."','".$nombre."','".$apePaterno."','".$apeMaterno."','".$adscripcion."','$area','$subarea',
+                Area, Subarea, Puesto, Telefono, Extension, 
+                Domicilio, Correo, GFC, Acceso_correo, Estatus, Usuario, Contra,  `Puesto_nivel`, `CURP`, Dominio) 
+                VALUES ('".$RFC."','".$nombre."','".$apePaterno."','".$apeMaterno."','$area','$subarea',
                     '$puesto','$telefono','$extencion','$domicilio','$correo','$GFC',
-                    '$accesoCorreo','$estatus', '$usuario', '$contra')";
+                    '$accesoCorreo','$estatus', '$usuario', '$contra',$Puesto_nivel, $CURP, $Dominio)";
                 $resultado = $mysqli->query($sql);
     
                 if ($RFC=1) {
@@ -37,7 +67,9 @@
 			</script>';
                     //header("location:personal.php");
                 }
-            }
+			}
+			
+
 ?>
 
 <!doctype html>
@@ -51,9 +83,30 @@
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
+	 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+	 crossorigin="anonymous">
+
 
 	<link rel="stylesheet" href="./css/estilo.css">
 	<title>Control de dispositivos</title>
+	<script language="javascript" src="js/jquery-3.4.0.min.js"></script>
+	<script language="javascript">
+		$(document).ready(function() {
+			$("#Area").change(function() {
+
+				//$('#cbx_localidad').find('option').remove().end().append('<option value="whatever"></option>').val('whatever');
+
+				$("#Area option:selected").each(function() {
+					id_area = $(this).val();
+					$.post("includes/getSubareas.php", {
+						id_area: id_area
+					}, function(data) {
+						$("#Subarea").html(data);
+					});
+				});
+			})
+		});
+	</script>
 
 </head>
 
@@ -107,7 +160,6 @@
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -118,9 +170,9 @@
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -173,30 +225,43 @@
 					</div>
 
 					<div class="form-group">
-						<label for="adscripcion" class="col-sm-2 controllabel">Adscripción</label>
+						<label for="apeMaterno" class="col-sm-2 controllabel">CURP</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="adscripcion" name="Adscripcion" placeholder="Adscripción" required>
+							<input type="text" class="form-control" id="CURP" name="CURP" placeholder="CURP" required>
 						</div>
 					</div>
 
+
 					<div class="form-group">
 						<label for="area" class="col-sm-2 controllabel">Area</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" id="area" name="Area" placeholder="Area" required>
-						</div>
+
+						<select class="form-control col-sm-10" id="Area" name="Area">
+							<option value="0">Seleccionar Area</option>
+							<?php while($row=$result->fetch_assoc()){ ?>
+							<option value="<?php echo $row['id_Zona']; ?>">
+								<?php echo $row['Nombre']; ?>
+							</option>
+							<?php } ?>
+						</select>
 					</div>
 
 					<div class="form-group">
 						<label for="subarea" class="col-sm-2 controllabel">Subarea</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" id="subarea" name="Subarea" placeholder="Subarea" required>
-						</div>
+						<select class="form-control col-sm-10" id="Subarea" name="Subarea">
+						</select>
 					</div>
 
 					<div class="form-group">
 						<label for="puestp" class="col-sm-2 controllabel">Puesto</label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control" id="puesto" name="Puesto" placeholder="Puesto" required>
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="puestp" class="col-sm-2 controllabel">Puesto_Nivel</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="puesto_nivel" name="puesto_nivel" placeholder="Puesto Nivel" required>
 						</div>
 					</div>
 
@@ -225,6 +290,13 @@
 						<label for="correo" class="col-sm-2 controllabel">Correo</label>
 						<div class="col-sm-10">
 							<input type="email" class="form-control" id="correo" name="correo" placeholder="Correo">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="correo" class="col-sm-2 controllabel">Dominio</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="Dominio" name="Dominio" placeholder="Dominio">
 						</div>
 					</div>
 
@@ -284,8 +356,7 @@
 	</main>
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-	 crossorigin="anonymous"></script>
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
 	 crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"

@@ -2,27 +2,45 @@
 error_reporting(E_ALL & ~E_NOTICE);
 error_reporting(E_ERROR | E_PARSE);
 	
-
+session_start();
 	
-    require 'conexion.php';
-    
-		
+$varsesion=$_SESSION['user'];
+//$contrasesion=$_SESSION['pass'];
 
+require 'conexion.php';
+$consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+//'or '1'='1
+$resultado = $mysqli->query($consulta);
+$row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+	$RFC=$row['RFC'];
+	$nombr=$row['nombComple'];
+
+	if ($varsesion==null || $varsesion='' ) {
+		header('location:index.php');
+		die();
+	}
+	
+	if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+		header('location:Resguardante/inicioRes.php');
+		die();
+	}
 
 		$idZona = $_GET['id_Zona'];
-		$idSubarea = $_GET['id_SubArea'];
-        if ($idZona!=null && $idSubarea!=null) {
-            $sqlarea= "INSERT INTO area_subarea (id_Zona,id_SubArea) VALUES ('$idZona','$idSubarea')";
-            $mysqli->query($sqlarea);
+		$nombreSubArea = $_GET['NombreSubarea'];
+        if ($nombreSubArea!=null) {
+            $sqlsub= "INSERT INTO subareas(NombreSubarea,Id_Zona) VALUES ('$nombreSubArea','$idZona')";
+            $mysqli->query($sqlsub);
 
-            if ($idZona=1) {
+            if ($nombreSubArea=1) {
 				echo'<script type="text/javascript">
 			alert("Registro guardado!");
-			window.location.href="vistaAreas.php"	;
+			window.location.href="vistaSubareas.php"	;
 			</script>';
                // header("location:vistaZonas.php");
             }
-		}
+        }
+
 		
 		$sql = "SELECT * FROM zona ORDER BY Nombre ASC";
 		$result = $mysqli->query($sql);
@@ -39,20 +57,6 @@ error_reporting(E_ERROR | E_PARSE);
 			echo "No hubo resultados";
 		}
 
-			$sql = "SELECT * FROM subareas ORDER BY NombreSubarea ASC";
-			$resultsub = $mysqli->query($sql);
-			if ($resultsub->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
-			{
-				$combobitsub="";
-				while ($row = $resultsub->fetch_array(MYSQLI_ASSOC)) 
-				{
-					$combobitsub .="<option value='".$row['IdSubarea']."'>".$row['NombreSubarea']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
-				}
-			}
-			else
-			{
-				echo "No hubo resultados";
-			}
 
 ?>
 <!doctype html>
@@ -65,6 +69,8 @@ error_reporting(E_ERROR | E_PARSE);
 
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous">
+	 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
 	 crossorigin="anonymous">
 
 	<link rel="stylesheet" href="./css/estilo.css">
@@ -123,7 +129,6 @@ error_reporting(E_ERROR | E_PARSE);
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -134,9 +139,9 @@ error_reporting(E_ERROR | E_PARSE);
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -159,11 +164,9 @@ error_reporting(E_ERROR | E_PARSE);
 						<?php echo $combobitzona; ?>
 					</select>
 				</div>
-				<div class="form-group ">
+				<div class="form-group">
 					<label>Subárea: </label>
-					<select class="form-control col-sm-10" id="sub" name="id_SubArea">
-						<?php echo $combobitsub; ?>
-					</select>
+					<input type="text" class="form-control" id="sub" name="NombreSubarea" placeholder="Escribe una Subárea" require>
 				</div>
 				<div class="form-group">
 					<div class="col-sm-offset-2 col-sm-10">
@@ -172,7 +175,7 @@ error_reporting(E_ERROR | E_PARSE);
 					</div>
 				</div>
 			</form>
-			<a href="vistaAreas.php" class="btn btn-success">Ver lista de áreas registradas</a>
+			<a href="vistaSubareas.php" class="btn btn-success">Ver lista de áreas registradas</a>
 
 		</div>
 

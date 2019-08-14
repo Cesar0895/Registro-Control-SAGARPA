@@ -1,7 +1,29 @@
 <?php	
 			error_reporting(E_ALL & ~E_NOTICE);
 			error_reporting(E_ERROR | E_PARSE);
-			require 'conexion.php';
+			session_start();
+	
+	$varsesion=$_SESSION['user'];
+	//$contrasesion=$_SESSION['pass'];
+	
+    require 'conexion.php';
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    //'or '1'='1
+    $resultado = $mysqli->query($consulta);
+    $row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+		$RFC=$row['RFC'];
+		$nombr=$row['nombComple'];
+	
+		if ($varsesion==null || $varsesion='' ) {
+			header('location:index.php');
+			die();
+		}
+		
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+			header('location:Resguardante/inicioRes.php');
+			die();
+		}
 
 			$idMon=$_GET['id_Monitor'];
 			$serie = $_GET['Serie'];
@@ -13,15 +35,15 @@
         
 
             if ($serie!=null) {
-				$sql2= "UPDATE Monitor SET Serie='$serie',id_Marca='$id_Marca',id_Modelo='$id_Modelo', Descripcion='$descripcion', Inventario='$inventario', Adquisicion='$adqui' WHERE id_Monitor='$idMon'";
+				$sql2= "UPDATE Monitor SET Serie='$serie',id_Marca='$id_Marca',Modelo='$id_Modelo', Descripcion='$descripcion', Inventario='$inventario', Adquisicion='$adqui' WHERE id_Monitor='$idMon'";
 				
                 $mysqli->query($sql2);
     
 				if ($idMon=1) {
 					echo'<script type="text/javascript">
-			alert("Registro actualizado!");
-			window.location.href="vistaMonitor.php"	;
-			</script>';
+					alert("Registro actualizado!");
+					window.location.href="vistaMonitor.php"	;
+					</script>';
                 
                 }
 			}
@@ -32,9 +54,9 @@ require 'conexion.php';
 
 			$idMon=$_GET['id_Monitor'];       
             
-			$sql = "SELECT m.id_Monitor, m.Serie,m.Inventario,m.Descripcion,m.Adquisicion,marca.Marca, marca.id_Marca, modelo.Modelo, modelo.id_Modelo FROM monitor m 
+			$sql = "SELECT m.id_Monitor, m.Serie,m.Inventario,m.Descripcion,m.Adquisicion,marca.Marca, marca.id_Marca, m.Modelo FROM monitor m 
 			INNER JOIN marca ON m.Id_Marca=marca.id_Marca 
-			INNER JOIN modelo on m.id_Modelo=modelo.id_Modelo where id_Monitor='$idMon'";
+			 where id_Monitor='$idMon'";
             $resultado = $mysqli->query($sql);
 			$row2 = $resultado->fetch_array(MYSQLI_ASSOC);
 			
@@ -45,7 +67,7 @@ require 'conexion.php';
 				$combobit="";
 				while ($row = $result->fetch_array(MYSQLI_ASSOC)) 
 				{
-					$combobit .="<option value='".$row['id_Modelo']."'>".$row['Modelo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+					$combobit .="<option value='".$row['Modelo']."'>".$row['Modelo']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
 				}
 			}
 			else
@@ -80,6 +102,8 @@ require 'conexion.php';
 
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous">
+	 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
 	 crossorigin="anonymous">
 
 	<link rel="stylesheet" href="./css/estilo.css">
@@ -138,7 +162,6 @@ require 'conexion.php';
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -149,9 +172,9 @@ require 'conexion.php';
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -197,10 +220,10 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Marca:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="id_Marca" name="id_Marca">
-								<option value='<?php echo $row2[' id_Marca ']?>'>
+							<option value='<?php echo $row2['id_Marca']?>'>
 									<?php echo $row2['Marca']?>
 								</option>
-								<?php echo $combobitmarca; ?>
+								<?php echo $combobitmarca;?>
 							</select>
 						</div>
 					</div>
@@ -208,7 +231,7 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Modelo:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="id_Modelo" name="id_Modelo">
-								<option value='<?php echo $row2[' id_Modelo ']?>'>
+								<option value='<?php echo $row2['Modelo']?>'>
 									<?php echo $row2['Modelo']?>
 								</option>
 								<?php echo $combobit; ?>

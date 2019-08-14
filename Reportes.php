@@ -1,7 +1,29 @@
 <?php
 	error_reporting(E_ALL & ~E_NOTICE);
 	error_reporting(E_ERROR | E_PARSE);
-	require 'conexion.php';
+	session_start();
+	
+	$varsesion=$_SESSION['user'];
+	//$contrasesion=$_SESSION['pass'];
+	
+    require 'conexion.php';
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    //'or '1'='1
+    $resultado = $mysqli->query($consulta);
+    $row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+		$RFC=$row['RFC'];
+		$nombr=$row['nombComple'];
+	
+		if ($varsesion==null || $varsesion='' ) {
+			header('location:index.php');
+			die();
+		}
+		
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+			header('location:Resguardante/inicioRes.php');
+			die();
+		}
 	
 	$id=1;
 	$where = "";
@@ -9,26 +31,32 @@
 	if(!empty($_POST))
 	{
         $valor = $_POST['campo'];
-        $valor2=$_POST['Valor2'];
+		$valor2=$_POST['Valor2'];
+		$valor3=$_POST['Valor3'];
 		
 		if(!empty($valor)){
-			$where = "WHERE $valor2 LIKE '$valor%'";
+			$where = "WHERE $valor2 LIKE '$valor%' and persona.Subarea LIKE '$valor3%'";
 		}
-    }
+	}
 
 
-	$sqlmostrar = "SELECT `Folio`, zona.Nombre, zona.Sigla, concat(persona.Nombre,' ',persona.ApePaterno,' ',persona.ApeMaterno) as nombResp, persona.RFC,persona.Area,persona.Subarea,
+
+	$sqlmostrar = "SELECT `Folio`, zona.Nombre, zona.Sigla, concat(persona.Nombre,' ',persona.ApePaterno,' ',persona.ApeMaterno) as nombResp, persona.RFC, zonaPer.Sigla as zonaPer, persona.Subarea,
+			
     cpu.Serie as serieCPU, marCPU.Marca as marcaCPU, modCPU.Modelo as modCPU, cpu.Invetario as InvCPU, cpu.Adquisicion
     FROM `equipos`
     INNER JOIN zona on equipos.Id_Zona=zona.id_Zona 
-    INNER JOIN persona on equipos.RFC=persona.RFC 
-    INNER JOIN persona p on equipos.RFC_Usuario=p.RFC 
+    INNER JOIN (persona 
+    			INNER JOIN zona zonaPer on persona.Area=zonaPer.id_Zona)
+    			on equipos.RFC=persona.RFC 
+    
     INNER JOIN (cpu 
                 INNER JOIN marca marCPU on cpu.Id_Marca=marCPU.id_Marca
                 INNER JOIN modelo modCPU on cpu.Id_Modelo=modCPU.id_Modelo) 
-                on equipos.Id_CPU=cpu.Id_CPU 
+                on equipos.Id_CPU=cpu.Id_CPU
 	$where ORDER BY `equipos`.`Folio` ASC";
 	$resultadoTabla = $mysqli->query($sqlmostrar);
+
 
 ?>
 <!doctype html>
@@ -70,17 +98,16 @@
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
 					<li class="nav-item">
-						<a class="nav-link" href="inicio.php">Inicio</a>
+						<a class="nav-link mask flex-center rgba-red-strong" href="inicio.php">Inicio</a>
 					</li>
 
 					<li class="nav-item dropdown">
 						<a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Registro</a>
 						<div class="dropdown-menu">
 							<a class="dropdown-item" href="registroEquipoComputo.php">Equipo de computo</a>
-							<a class="dropdown-item" href="registroAuxiliares.php">Auxiliares</a>
-							<a class="dropdown-item" href="#">Telefonia</a>
-							<div class="dropdown-divider"></div>
-							<a class="dropdown-item" href="#">Separated link</a>
+							<a class="dropdown-item" href="Auxiliares.php">Auxiliares</a>
+							<a class="dropdown-item" href="Telefonia.php">Telefonia</a>
+
 						</div>
 					</li>
 					<li class="nav-item">
@@ -100,18 +127,27 @@
 							<a class="dropdown-item" href="RAM.php">Memoria RAM</a>
 							<a class="dropdown-item" href="Procesador.php">Procesador</a>
 							<a class="dropdown-item" href="Velocidad.php">Velocidad</a>
+							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
+							<a class="dropdown-item" href="Areas.php">Áreas</a>
 						</div>
+					</li>
+
+					<li class="nav-item">
+						<a class="nav-link mask flex-center rgba-red-strong" href="Reportes.php">Reportes</a>
 					</li>
 				</ul>
 				<ul class="nav navbar-nav">
 					<li>
-						<a href="#">
-							<span class="fas fa-user nav-link"></span> Sign Up</a>
+
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
-						<a href="#">
-							<span class="fas fa-sign-in-alt nav-link"></span> Salir</a>
+						<a href="cerrar_session.php">
+							<span class="fas fa-sign-in-alt nav-link"></span> (Cerrar sesion)</a>
+
 					</li>
 				</ul>
 			</div>
@@ -122,41 +158,55 @@
 	<main role="main" class="container">
 		<div class="card">
 			<div class="card-header bg-info">
-				<h3 style="text-align:center">REGISTRO DE INVENTARIO</h3>
+				<h3 style="text-align:center">REPORTES</h3>
 			</div>
 			<div class="card-body">
 
-				<form action="GeneraReporte.php" method="POST">
-						
-                        <input type="hidden" id="campo" name="Valor2" value="<?php echo $valor2 ?>" />
-						<input type="hidden" id="campo" name="campo" value="<?php echo $valor ?>" />
-						<input type="submit" id="enviar" name="enviar" value="Generar Reporte" class="btn btn-primary float-right" />
-					</form>
+				<form action="ReporteMulticell.php" method="POST">
 
-					<a class="btn btn-primary" href="ReporteExcel.php">Reporte de inventario</a>
+					<input type="hidden" id="campo" name="Valor3" value="<?php echo $valor3 ?>"
+					/>
+					<input type="hidden" id="campo" name="Valor2" value="<?php echo $valor2 ?>"
+					/>
+					<input type="hidden" id="campo" name="campo" value="<?php echo $valor ?>" />
+					<input type="submit" id="enviar" name="enviar" value="Generar Reporte (pdf)" class="btn btn-primary float-right" />
+				</form>
+
+				<a class="btn btn-secondary" href="ReporteExcel.php">Reporte inventario de quipos (Excel)</a>
+
+				<a class="btn btn-secondary" href="ReporteExcelSoft.php">Reporte software de quipos (Excel)</a>
+
+				<a class="btn btn-secondary" href="ReporteExcelaUX.php">Reporte Auxiliares de quipos (Excel)</a>
 
 				<div class="row">
 
-
 					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-						<select class="form-control" id="Valor2" name="Valor2">
-                            <option value="0">Elige una opción</option>
-							<option value="Sigla">Area</option>
-                            <option value="marCPU.Marca">Marca</option>
-                            <option value="modCPU.Modelo">Modelo</option>
-							
+						<select class="col-sm-8 form-control" id="Valor2" name="Valor2">
+							<option value="0">Elige una opción</option>
+							<option value="zonaPer.Sigla">Area</option>
+							<option value="Subarea">Subarea</option>
+							<option value="marCPU.Marca">Marca</option>
+							<option value="modCPU.Modelo">Modelo</option>
+
 						</select>
-						<input type="text" id="campo" name="campo" />
+						<input type="text" id="campo" name="campo" placeholder="Buscador" />
+
+						<br>
+						<br>
+						<label>Subarea</label>
+						<br>
+						<input type="text" id="Valor3" name="Valor3" placeholder="Buscar por subarea" />
 						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
 					</form>
 				</div>
-               
+
 				<br>
 
 				<div class="row table-responsive">
 					<table class="table table-hover table-secondary">
 						<thead>
 							<tr>
+								<th></th>
 								<th></th>
 								<th>Folio</th>
 								<th>Responsable</th>
@@ -168,13 +218,20 @@
 								<th>Serie</th>
 								<th>Inventario</th>
 								<th>Adquisicion</th>
-								<th></th>
+								
 							</tr>
 						</thead>
 
 						<tbody>
 							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
 							<tr>
+
+								<td>
+									<a href="DetalleInventario.php?Folio=<?php echo $row['Folio']; ?>" title="Ver mas">
+										<span class="fas fa-eye"></span>
+
+									</a>
+								</td>
 
 								<td>
 									<?php echo $id++; ?>
@@ -189,9 +246,9 @@
 									<?php echo $row['RFC']; ?>
 								</td>
 								<td>
-									<?php echo $row['Sigla']; ?>
+									<?php echo $row['zonaPer']; ?>
 								</td>
-								
+
 								<td>
 									<?php echo $row['Subarea']; ?>
 								</td>
@@ -210,15 +267,10 @@
 								<td>
 									<?php echo $row['Adquisicion']; ?>
 								</td>
+
+
 								
-								
-								<td>
-									<a href="DetalleInventario.php?Folio=<?php echo $row['Folio']; ?>" title="Ver mas">
-										<span class="fas fa-eye"></span>
-                                        
-									</a>
-								</td>
-								
+
 							</tr>
 							<?php } ?>
 						</tbody>

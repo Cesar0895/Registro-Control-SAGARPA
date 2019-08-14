@@ -11,7 +11,9 @@ error_reporting(E_ERROR | E_PARSE);
     $_SESSION['user']=$usuario;
     $_SESSION['pass']=$password;
 */
-    $conexion =  new mysqli ('localhost','root','','inventariosagarpa');
+ $conexion =  new mysqli ('localhost','root','','inventariosagarpa');
+
+    //$conexion =  new mysqli ('localhost','id8480341_root','contra123','id8480341_invensagarpa');
     
     $usuario= mysqli_real_escape_string($conexion, $_POST['user']);
     $email= mysqli_real_escape_string($conexion, $_POST['user']);
@@ -26,13 +28,13 @@ error_reporting(E_ERROR | E_PARSE);
     $resultado = mysqli_query($conexion, $consulta);
     $row = $resultado->fetch_array(MYSQLI_ASSOC);
 
-        $puesto=$row['Puesto'];
+        $RFC=$row['RFC'];
         
  
     $filas=mysqli_num_rows($resultado);
 
     if($filas>0){
-        if ($puesto=='encargado' || $puesto=='jefe') {
+        if ($RFC=='CUAJ800423F77' || $RFC=='BUVG860908DU8') {
             header('location:inicio.php');
         } else {
             header('location:Resguardante/inicioRes.php');

@@ -1,12 +1,33 @@
 <?php
 error_reporting(E_ALL & ~E_NOTICE);
 error_reporting(E_ERROR | E_PARSE);
-require 'conexion.php';
+session_start();
+	
+	$varsesion=$_SESSION['user'];
+	//$contrasesion=$_SESSION['pass'];
+	
+    require 'conexion.php';
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    //'or '1'='1
+    $resultado = $mysqli->query($consulta);
+    $row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+		$RFC=$row['RFC'];
+		$nombr=$row['nombComple'];
+	
+		if ($varsesion==null || $varsesion='' ) {
+			header('location:index.php');
+			die();
+		}
+		
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+			header('location:Resguardante/inicioRes.php');
+			die();
+		}
 $RFC = $_GET['RFC'];
 $nombre = isset($_GET['Nombre']) ? $_GET['Nombre'] : null ;
 $apePaterno = isset($_GET['ApePaterno']) ? $_GET['ApePaterno'] : null ;
 $apeMaterno = isset($_GET['ApeMaterno']) ? $_GET['ApeMaterno'] : null ;
-$adscripcion = isset($_GET['Adscripcion']) ? $_GET['Adscripcion'] : null ;
 $area = isset($_GET['Area']) ? $_GET['Area'] : null ;
 $subarea = isset($_GET['Subarea']) ? $_GET['Subarea'] : null ;
 $puesto = isset($_GET['Puesto']) ? $_GET['Puesto'] : null ;
@@ -17,9 +38,12 @@ $correo = isset($_GET['correo']) ? $_GET['correo'] : null ;
 $GFC = isset($_GET['GFC']) ? $_GET['GFC'] : null ;
 $accesoCorreo = isset($_GET['accesoCorreo']) ? $_GET['accesoCorreo'] : null ;
 $estatus = isset($_GET['estatus']) ? $_GET['estatus'] : null ;
+$Puesto_nivel = isset($_GET['puesto_nivel']) ? $_GET['puesto_nivel'] : null ;
+$CURP = isset($_GET['CURP']) ? $_GET['CURP'] : null ;
+$Dminio = isset($_GET['Dominio']) ? $_GET['Dominio'] : null ;
 
 if ($nombre!=null) {
-    $sql2= "update persona set  Nombre='".$nombre."', ApePaterno='".$apePaterno."',ApeMaterno='".$apeMaterno."', Adscripcion='".$adscripcion."', Area='$area',Subarea='$subarea', Puesto='$puesto', Telefono='$telefono', Extension='$extension', Domicilio='$domicilio', Correo='$correo', GFC='$GFC', Acceso_correo='$accesoCorreo', Estatus='$estatus'
+    $sql2= "update persona set  Nombre='".$nombre."', ApePaterno='".$apePaterno."',ApeMaterno='".$apeMaterno."',  Area='$area',Subarea='$subarea', Puesto='$puesto', Telefono='$telefono', Extension='$extension', Domicilio='$domicilio', Correo='$correo', GFC='$GFC', Acceso_correo='$accesoCorreo', Estatus='$estatus', `Puesto_nivel`='$Puesto_nivel',`CURP`='$CURP', Dominio='$Dminio'
     Where RFC='".$RFC."'";
     $mysqli->query($sql2);
     
@@ -39,9 +63,17 @@ if ($nombre!=null) {
 	
 	        $RFC = $_GET['RFC'];        
             
-			$sql = "SELECT * FROM persona WHERE RFC = '$RFC'";
+			$sql = "SELECT `RFC`, persona.`Nombre`, `ApePaterno`, `ApeMaterno`,  zona.id_Zona , zona.Nombre as nomArea, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra`, Puesto_nivel, CURP, Dominio  FROM `persona`
+			INNER JOIN zona on zona.id_Zona=persona.Area WHERE RFC = '$RFC'";
             $resultado = $mysqli->query($sql);
-            $row = $resultado->fetch_array(MYSQLI_ASSOC);
+			$row = $resultado->fetch_array(MYSQLI_ASSOC);
+			
+
+			$query="SELECT id_Zona, Nombre, Sigla FROM ZONA ORDER BY `zona`.`Nombre` ASC";
+			$result=$mysqli->query($query);
+
+			
+		
 ?>
 <!doctype html>
 <html lang="en">
@@ -54,10 +86,29 @@ if ($nombre!=null) {
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
+	 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+	 crossorigin="anonymous">
 
 	<link rel="stylesheet" href="./css/estilo.css">
 
 	<title>Control de dispositivos</title>
+
+	<script language="javascript" src="js/jquery-3.4.0.min.js"></script>
+	<script language="javascript">
+		$(document).ready(function() {
+			$("#Area").change(function() {
+
+				$("#Area option:selected").each(function() {
+					id_area = $(this).val();
+					$.post("includes/getSubareas.php", {
+						id_area: id_area
+					}, function(data) {
+						$("#Subarea").html(data);
+					});
+				});
+			})
+		});
+	</script>
 
 </head>
 
@@ -111,7 +162,6 @@ if ($nombre!=null) {
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -122,9 +172,9 @@ if ($nombre!=null) {
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -174,35 +224,51 @@ if ($nombre!=null) {
 							 required>
 						</div>
 					</div>
-
 					<div class="form-group">
-						<label for="adscripcion" class="col-sm-2 controllabel">Adscripción</label>
+						<label for="apeMaterno" class="col-sm-2 controllabel">CURP</label>
 						<div class="col-sm-10">
-							<input type="text" class="form-control" id="adscripcion" name="Adscripcion" placeholder="Adscripción" value="<?php echo $row['Adscripcion']; ?>"
+							<input type="text" class="form-control" id="CURP" name="CURP" placeholder="CURP" value="<?php echo $row['CURP']; ?>"
 							 required>
 						</div>
 					</div>
+
 
 					<div class="form-group">
 						<label for="area" class="col-sm-2 controllabel">Area</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" id="area" name="Area" placeholder="Area" value="<?php echo $row['Area']; ?>"
-							 required>
-						</div>
+						<select class="form-control col-sm-10" id="Area" name="Area">
+							<option value="<?php echo $row['id_Zona']; ?>">
+								<?php echo $row['nomArea']; ?>
+							</option>
+							<?php while($rowA=$result->fetch_assoc()){ ?>
+							<option value="<?php echo $rowA['id_Zona']; ?>">
+								<?php echo $rowA['Nombre']; ?>
+							</option>
+							<?php } ?>
+						</select>
 					</div>
+
 
 					<div class="form-group">
 						<label for="subarea" class="col-sm-2 controllabel">Subarea</label>
-						<div class="col-sm-10">
-							<input type="text" class="form-control" id="subarea" name="Subarea" placeholder="Subarea" value="<?php echo $row['Subarea']; ?>"
-							 required>
-						</div>
+						<select class="form-control col-sm-10" id="Subarea" name="Subarea">
+							<option >
+								<?php echo $row['Subarea']; ?>
+							</option>
+						</select>
 					</div>
+
 
 					<div class="form-group">
 						<label for="puestp" class="col-sm-2 controllabel">Puesto</label>
 						<div class="col-sm-10">
 							<input type="text" class="form-control" id="puesto" name="Puesto" placeholder="Puesto" value="<?php echo $row['Puesto']; ?>"
+							 required>
+						</div>
+					</div>
+					<div class="form-group">
+						<label for="puestp" class="col-sm-2 controllabel">Puesto_Nivel</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="puesto_nivel" name="puesto_nivel" placeholder="Puesto" value="<?php echo $row['Puesto_nivel']; ?>"
 							 required>
 						</div>
 					</div>
@@ -232,6 +298,13 @@ if ($nombre!=null) {
 						<label for="correo" class="col-sm-2 controllabel">Correo</label>
 						<div class="col-sm-10">
 							<input type="email" class="form-control" id="correo" name="correo" placeholder="Correo" value="<?php echo $row['Correo']; ?>">
+						</div>
+					</div>
+
+					<div class="form-group">
+						<label for="correo" class="col-sm-2 controllabel">Dominio</label>
+						<div class="col-sm-10">
+							<input type="text" class="form-control" id="Dominio" name="Dominio" value="<?php echo $row['Dominio']; ?>">
 						</div>
 					</div>
 
@@ -276,8 +349,7 @@ if ($nombre!=null) {
 	</main>
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
-	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-	 crossorigin="anonymous"></script>
+
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
 	 crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"

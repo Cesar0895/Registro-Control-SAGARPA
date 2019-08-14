@@ -3,7 +3,29 @@ error_reporting(E_ALL & ~E_NOTICE);
 error_reporting(E_ERROR | E_PARSE);
 
 	
-    require 'conexion.php';
+session_start();
+	
+$varsesion=$_SESSION['user'];
+//$contrasesion=$_SESSION['pass'];
+
+require 'conexion.php';
+$consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+//'or '1'='1
+$resultado = $mysqli->query($consulta);
+$row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+	$RFC=$row['RFC'];
+	$nombr=$row['nombComple'];
+
+	if ($varsesion==null || $varsesion='' ) {
+		header('location:index.php');
+		die();
+	}
+	
+	if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+		header('location:Resguardante/inicioRes.php');
+		die();
+	}
    
 		
 
@@ -26,7 +48,7 @@ error_reporting(E_ERROR | E_PARSE);
 
 		$id_CPU = $_GET['Id_CPU'];        
             
-			$sql = "SELECT `Id_CPU`, marca.Marca, modelo.Modelo, procesador.Procesador, memoria_ram.Memoria_RAM, disco_duro.Almacenamiento, velocidad.Velocidad, `Serie`, `Invetario`, `Adquisicion`, `UnidadOptica`, `Bosinas`, `P_USB`, `P_Serial`, `P_Paralelo`, `RedTipo`, `IP`, `MacEth`, `Mac_wifi`, `Dominio`, `Antivirus` FROM `cpu` INNER JOIN marca on cpu.Id_Marca=marca.id_Marca INNER JOIN modelo on cpu.Id_Modelo=modelo.id_Modelo INNER JOIN procesador on cpu.Id_Procesador=procesador.id_Procesador INNER JOIN memoria_ram on cpu.Id_MemoriaRam=memoria_ram.Id_Memoria INNER JOIN disco_duro on cpu.Id_DD=disco_duro.id_DD INNER JOIN velocidad on cpu.Id_Velocidad=velocidad.Id_velocidad WHERE Id_CPU = '$id_CPU'";
+			$sql = "SELECT `Id_CPU`, marca.Marca, modelo.Modelo, procesador.Procesador, memoria_ram.Memoria_RAM, disco_duro.Almacenamiento, velocidad.Velocidad, `Serie`, `Invetario`, `Adquisicion`, `UnidadOptica`, `Bosinas`, `P_USB`, `P_Serial`, `P_Paralelo`, `RedTipo`, `IP`, `MacEth`, `Mac_wifi`, `Dominio`, `Antivirus`, T_Red FROM `cpu` INNER JOIN marca on cpu.Id_Marca=marca.id_Marca INNER JOIN modelo on cpu.Id_Modelo=modelo.id_Modelo INNER JOIN procesador on cpu.Id_Procesador=procesador.id_Procesador INNER JOIN memoria_ram on cpu.Id_MemoriaRam=memoria_ram.Id_Memoria INNER JOIN disco_duro on cpu.Id_DD=disco_duro.id_DD INNER JOIN velocidad on cpu.Id_Velocidad=velocidad.Id_velocidad WHERE Id_CPU = '$id_CPU'";
             $resultado = $mysqli->query($sql);
 			$row = $resultado->fetch_array(MYSQLI_ASSOC);
 			
@@ -122,7 +144,6 @@ error_reporting(E_ERROR | E_PARSE);
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -133,9 +154,9 @@ error_reporting(E_ERROR | E_PARSE);
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -296,6 +317,16 @@ error_reporting(E_ERROR | E_PARSE);
 					<div class="col-5">
 						<p class="h6">
 							<?php echo $row['P_Paralelo']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Terjeta de red: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['T_Red']; ?>
 						</p>
 					</div>
 				</div>

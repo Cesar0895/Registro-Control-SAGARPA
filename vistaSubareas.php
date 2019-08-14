@@ -1,7 +1,29 @@
 <?php
 	error_reporting(E_ALL & ~E_NOTICE);
 	error_reporting(E_ERROR | E_PARSE);
-	require 'conexion.php';
+	session_start();
+	
+	$varsesion=$_SESSION['user'];
+	//$contrasesion=$_SESSION['pass'];
+	
+    require 'conexion.php';
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    //'or '1'='1
+    $resultado = $mysqli->query($consulta);
+    $row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+		$RFC=$row['RFC'];
+		$nombr=$row['nombComple'];
+	
+		if ($varsesion==null || $varsesion='' ) {
+			header('location:index.php');
+			die();
+		}
+		
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+			header('location:Resguardante/inicioRes.php');
+			die();
+		}
 	$id_Subarea = $_GET['IdSubarea'];
 
 	$sql2 = "DELETE FROM subareas WHERE IdSubarea = '$id_Subarea'";
@@ -14,12 +36,27 @@
 		$valor = $_POST['campo'];
 	
 		if(!empty($valor)){
-			$where = "WHERE NombreSubarea LIKE '%$valor'";
+			$where = "WHERE Nombre LIKE '%$valor' or Sigla LIKE '%$valor'";
 		}
 	}
 
-	$sqlmostrar = "SELECT * FROM subareas $where ORDER BY NombreSubarea ASC";
+	$sqlmostrar = "SELECT subareas.IdSubarea, zona.Nombre,zona.Sigla,subareas.NombreSubarea FROM `subareas` INNER JOIN zona on subareas.Id_Zona=zona.id_Zona $where ORDER BY NombreSubarea ASC";
 	$resultadoTabla = $mysqli->query($sqlmostrar);
+
+	$sql = "SELECT * FROM zona ORDER BY Nombre ASC";
+		$result = $mysqli->query($sql);
+		if ($result->num_rows > 0) //si la variable tiene al menos 1 fila entonces seguimos con el codigo
+		{
+			$combobitzona="";
+			while ($row = $result->fetch_array(MYSQLI_ASSOC)) 
+			{
+				$combobitzona .="<option>".$row['Nombre']."</option>"; //concatenamos el los options para luego ser insertado en el HTML
+			}
+		}
+		else
+		{
+			echo "No hubo resultados";
+		}
 
 ?>
 
@@ -94,7 +131,6 @@
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -105,9 +141,9 @@
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -124,10 +160,25 @@
 		<div class="card">
 			<div class="card-header bg-info">
 				<h3 style="text-align:center">SUBAREAS</h3>
+				<h4 style="text-align:center">AREA: <?php echo $valor?> </h4>
+				
+
 			</div>
 			<div class="card-body">
 
-				<a href="Subareas.php" class="btn btn-primary float-right">Nuevo Registro</a>
+
+
+				<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+					<b>Filtrar por Area: </b>
+					<select id="campo" name="campo">
+						<option value="0">Elige una opción</option>
+						<?php echo $combobitzona; ?>
+					</select>
+					<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
+				</form>
+
+
+				<a href="Areas.php" class="btn btn-primary float-right">Nuevo Registro</a>
 
 
 				<br>
@@ -138,7 +189,7 @@
 							<tr>
 
 								<th>Subáreas</th>
-
+								<th></th>
 								<th></th>
 
 							</tr>
@@ -155,6 +206,11 @@
 									<a href="vistaSubareas.php" data-href="vistaSubareas.php?IdSubarea=<?php echo $row['IdSubarea']; ?>"
 									 data-toggle="modal" data-target="#confirm-delete">
 										<span class="far fa-trash-alt"></span>
+									</a>
+								</td>
+								<td>
+									<a href="ModificaSubarea.php?IdSubarea=<?php echo $row['IdSubarea']; ?>">
+										<span class="far fa-edit"></span>
 									</a>
 								</td>
 							</tr>

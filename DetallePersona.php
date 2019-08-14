@@ -1,11 +1,33 @@
 <?php
 	
-	require 'conexion.php';
+	session_start();
+	
+	$varsesion=$_SESSION['user'];
+	//$contrasesion=$_SESSION['pass'];
+	
+    require 'conexion.php';
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    //'or '1'='1
+    $resultado = $mysqli->query($consulta);
+    $row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+		$RFC=$row['RFC'];
+		$nombr=$row['nombComple'];
+	
+		if ($varsesion==null || $varsesion='' ) {
+			header('location:index.php');
+			die();
+		}
+		
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+			header('location:Resguardante/inicioRes.php');
+			die();
+		}	
 
 	        $RFC = $_GET['RFC'];        
             
-			$sql = "SELECT RFC, concat(ApePaterno,' ', ApeMaterno,' ', Nombre) as NombreComp, Adscripcion, Area, Subarea, Puesto, Telefono, Extension, Domicilio, Correo, GFC, Acceso_correo, Estatus, Usuario, Contra 
-			FROM persona WHERE RFC = '$RFC'";
+			$sql = "SELECT RFC, concat(ApePaterno,' ', ApeMaterno,' ', persona.Nombre) as NombreComp, CURP ,zona.id_Zona , zona.Nombre as nomArea, Subarea, Puesto,Puesto_nivel, Telefono, Extension, Domicilio, Correo, GFC, Acceso_correo, Estatus, Usuario, Contra, Dominio
+			FROM persona INNER JOIN zona on zona.id_Zona=persona.Area WHERE RFC = '$RFC'";
             $resultado = $mysqli->query($sql);
             $row = $resultado->fetch_array(MYSQLI_ASSOC);
 ?>
@@ -19,6 +41,8 @@
 
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+	 crossorigin="anonymous">
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
 	 crossorigin="anonymous">
 
 	<link rel="stylesheet" href="./css/estilo.css">
@@ -78,7 +102,6 @@
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -89,9 +112,9 @@
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -103,7 +126,6 @@
 		</nav>
 
 	</div>
-
 	<main role="main" class="container">
 		<br>
 		<div class="card">
@@ -137,11 +159,11 @@
 
 				<div class="row">
 					<div class="col-3">
-						<p class="h5">Adscripción: </p>
+						<p class="h5">CURP: </p>
 					</div>
 					<div class="col-5">
 						<p class="h6">
-							<?php echo $row['Adscripcion']; ?>
+							<?php echo $row['CURP']; ?>
 						</p>
 					</div>
 				</div>
@@ -151,7 +173,7 @@
 					</div>
 					<div class="col-5">
 						<p class="h6">
-							<?php echo $row['Area']; ?>
+							<?php echo $row['nomArea']; ?>
 						</p>
 					</div>
 				</div>
@@ -172,6 +194,16 @@
 					<div class="col-5">
 						<p class="h6">
 							<?php echo $row['Puesto']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Puesto_nivel: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Puesto_nivel']; ?>
 						</p>
 					</div>
 				</div>
@@ -218,6 +250,16 @@
 				</div>
 				<div class="row">
 					<div class="col-3">
+						<p class="h5">Dominio: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Dominio']; ?>
+						</p>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-3">
 						<p class="h5">GFC: </p>
 					</div>
 					<div class="col-5">
@@ -247,8 +289,33 @@
 					</div>
 				</div>
 
+				<hr color="blue" size=3>
+
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Usuario: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Usuario']; ?>
+						</p>
+					</div>
+				</div>
+
+				<div class="row">
+					<div class="col-3">
+						<p class="h5">Contraseña: </p>
+					</div>
+					<div class="col-5">
+						<p class="h6">
+							<?php echo $row['Contra']; ?>
+						</p>
+					</div>
+				</div>
+
+
 				<a href="personal.php" class="btn btn-primary">Regresar</a>
-				
+
 			</div>
 
 		</div>

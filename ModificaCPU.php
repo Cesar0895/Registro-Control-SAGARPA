@@ -2,8 +2,29 @@
 			
 			error_reporting(E_ALL & ~E_NOTICE);
 			error_reporting(E_ERROR | E_PARSE);
-			require 'conexion.php';
+			session_start();
+	
+	$varsesion=$_SESSION['user'];
+	//$contrasesion=$_SESSION['pass'];
+	
+    require 'conexion.php';
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    //'or '1'='1
+    $resultado = $mysqli->query($consulta);
+    $row = $resultado->fetch_array(MYSQLI_ASSOC);
 
+		$RFC=$row['RFC'];
+		$nombr=$row['nombComple'];
+	
+		if ($varsesion==null || $varsesion='' ) {
+			header('location:index.php');
+			die();
+		}
+		
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+			header('location:Resguardante/inicioRes.php');
+			die();
+		}
 			$id_CPU=$_GET['Id_CPU'];
 			$id_Marcapc = $_GET['id_Marcapc'];
 			$id_Modelopc = $_GET['id_Modelopc'];
@@ -20,6 +41,7 @@
 			$P_serial = $_GET['P_serial'];
 			$P_paralelo = $_GET['P_paralelo'];
 			$Red_tipo = $_GET['red_tipo'];
+			$T_Red = $_GET['T_Red'];
 			$ip = $_GET['ip'];
 			$MacEth = $_GET['MacEth'];
 			$MacWifi = $_GET['MacWifi'];
@@ -28,12 +50,13 @@
         
 
             if ($seriepc!=null) {
-				$sql2= "UPDATE `cpu` SET `Id_Marca`='$id_Marcapc', `Id_Modelo`='$id_Modelopc', `Serie`='$seriepc',`Invetario`='$inventariopc',`Id_Procesador`='$id_procesador', `Id_MemoriaRam`='$idMemoriaRam',`Id_DD`='$id_DD',`Id_Velocidad`='$id_velocidad',`Adquisicion`='$adquipc',UnidadOptica='$unidadOptica',Bosinas='$bocinas', `P_Serial`='$P_serial',`P_Paralelo`='$P_paralelo',P_USB=$P_usb,RedTipo='$Red_tipo',IP='$ip',MacEth='$MacEth',Mac_wifi='$MacWifi',Dominio='$Dominio',Antivirus='$Antivirus' WHERE Id_CPU='$id_CPU'";
+				$sql2= "UPDATE `cpu` SET `Id_Marca`='$id_Marcapc', `Id_Modelo`='$id_Modelopc', `Serie`='$seriepc',`Invetario`='$inventariopc',`Id_Procesador`='$id_procesador', `Id_MemoriaRam`='$idMemoriaRam',`Id_DD`='$id_DD',`Id_Velocidad`='$id_velocidad',`Adquisicion`='$adquipc',UnidadOptica='$unidadOptica',Bosinas='$bocinas', `P_Serial`='$P_serial',`P_Paralelo`='$P_paralelo',P_USB='$P_usb',RedTipo='$Red_tipo',IP='$ip',MacEth='$MacEth',Mac_wifi='$MacWifi',Dominio='$Dominio',Antivirus='$Antivirus', T_Red='$T_Red' WHERE Id_CPU='$id_CPU'";
 				
 				///SET `Id_Marca`='$id_Marcapc',`Id_Modelo`='$id_Modelopc',`Id_Procesador`='$id_procesador',`Id_MemoriaRam`='$idMemoriaRam',`Id_DD`='$id_DD',`Id_Velocidad`='$id_velocidad',`Serie`='$seriepc',`Invetario`='$inventariopc',`Adquisicion`='$adquipc',`UnidadOptica`='$unidadOptica',`Bosinas`='$bocinas',`P_USB`='$P_usb',`P_Serial`='$P_serial',`P_Paralelo`='$P_paralelo',`RedTipo`='$Red_tipo',`IP`='$ip',`MacEth`='$MacEth',`Mac_wifi`=$MacWifi,`Dominio`='$Dominio',`Antivirus`='$Antivirus' WHERE Id_CPU='$id_CPU'
                 $mysqli->query($sql2);
     
 				if ($id_CPU=1) {
+					
 					echo'<script type="text/javascript">
 			alert("Registro actualizado!");
 			window.location.href="vistaCPU.php"	;
@@ -47,7 +70,7 @@
 require 'conexion.php';
 	        $id_CPU = $_GET['Id_CPU'];        
             
-			$sql = "SELECT `Id_CPU`, cpu.Id_Marca, marca.Marca, cpu.Id_Modelo,modelo.Modelo, cpu.Id_Procesador,procesador.Procesador, cpu.Id_MemoriaRam,memoria_ram.Memoria_RAM, cpu.Id_DD, disco_duro.Almacenamiento, cpu.Id_Velocidad, velocidad.Velocidad ,`Serie`, `Invetario`, `Adquisicion`, `UnidadOptica`, `Bosinas`, `P_USB`, `P_Serial`, `P_Paralelo`, `RedTipo`, `IP`, `MacEth`, `Mac_wifi`, `Dominio`, `Antivirus` FROM `cpu` 
+			$sql = "SELECT `Id_CPU`, cpu.Id_Marca, marca.Marca, cpu.Id_Modelo,modelo.Modelo, cpu.Id_Procesador,procesador.Procesador, cpu.Id_MemoriaRam,memoria_ram.Memoria_RAM, cpu.Id_DD, disco_duro.Almacenamiento, cpu.Id_Velocidad, velocidad.Velocidad ,`Serie`, `Invetario`, `Adquisicion`, `UnidadOptica`, `Bosinas`, `P_USB`, `P_Serial`, `P_Paralelo`, `RedTipo`, `IP`, `MacEth`, `Mac_wifi`, `Dominio`, `Antivirus`, T_Red FROM `cpu` 
 			INNER JOIN marca on cpu.Id_Marca=marca.id_Marca
 			INNER JOIN modelo on cpu.Id_Modelo=modelo.id_Modelo
 			INNER JOIN procesador on cpu.Id_Procesador=procesador.id_Procesador
@@ -158,6 +181,8 @@ require 'conexion.php';
 	<!-- Bootstrap CSS -->
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
+	 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
+	 crossorigin="anonymous">
 
 	<link rel="stylesheet" href="./css/estilo.css">
 
@@ -215,7 +240,6 @@ require 'conexion.php';
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -226,9 +250,9 @@ require 'conexion.php';
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -274,7 +298,7 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Marca:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="marca" name="id_Marcapc">
-								<option value='<?php echo $row2[' Id_Marca ']?>'>
+								<option value="<?php echo $row2['Id_Marca']?>">
 									<?php echo $row2['Marca']?>
 								</option>
 								<?php echo $combobitmarca; ?>
@@ -285,7 +309,7 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Modelo:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="marca" name="id_Modelopc">
-								<option value='<?php echo $row2[' Id_Modelo ']?>'>
+								<option value="<?php echo $row2['Id_Modelo']?>">
 									<?php echo $row2['Modelo']?>
 								</option>
 								<?php echo $combobit; ?>
@@ -296,7 +320,7 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Procesador:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="procesador" name="id_procesador">
-								<option value='<?php echo $row2[' Id_Procesador ']?>'>
+								<option value="<?php echo $row2['Id_Procesador']?>">
 									<?php echo $row2['Procesador']?>
 								</option>
 								<?php echo $combobitpro; ?>
@@ -307,7 +331,7 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Memoria RAM:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="procesador" name="idMemoriaRam">
-								<option value='<?php echo $row2[' Id_MemoriaRam ']?>'>
+								<option value="<?php echo $row2['Id_MemoriaRam']?>">
 									<?php echo $row2['Memoria_RAM']?>
 								</option>
 								<?php echo $combobitram; ?>
@@ -318,7 +342,7 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Disco Duro:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="DD" name="id_DD">
-								<option value='<?php echo $row2[' Id_DD ']?>'>
+								<option value="<?php echo $row2['Id_DD']?>">
 									<?php echo $row2['Almacenamiento']?>
 								</option>
 								<?php echo $combobitDD; ?>
@@ -329,7 +353,7 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Velocidad:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="Velocidad" name="id_velocidad">
-								<option value='<?php echo $row2[' Id_Velocidad ']?>'>
+								<option value="<?php echo $row2['Id_Velocidad']?>">
 									<?php echo $row2['Velocidad']?>
 								</option>
 								<?php echo $combobitvel; ?>
@@ -355,8 +379,12 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Unidad Optica:</label>
 						<div class="col-sm-4">
 							<select class="form-control" id="unidadOptic" name="unidadOptica">
-								<option value="SI" <?php if( $row2[ 'UnidadOptica']=='SI' ) echo 'Selected'; ?>>SI</option>
-								<option value="NO" <?php if( $row2[ 'UnidadOptica']=='NO' ) echo 'Selected'; ?>>NO</option>
+							
+								<option value="DVD" <?php if( $row2['UnidadOptica']=='DVD' ) echo 'Selected'; ?>>DVD</option>
+
+								<option value="DVD-RW" <?php if( $row2[ 'UnidadOptica']=='DVD-RW' ) echo 'Selected'; ?>>DVD-RW</option>
+
+								<option value="CD-RW" <?php if( $row2['UnidadOptica']=='CD-RW' ) echo 'Selected'; ?>>CD-RW</option>
 							</select>
 						</div>
 					</div>
@@ -392,7 +420,7 @@ require 'conexion.php';
 						<label class="col-sm-2 col-form-label ml-4">Puertos USB:</label>
 						<div class="col-sm-1">
 							<select class="form-control" id="p_usb" name="P_usb">
-								<option value='<?php echo $row2[' P_USB ']?>'>
+								<option value="<?php echo $row2['P_USB']?>">
 									<?php echo $row2['P_USB']?>
 								</option>
 								<option value="1">1</option>
@@ -416,6 +444,14 @@ require 'conexion.php';
 								<option value="19">19</option>
 								<option value="20">20</option>
 							</select>
+						</div>
+					</div>
+
+					<div class="form-group row">
+						<label class="col-sm-2 col-form-label ml-4">Tarjeta de Red:</label>
+						<div class="col-sm-4">
+							<input type="text" class="form-control" id="T_Red" name="T_Red" value="<?php echo $row2['T_Red']; ?>"
+							 require>
 						</div>
 					</div>
 
@@ -457,10 +493,8 @@ require 'conexion.php';
 					<div class="form-group row">
 						<label class="col-sm-2 col-form-label ml-4">Antivirus:</label>
 						<div class="col-sm-4">
-							<select class="form-control" id="Antivirus" name="Antivirus">
-								<option value="SI" <?php if( $row2[ 'Antivirus']=='SI' ) echo 'Selected'; ?>>SI</option>
-								<option value="NO" <?php if( $row2[ 'Antivirus']=='NO' ) echo 'Selected'; ?>>NO</option>
-							</select>
+							<input type="text" class="form-control" id="Antivirus" name="Antivirus" value="<?php echo $row2['Antivirus']; ?>"
+							 require>
 						</div>
 					</div>
 

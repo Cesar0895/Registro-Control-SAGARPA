@@ -5,12 +5,12 @@ session_start();
 	//$contrasesion=$_SESSION['pass'];
 	
     require '../conexion.php';
-    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple, `Adscripcion`, `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion'";
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion'";
     //'or '1'='1
     $resultado = $mysqli->query($consulta);
     $row = $resultado->fetch_array(MYSQLI_ASSOC);
 
-		$puesto=$row['Puesto'];
+		
         $nombr=$row['nombComple'];
         $rfc=$row['RFC'];
 	
@@ -62,7 +62,7 @@ session_start();
 				<ul class="navbar-nav mr-auto mt-2 mt-lg-0">
 
 					<li class="nav-item">
-						<a class="nav-link mask flex-center rgba-red-strong" href="#">Inicio</a>
+						<a class="nav-link mask flex-center rgba-red-strong" href="inicioRes.php">Inicio</a>
 					</li>
 					<li class="nav-item">
 						<a class="nav-link mask flex-center rgba-red-strong" href="#">Equipo a cargo</a>
@@ -116,9 +116,7 @@ session_start();
 								<th>Fin de Garantia</th>
                                 <th>Estatus</th>
 								<th></th>
-								<th></th>
-								<th></th>
-								<th></th>
+								
 							</tr>
 						</thead>
 
@@ -155,22 +153,7 @@ session_start();
 										<span class="fas fa-eye"></span>
 									</a>
 								</td>
-								<td>
-									<a href="ReportePersonalXUno.php?RFC=<?php echo $row['RFC']; ?>">
-										<span class="fas fa-download"></span>
-									</a>
-								</td>
-								<td>
-									<a href="ModificaPersona.php?RFC=<?php echo $row['RFC']; ?>">
-										<span class="far fa-edit"></span>
-									</a>
-								</td>
-								<td>
-									<a href="personal.php" data-href="personal.php?RFC=<?php echo $row['RFC']; ?>"
-									 data-toggle="modal" data-target="#confirm-delete">
-										<span class="far fa-trash-alt"></span>
-									</a>
-								</td>
+								
 
 							</tr>
 							<?php } ?>

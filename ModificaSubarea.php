@@ -1,47 +1,52 @@
 <?php
-	error_reporting(E_ALL & ~E_NOTICE);
-	error_reporting(E_ERROR | E_PARSE);
-	session_start();
+        error_reporting(E_ALL & ~E_NOTICE);
+        error_reporting(E_ERROR | E_PARSE);
+		session_start();
 	
-	$varsesion=$_SESSION['user'];
-	//$contrasesion=$_SESSION['pass'];
-	
-    require 'conexion.php';
-    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
-    //'or '1'='1
-    $resultado = $mysqli->query($consulta);
-    $row = $resultado->fetch_array(MYSQLI_ASSOC);
-
-		$RFC=$row['RFC'];
-		$nombr=$row['nombComple'];
-	
-		if ($varsesion==null || $varsesion='' ) {
-			header('location:index.php');
-			die();
-		}
+		$varsesion=$_SESSION['user'];
+		//$contrasesion=$_SESSION['pass'];
 		
-		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
-			header('location:Resguardante/inicioRes.php');
-			die();
-		}
-	$id_Marca = $_GET['id_Marca'];
-
-	$sql2 = "DELETE FROM marca WHERE id_Marca = '$id_Marca'";
-	$resultado = $mysqli->query($sql2);
+		require 'conexion.php';
+		$consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+		//'or '1'='1
+		$resultado = $mysqli->query($consulta);
+		$row = $resultado->fetch_array(MYSQLI_ASSOC);
 	
-	$where = "";
+			$RFC=$row['RFC'];
+			$nombr=$row['nombComple'];
+		
+			if ($varsesion==null || $varsesion='' ) {
+				header('location:index.php');
+				die();
+			}
+			
+			if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+				header('location:Resguardante/inicioRes.php');
+				die();
+            }
+            
+        $id_Subarea = $_GET['IdSubarea'];
+        $nombreSubArea = $_GET['NombreSubarea'];
+        
+        $sqlmostrar = "SELECT IdSubarea, NombreSubarea FROM `subareas` where IdSubarea='$id_Subarea'";
+        $resultadoTabla = $mysqli->query($sqlmostrar);
+        $row = $resultadoTabla->fetch_array(MYSQLI_ASSOC);
 
-	if(!empty($_POST))
-	{
-		$valor = $_POST['campo'];
-	
-		if(!empty($valor)){
-			$where = "WHERE Marca LIKE '%$valor'";
-		}
-	}
+		
+		
+        if ($nombreSubArea!=null) {
+            $sqlActualizar= "UPDATE `subareas` SET  `NombreSubarea`='$nombreSubArea' WHERE `IdSubarea`='$id_Subarea'";
+            $mysqli->query($sqlActualizar);
 
-	$sqlmostrar = "SELECT * FROM marca $where";
-	$resultadoTabla = $mysqli->query($sqlmostrar);
+            if ($nombreSubArea=1) {
+           
+				echo'<script type="text/javascript">
+			alert("Registro guardado!");
+			window.location.href="vistaSubareas.php"	;
+			</script>';
+               // header("location:vistaZonas.php");
+            }
+        }
 
 ?>
 
@@ -57,16 +62,13 @@
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
 	 crossorigin="anonymous">
 
-	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU"
-	 crossorigin="anonymous">
-
 	<link rel="stylesheet" href="./css/estilo.css">
-
 	<title>Control de dispositivos</title>
 
 </head>
 
 <body>
+
 
 	<div class="allNavbar">
 
@@ -141,72 +143,32 @@
 
 	</div>
 	<br>
-	<main role="main" class="container">
+
+	<div class="container">
 		<div class="card">
-			<div class="card-header bg-info">
-				<h3 style="text-align:center">MARCAS</h3>
-			</div>
-			<div class="card-body">
-
-				<a href="Marcas.php" class="btn btn-primary float-right">Nuevo Registro</a>
-
-				<div class="row">
-
-
-					<form action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
-						<b>Marca: </b>
-						<input type="text" id="campo" name="campo" />
-						<input type="submit" id="enviar" name="enviar" value="Buscar" class="btn btn-info" />
-					</form>
+			<form>
+                <div class="form-group">
+					<h5 class="card-title">Subáreas</h5>
+					<input type="hidden" class="form-control" id="sub" name="IdSubarea" value="<?php echo $row['IdSubarea'];?>" >
 				</div>
-
-
-				<br>
-
-				<div class="row table-responsive">
-					<table class="table table-hover table-secondary">
-						<thead>
-							<tr>
-
-								<th>Marca</th>
-
-								<th></th>
-								<th></th>
-
-							</tr>
-						</thead>
-
-						<tbody>
-							<?php while($row = $resultadoTabla->fetch_array(MYSQLI_ASSOC)) { ?>
-							<tr>
-
-								<td>
-									<?php echo $row['Marca']; ?>
-								</td>
-								<td>
-									<a href="ModificaMarcas.php?id_Marca=<?php echo $row['id_Marca']; ?>">
-										<span class="far fa-edit"></span>
-									</a>
-								</td>
-								<td>
-									<a href="vistaMarcas.php" data-href="vistaMarcas.php?id_Marca=<?php echo $row['id_Marca']; ?>"
-									 data-toggle="modal" data-target="#confirm-delete">
-										<span class="far fa-trash-alt"></span>
-									</a>
-								</td>
-							</tr>
-							<?php } ?>
-						</tbody>
-					</table>
+				<div class="form-group">
+					<h5 class="card-title">Subáreas</h5>
+					<input type="text" class="form-control" id="sub" name="NombreSubarea" value="<?php echo $row['NombreSubarea'];?>" require>
 				</div>
-			</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<a href="index.php" class="btn btn-default">Regresar</a>
+						<button type="submit" class="btn btn-primary">Guardar</button>
+					</div>
+				</div>
+			</form>
+			<a href="vistaSubareas.php" class="btn btn-success">Ver lista de zonas registradas</a>
+
 		</div>
 
 
 
-
-
-	</main>
+	</div>
 	<!-- Optional JavaScript -->
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -215,37 +177,6 @@
 	 crossorigin="anonymous"></script>
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
 	 crossorigin="anonymous"></script>
-
-	<!-- Modal -->
-	<div class="modal fade" id="confirm-delete" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-
-				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-					<h4 class="modal-title" id="myModalLabel">Eliminar Marca</h4>
-				</div>
-
-				<div class="modal-body">
-					¿Desea eliminar esta marca?
-				</div>
-
-				<div class="modal-footer">
-					<button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
-					<a class="btn btn-danger btn-ok">Delete</a>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<script>
-		$('#confirm-delete').on('show.bs.modal', function(e) {
-			$(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-
-			$('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
-		});
-	</script>
-
 </body>
 
 </html>

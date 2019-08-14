@@ -1,7 +1,29 @@
 <?php
 	error_reporting(E_ALL & ~E_NOTICE);
 	error_reporting(E_ERROR | E_PARSE);
-	require 'conexion.php';
+	session_start();
+	
+	$varsesion=$_SESSION['user'];
+	//$contrasesion=$_SESSION['pass'];
+	
+    require 'conexion.php';
+    $consulta="SELECT `RFC`, concat(`Nombre`,' ', `ApePaterno`,' ', `ApeMaterno`) as nombComple,  `Area`, `Subarea`, `Puesto`, `Telefono`, `Extension`, `Domicilio`, `Correo`, `GFC`, `Acceso_correo`, `Estatus`, `Usuario`, `Contra` FROM `persona` WHERE Usuario='$varsesion' or Correo='$varsesion'";
+    //'or '1'='1
+    $resultado = $mysqli->query($consulta);
+    $row = $resultado->fetch_array(MYSQLI_ASSOC);
+
+		$RFC=$row['RFC'];
+		$nombr=$row['nombComple'];
+	
+		if ($varsesion==null || $varsesion='' ) {
+			header('location:index.php');
+			die();
+		}
+		
+		if ($RFC!='CUAJ800423F77' && $RFC!='BUVG860908DU8') {
+			header('location:Resguardante/inicioRes.php');
+			die();
+		}
 	$id_RAM = $_GET['Id_Memoria'];
 
 	$sql2 = "DELETE FROM memoria_ram WHERE Id_Memoria = '$id_RAM'";
@@ -87,7 +109,6 @@
 							<div class="dropdown-divider"></div>
 							<a class="dropdown-item" href="Zonas.php">Zonas</a>
 							<a class="dropdown-item" href="Areas.php">Áreas</a>
-							<a class="dropdown-item" href="Subareas.php">Subáreas</a>
 						</div>
 					</li>
 
@@ -98,9 +119,9 @@
 				<ul class="nav navbar-nav">
 					<li>
 
-						<span class="fas fa-user nav-link"> Bienvenido (a):
-							<?php echo $nombr; ?>
-						</span>
+						<a href="DetallePersona.php?RFC=<?php echo $row['RFC']; ?>">
+						<span class="fas fa-user nav-link" href=""> Bienvenido (a): <?php echo $nombr; ?> </span>
+						</a>
 					</li>
 					<li>
 						<a href="cerrar_session.php">
@@ -133,6 +154,7 @@
 								<th>Memoria RAM</th>
 
 								<th></th>
+								<th></th>
 
 							</tr>
 						</thead>
@@ -143,6 +165,11 @@
 
 								<td>
 									<?php echo $row['Memoria_RAM']; ?>GB
+								</td>
+								<td>
+									<a href="ModificaRAM.php?Id_Memoria=<?php echo $row['Id_Memoria']; ?>">
+										<span class="far fa-edit"></span>
+									</a>
 								</td>
 								<td>
 									<a href="vistaRAM.php" data-href="vistaRAM.php?Id_Memoria=<?php echo $row['Id_Memoria']; ?>"

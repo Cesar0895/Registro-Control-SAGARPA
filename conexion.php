@@ -2,7 +2,7 @@
 
 $mysqli =  new mysqli ('localhost','root','','inventariosagarpa');
 
-//$mysqli =  new mysqli ('localhost','id8480341_root','contra123','id8480341_inventariosagarpa');
+//$mysqli =  new mysqli ('localhost','id8480341_root','contra123','id8480341_invensagarpa');
 
 
 if ($mysqli->connect_error) {
